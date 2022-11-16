@@ -1,4 +1,4 @@
-package io.github.bradpatras.workoutstore
+package io.github.bradpatras.justworkout
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
@@ -10,7 +10,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
-import io.github.bradpatras.workoutstore.databinding.ActivityMainBinding
+import io.github.bradpatras.justworkout.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package io.github.bradpatras.workoutstore
+package io.github.bradpatras.justworkout
 
 import org.junit.Test
 

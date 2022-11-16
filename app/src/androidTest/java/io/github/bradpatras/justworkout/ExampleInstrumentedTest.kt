@@ -1,4 +1,4 @@
-package io.github.bradpatras.workoutstore
+package io.github.bradpatras.justworkout
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
