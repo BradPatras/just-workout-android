@@ -9,7 +9,7 @@ import androidx.room.Update
 @Dao
 interface TagDao {
     @Insert
-    fun insertAll(vararg tags: TagEntity)
+    fun insert(vararg tags: TagEntity)
 
     @Delete
     fun delete(tag: TagEntity)
@@ -18,5 +18,5 @@ interface TagDao {
     fun getAll(): List<TagEntity>
 
     @Update
-    fun update(tag: TagEntity)
+    fun update(vararg tags: TagEntity)
 }
