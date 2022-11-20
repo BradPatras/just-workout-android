@@ -1,7 +1,6 @@
 package io.github.bradpatras.justworkout.database.musclegroup
 
 import androidx.room.*
-import io.github.bradpatras.justworkout.database.musclegroup.MuscleGroupEntity
 
 @Dao
 interface MuscleGroupDao {
