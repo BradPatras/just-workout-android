@@ -1,33 +1,33 @@
 package io.github.bradpatras.justworkout.repository
 
 import androidx.annotation.WorkerThread
-import io.github.bradpatras.justworkout.models.MuscleGroup
+import io.github.bradpatras.justworkout.models.Workout
 import kotlinx.coroutines.flow.Flow
 
-interface MuscleGroupRepository {
+interface WorkoutRepository {
     @WorkerThread
-    fun fetchMuscleGroups(
+    fun fetchWorkouts(
         onComplete: () -> Unit,
         onError: (Error) -> Unit
-    ): Flow<List<MuscleGroup>>
+    ): Flow<List<Workout>>
 
     @WorkerThread
-    fun updateMuscleGroup(
-        muscleGroup: MuscleGroup,
+    fun updateWorkout(
+        workout: Workout,
         onComplete: () -> Unit,
         onError: (Error) -> Unit
     ): Flow<Unit>
 
     @WorkerThread
-    fun deleteMuscleGroup(
-        muscleGroup: MuscleGroup,
+    fun deleteWorkout(
+        workout: Workout,
         onComplete: () -> Unit,
         onError: (Error) -> Unit
     )
 
     @WorkerThread
-    fun createMuscleGroup(
-        muscleGroup: MuscleGroup,
+    fun createWorkout(
+        workout: Workout,
         onComplete: () -> Unit,
         onError: (Error) -> Unit
     )
