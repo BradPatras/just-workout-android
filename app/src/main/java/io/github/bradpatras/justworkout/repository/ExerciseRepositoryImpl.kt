@@ -1,9 +1,12 @@
 package io.github.bradpatras.justworkout.repository
 
 import io.github.bradpatras.justworkout.database.exercise.ExerciseDao
+import io.github.bradpatras.justworkout.database.exercise.asExercise
 import io.github.bradpatras.justworkout.models.Exercise
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 class ExerciseRepositoryImpl constructor(
     private val exerciseDao: ExerciseDao,
@@ -12,9 +15,11 @@ class ExerciseRepositoryImpl constructor(
     override fun fetchExercises(
         onComplete: () -> Unit,
         onError: (Error) -> Unit
-    ): Flow<List<Exercise>> {
-        TODO("Not yet implemented")
-    }
+    ) = flow<List<Exercise>> {
+        exerciseDao
+            .getAll()
+            .map { it.asExercise() }
+    }.flowOn(ioDispatcher)
 
     override fun updateExercise(
         exercise: Exercise, onComplete: () -> Unit,

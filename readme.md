@@ -2,4 +2,4 @@
 Workout database app to assist in coming up with fresh and effective strength training workouts.
 
 ## Dev docs
-Taking architectural inspiration from skydove's pokedex app.
+Taking architectural inspiration from [skydove's pokedex project](https://github.com/skydoves/Pokedex).
