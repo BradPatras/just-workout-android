@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import io.github.bradpatras.justworkout.database.exercise.ExerciseEntity
 import io.github.bradpatras.justworkout.database.exercise.asExercise
+import io.github.bradpatras.justworkout.database.exercise.asExerciseEntity
 import io.github.bradpatras.justworkout.models.Workout
 import java.util.Date
 
@@ -17,8 +18,17 @@ data class WorkoutEntity(
 )
 
 fun WorkoutEntity.asWorkout() = Workout(
-    title,
-    notes,
-    exercises.map { it.asExercise() },
-    datesCompleted
+    datesCompleted = datesCompleted,
+    exercises = exercises.map { it.asExercise() },
+    id = id,
+    notes = notes,
+    title = title
+)
+
+fun Workout.asWorkoutEntity() = WorkoutEntity(
+    datesCompleted = datesCompleted,
+    exercises = exercises.map { it.asExerciseEntity() },
+    id = id,
+    notes = notes,
+    title = title
 )

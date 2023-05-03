@@ -23,12 +23,12 @@ interface WorkoutRepository {
         workout: Workout,
         onComplete: () -> Unit,
         onError: (Error) -> Unit
-    )
+    ): Flow<Unit>
 
     @WorkerThread
     fun createWorkout(
         workout: Workout,
         onComplete: () -> Unit,
         onError: (Error) -> Unit
-    )
+    ): Flow<Unit>
 }

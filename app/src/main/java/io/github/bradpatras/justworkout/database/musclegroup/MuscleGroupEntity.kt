@@ -14,3 +14,8 @@ fun MuscleGroupEntity.asMuscleGroup() = MuscleGroup(
     id = id,
     title = title
 )
+
+fun MuscleGroup.asMuscleGroupEntity() = MuscleGroupEntity(
+    id = id,
+    title = title
+)

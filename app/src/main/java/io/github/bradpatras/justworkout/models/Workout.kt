@@ -3,8 +3,9 @@ package io.github.bradpatras.justworkout.models
 import java.util.Date
 
 data class Workout(
-    val title: String,
-    val notes: String,
+    val datesCompleted: List<Date>,
     val exercises: List<Exercise>,
-    val datesCompleted: List<Date>
+    val id: Int,
+    val notes: String,
+    val title: String
 )

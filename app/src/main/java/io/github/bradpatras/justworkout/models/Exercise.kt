@@ -1,9 +1,9 @@
 package io.github.bradpatras.justworkout.models
 
 data class Exercise(
-    val id: Int,
-    val title: String,
     val description: String,
+    val id: Int,
+    val muscleGroups: List<MuscleGroup>,
     val tags: List<Tag>,
-    val muscleGroups: List<MuscleGroup>
+    val title: String
 )

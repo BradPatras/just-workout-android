@@ -5,14 +5,14 @@ import androidx.room.*
 @Dao
 interface TagDao {
     @Insert
-    fun insert(vararg tags: TagEntity)
+    suspend fun insert(vararg tags: TagEntity)
 
     @Delete
-    fun delete(tag: TagEntity)
+    suspend fun delete(tag: TagEntity)
 
     @Query("SELECT * FROM tag")
-    fun getAll(): List<TagEntity>
+    suspend fun getAll(): List<TagEntity>
 
     @Update
-    fun update(vararg tags: TagEntity)
+    suspend fun update(vararg tags: TagEntity)
 }

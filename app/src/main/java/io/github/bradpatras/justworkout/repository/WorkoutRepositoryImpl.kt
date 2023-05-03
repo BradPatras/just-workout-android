@@ -1,9 +1,13 @@
 package io.github.bradpatras.justworkout.repository
 
 import io.github.bradpatras.justworkout.database.workout.WorkoutDao
+import io.github.bradpatras.justworkout.database.workout.asWorkout
+import io.github.bradpatras.justworkout.database.workout.asWorkoutEntity
 import io.github.bradpatras.justworkout.models.Workout
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
 
 class WorkoutRepositoryImpl constructor(
     private val workoutDao: WorkoutDao,
@@ -12,30 +16,48 @@ class WorkoutRepositoryImpl constructor(
     override fun fetchWorkouts(
         onComplete: () -> Unit,
         onError: (Error) -> Unit
-    ): Flow<List<Workout>> {
-        TODO("Not yet implemented")
+    ) = flow<List<Workout>> {
+        workoutDao
+            .getAll()
+            .map { it.asWorkout() }
+            .also { emit(it) }
     }
+        .onCompletion { onComplete() }
+        .flowOn(ioDispatcher)
 
     override fun updateWorkout(
-        workout: Workout, onComplete: () -> Unit,
+        workout: Workout,
+        onComplete: () -> Unit,
         onError: (Error) -> Unit
-    ): Flow<Unit> {
-        TODO("Not yet implemented")
+    ) = flow<Unit> {
+        workoutDao
+            .update(workouts = arrayOf(workout.asWorkoutEntity()))
+            .also { emit(Unit) }
     }
+        .onCompletion { onComplete() }
+        .flowOn(ioDispatcher)
 
     override fun deleteWorkout(
         workout: Workout,
         onComplete: () -> Unit,
         onError: (Error) -> Unit
-    ) {
-        TODO("Not yet implemented")
+    ) = flow<Unit> {
+        workoutDao
+            .delete(workout = workout.asWorkoutEntity())
+            .also { emit(Unit) }
     }
+        .onCompletion { onComplete() }
+        .flowOn(ioDispatcher)
 
     override fun createWorkout(
         workout: Workout,
         onComplete: () -> Unit,
         onError: (Error) -> Unit
-    ) {
-        TODO("Not yet implemented")
+    ) = flow<Unit> {
+        workoutDao
+            .insert(workouts = arrayOf(workout.asWorkoutEntity()))
+            .also { emit(Unit) }
     }
+        .onCompletion { onComplete() }
+        .flowOn(ioDispatcher)
 }

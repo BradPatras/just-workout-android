@@ -2,11 +2,12 @@ package io.github.bradpatras.justworkout.repository
 
 import io.github.bradpatras.justworkout.database.exercise.ExerciseDao
 import io.github.bradpatras.justworkout.database.exercise.asExercise
+import io.github.bradpatras.justworkout.database.exercise.asExerciseEntity
 import io.github.bradpatras.justworkout.models.Exercise
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
 
 class ExerciseRepositoryImpl constructor(
     private val exerciseDao: ExerciseDao,
@@ -19,28 +20,44 @@ class ExerciseRepositoryImpl constructor(
         exerciseDao
             .getAll()
             .map { it.asExercise() }
-    }.flowOn(ioDispatcher)
+            .also { emit(it) }
+    }
+        .onCompletion { onComplete() }
+        .flowOn(ioDispatcher)
 
     override fun updateExercise(
-        exercise: Exercise, onComplete: () -> Unit,
+        exercise: Exercise,
+        onComplete: () -> Unit,
         onError: (Error) -> Unit
-    ): Flow<Unit> {
-        TODO("Not yet implemented")
+    ) = flow<Unit> {
+        exerciseDao
+            .update(exercises = arrayOf(exercise.asExerciseEntity()))
+            .also { emit(Unit) }
     }
+        .onCompletion { onComplete() }
+        .flowOn(ioDispatcher)
 
     override fun deleteExercise(
         exercise: Exercise,
         onComplete: () -> Unit,
         onError: (Error) -> Unit
-    ) {
-        TODO("Not yet implemented")
+    ) = flow<Unit> {
+        exerciseDao
+            .delete(exercise = exercise.asExerciseEntity())
+            .also { emit(Unit) }
     }
+        .onCompletion { onComplete() }
+        .flowOn(ioDispatcher)
 
     override fun createExercise(
         exercise: Exercise,
         onComplete: () -> Unit,
         onError: (Error) -> Unit
-    ) {
-        TODO("Not yet implemented")
+    ) = flow<Unit> {
+        exerciseDao
+            .insert(exercises = arrayOf(exercise.asExerciseEntity()))
+            .also { emit(Unit) }
     }
+        .onCompletion { onComplete() }
+        .flowOn(ioDispatcher)
 }

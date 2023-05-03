@@ -7,12 +7,18 @@ import io.github.bradpatras.justworkout.models.Tag
 @Entity(tableName = "tag")
 data class TagEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
-    val title: String,
-    val color: Int
+    val color: Int,
+    val title: String
 )
 
 fun TagEntity.asTag() = Tag(
-    id,
-    title,
-    color
+    color = color,
+    id = id,
+    title = title
+)
+
+fun Tag.asTagEntity() = TagEntity(
+    id = id,
+    color = color,
+    title = title
 )

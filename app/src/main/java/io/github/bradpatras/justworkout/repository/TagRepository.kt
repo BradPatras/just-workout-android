@@ -23,12 +23,12 @@ interface TagRepository {
         tag: Tag,
         onComplete: () -> Unit,
         onError: (Error) -> Unit
-    )
+    ): Flow<Unit>
 
     @WorkerThread
     fun createTag(
         tag: Tag,
         onComplete: () -> Unit,
         onError: (Error) -> Unit
-    )
+    ): Flow<Unit>
 }

@@ -5,14 +5,14 @@ import androidx.room.*
 @Dao
 interface WorkoutDao {
     @Insert
-    fun insert(vararg workout: WorkoutEntity)
+    suspend fun insert(vararg workouts: WorkoutEntity)
 
     @Delete
-    fun delete(workout: WorkoutEntity)
+    suspend fun delete(workout: WorkoutEntity)
 
     @Query("SELECT * FROM workout")
-    fun getAll(): List<WorkoutEntity>
+    suspend fun getAll(): List<WorkoutEntity>
 
     @Update
-    fun update(vararg workouts: WorkoutEntity)
+    suspend fun update(vararg workouts: WorkoutEntity)
 }

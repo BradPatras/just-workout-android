@@ -23,12 +23,12 @@ interface MuscleGroupRepository {
         muscleGroup: MuscleGroup,
         onComplete: () -> Unit,
         onError: (Error) -> Unit
-    )
+    ): Flow<Unit>
 
     @WorkerThread
     fun createMuscleGroup(
         muscleGroup: MuscleGroup,
         onComplete: () -> Unit,
         onError: (Error) -> Unit
-    )
+    ): Flow<Unit>
 }
