@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting2("Android")
+                    ListTest()
                 }
             }
         }
@@ -32,17 +32,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting2(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun ListTest(modifier: Modifier = Modifier) {
+
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview2() {
     JustWorkoutTheme {
-        Greeting2("Android")
+
     }
 }
