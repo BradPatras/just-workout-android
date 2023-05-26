@@ -1,5 +1,6 @@
 package io.github.bradpatras.justworkout.ui.exercises.details
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -49,7 +50,8 @@ fun ExerciseDetailsScreen(
                 .padding(vertical = 4.dp)
                 .align(Alignment.Start),
             style = MaterialTheme.typography.headlineLarge,
-            textAlign = TextAlign.Start
+            textAlign = TextAlign.Start,
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         FlowRow(
@@ -72,7 +74,8 @@ fun ExerciseDetailsScreen(
                 .padding(vertical = 16.dp)
                 .align(Alignment.Start),
             style = MaterialTheme.typography.bodyMedium,
-            textAlign = TextAlign.Start
+            textAlign = TextAlign.Start,
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         FlowRow(
@@ -92,7 +95,8 @@ fun MuscleGroupChip(muscleGroup: MuscleGroup) {
         label = {
             Text(
                 text = muscleGroup.title,
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onTertiaryContainer
             )
         },
         modifier = Modifier.padding(horizontal = 4.dp),
@@ -139,7 +143,7 @@ fun TagChip(tag: Tag) {
     )
 }
 
-@Preview(showSystemUi = true, showBackground = true)
+@Preview(showSystemUi = true, showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun ExerciseDetailsPreview() {
     JustWorkoutTheme() {
