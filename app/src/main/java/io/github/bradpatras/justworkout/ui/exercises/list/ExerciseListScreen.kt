@@ -2,6 +2,7 @@
 
 package io.github.bradpatras.justworkout.ui.exercises.list
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.graphics.Color
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -56,24 +57,24 @@ fun ExerciseList(
 @Composable
 private fun ExerciseListItem(exercise: Exercise) {
     ListItem(
-        headlineText = {
+        headlineContent = {
             Text(text = exercise.title)
         },
-        supportingText = {
+        supportingContent = {
             Text(text = exercise.tags.map { it.title }.joinToString())
         }
     )
     Divider()
 }
 
-@Preview(showSystemUi = true, showBackground = true)
+@Preview(showSystemUi = true, showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun ExerciseListPreview() {
     JustWorkoutTheme() {
         ExerciseList(
             exercises = listOf(
                 Exercise(
-                    description = "this is the desription",
+                    description = "this is the description",
                     id = 0,
                     muscleGroups = emptyList(),
                     tags = listOf(
@@ -100,7 +101,7 @@ fun ExerciseListPreview() {
 
                 ),
                 Exercise(
-                    description = "this is the desription",
+                    description = "this is the description",
                     id = 1,
                     muscleGroups = emptyList(),
                     tags = listOf(
@@ -124,7 +125,7 @@ fun ExerciseListPreview() {
                     title = "Shoulder circles"
                 ),
                 Exercise(
-                    description = "this is the desription",
+                    description = "this is the description",
                     id = 2,
                     muscleGroups = emptyList(),
                     tags = listOf(
@@ -143,7 +144,7 @@ fun ExerciseListPreview() {
 
                 ),
                 Exercise(
-                    description = "this is the desription",
+                    description = "this is the description",
                     id = 3,
                     muscleGroups = emptyList(),
                     tags = listOf(
