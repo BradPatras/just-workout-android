@@ -27,12 +27,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ramcosta.composedestinations.annotation.Destination
 import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.models.MuscleGroup
 import io.github.bradpatras.justworkout.models.Tag
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@Destination
 @Composable
 fun ExerciseDetailsScreen(
     exercise: Exercise

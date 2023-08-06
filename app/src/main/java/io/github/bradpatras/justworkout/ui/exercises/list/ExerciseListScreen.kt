@@ -23,14 +23,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ramcosta.composedestinations.annotation.Destination
 import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.models.Tag
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
-
+@Destination
 @Composable
-fun ExerciseList(
-    exercises: List<Exercise>,
-    onAddButtonTapped: () -> Unit
+fun ExerciseListScreen(
+    exercises: List<Exercise>
+//    onAddButtonTapped: () -> Unit
 ) {
     LazyColumn(
         contentPadding = PaddingValues(12.dp)
@@ -45,7 +46,7 @@ fun ExerciseList(
         contentAlignment = Alignment.BottomEnd
     ) {
         FloatingActionButton(
-            onClick = { onAddButtonTapped() },
+            onClick = { }, //onAddButtonTapped() },
             shape = RoundedCornerShape(12.dp)
         ) {
             Icon(Icons.Filled.Add, "add exercise")
@@ -71,7 +72,7 @@ private fun ExerciseListItem(exercise: Exercise) {
 @Composable
 fun ExerciseListPreview() {
     JustWorkoutTheme() {
-        ExerciseList(
+        ExerciseListScreen(
             exercises = listOf(
                 Exercise(
                     description = "this is the description",
@@ -162,7 +163,7 @@ fun ExerciseListPreview() {
                     title = "Chest cable flys"
                 )
             ),
-            onAddButtonTapped = { }
+            //onAddButtonTapped = { }
         )
     }
 }

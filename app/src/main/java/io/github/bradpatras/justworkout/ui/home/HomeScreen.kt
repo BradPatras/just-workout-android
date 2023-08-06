@@ -14,38 +14,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.NavGraph
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
-
+@RootNavGraph(start = true)
+@Destination
 @Composable
 fun HomeScreen() {
-    Scaffold(
-        bottomBar = {
-            BottomAppBar() {
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { },
-                    icon = { Icon(Icons.Rounded.Home, "home") },
-                    label = { Text("Home") }
-                )
-
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { },
-                    icon = { Icon(Icons.Rounded.List, "exercises") },
-                    label = { Text("Exercises") }
-                )
-
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { },
-                    icon = { Icon(Icons.Rounded.DateRange, "workouts") },
-                    label = { Text("Workouts") }
-                )
-            }
-        }
-    ) { paddingValues ->
-        Text(text = "Home Screen", modifier = Modifier.padding(paddingValues))
-    }
+    Text(text = "Home Screen")
 }
 
 //@Composable

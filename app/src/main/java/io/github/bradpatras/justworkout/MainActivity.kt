@@ -10,21 +10,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.ramcosta.composedestinations.DestinationsNavHost
+import io.github.bradpatras.justworkout.ui.MainScreen
+import io.github.bradpatras.justworkout.ui.NavGraphs
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        Timber.d("onCreate")
         super.onCreate(savedInstanceState)
         setContent {
             JustWorkoutTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ListTest()
+                    MainScreen()
                 }
             }
         }
