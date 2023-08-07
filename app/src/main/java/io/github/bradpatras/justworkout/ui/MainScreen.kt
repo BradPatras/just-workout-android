@@ -1,11 +1,13 @@
 package io.github.bradpatras.justworkout.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -31,7 +33,8 @@ fun MainScreen() {
         DestinationsNavHost(
             navGraph = NavGraphs.root,
             navController = navController,
-            modifier = Modifier.padding(it),
+            modifier = Modifier.padding(it)
+                .fillMaxSize(),
         )
     }
 }
@@ -51,7 +54,7 @@ fun BottomBar(navController: NavController) {
                 }
             },
             icon = {
-                Image(Icons.Default.Home, "home tab")
+                Icon(Icons.Default.Home, "home tab")
             },
             label = {
                 Text("Home")
@@ -62,7 +65,7 @@ fun BottomBar(navController: NavController) {
             onClick = {
                 navController.navigate(
                     ExerciseListScreenDestination (
-                        exercises = emptyList<Exercise>()
+                        exercises = emptyArray<Exercise>()
                     )
                 ) {
                     launchSingleTop = true
@@ -70,7 +73,7 @@ fun BottomBar(navController: NavController) {
                 }
             },
             icon = {
-                Image(Icons.Default.List, "exercise list tab")
+                Icon(Icons.Default.List, "exercise list tab")
             },
             label = {
                 Text("Exercises")

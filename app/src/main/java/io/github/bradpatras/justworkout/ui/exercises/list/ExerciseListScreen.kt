@@ -30,8 +30,7 @@ import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 @Destination
 @Composable
 fun ExerciseListScreen(
-    exercises: List<Exercise>
-//    onAddButtonTapped: () -> Unit
+    exercises: Array<Exercise>
 ) {
     LazyColumn(
         contentPadding = PaddingValues(12.dp)
@@ -62,7 +61,7 @@ private fun ExerciseListItem(exercise: Exercise) {
             Text(text = exercise.title)
         },
         supportingContent = {
-            Text(text = exercise.tags.map { it.title }.joinToString())
+            Text(text = exercise.tags.joinToString { it.title })
         }
     )
     Divider()
@@ -73,7 +72,7 @@ private fun ExerciseListItem(exercise: Exercise) {
 fun ExerciseListPreview() {
     JustWorkoutTheme() {
         ExerciseListScreen(
-            exercises = listOf(
+            exercises = arrayOf(
                 Exercise(
                     description = "this is the description",
                     id = 0,
