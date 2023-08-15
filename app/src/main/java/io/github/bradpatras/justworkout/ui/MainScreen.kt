@@ -33,7 +33,8 @@ fun MainScreen() {
         DestinationsNavHost(
             navGraph = NavGraphs.root,
             navController = navController,
-            modifier = Modifier.padding(it)
+            modifier = Modifier
+                .padding(it)
                 .fillMaxSize(),
         )
     }
@@ -64,9 +65,7 @@ fun BottomBar(navController: NavController) {
             selected = ExerciseListScreenDestination == currentDestination,
             onClick = {
                 navController.navigate(
-                    ExerciseListScreenDestination (
-                        exercises = emptyArray<Exercise>()
-                    )
+                    ExerciseListScreenDestination
                 ) {
                     launchSingleTop = true
                     restoreState = true

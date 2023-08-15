@@ -51,14 +51,15 @@ android {
 
 dependencies {
     // android stuff
-    implementation 'androidx.core:core-ktx:1.10.1'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.6.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.6.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1"
     implementation 'androidx.activity:activity-compose:1.7.2'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.7.0'
+    implementation 'com.google.android.material:material:1.9.0'
 
     // compose
     // https://developer.android.com/jetpack/compose/bom/bom-mapping
@@ -73,7 +74,7 @@ dependencies {
 
     // navigation annotations
     implementation 'io.github.raamcosta.compose-destinations:core:1.9.51'
-    ksp 'io.github.raamcosta.compose-destinations:ksp:1.9.51' // borked? check: https://github.com/google/ksp/issues/1401
+    ksp 'io.github.raamcosta.compose-destinations:ksp:1.9.51' // broken? check: https://github.com/google/ksp/issues/1401
 
     // room db
     def room_version = '2.5.2'

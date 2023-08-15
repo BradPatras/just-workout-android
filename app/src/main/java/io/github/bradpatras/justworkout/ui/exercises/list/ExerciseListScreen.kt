@@ -19,6 +19,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,15 +29,27 @@ import com.ramcosta.composedestinations.annotation.Destination
 import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.models.Tag
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
 @Destination
 @Composable
 fun ExerciseListScreen(
-    exercises: Array<Exercise>
+    viewModel: ExerciseListViewModel = viewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    ExerciseListContent(
+        uiState = uiState
+    )
+}
+
+@Composable
+fun ExerciseListContent(
+    uiState: ExerciseListUiState
 ) {
     LazyColumn(
         contentPadding = PaddingValues(12.dp)
     ) {
-        items(exercises) { exercise ->
+        items(uiState.exercises) { exercise ->
             ExerciseListItem(exercise = exercise)
         }
     }
@@ -53,7 +67,6 @@ fun ExerciseListScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ExerciseListItem(exercise: Exercise) {
     ListItem(
@@ -71,98 +84,100 @@ private fun ExerciseListItem(exercise: Exercise) {
 @Composable
 fun ExerciseListPreview() {
     JustWorkoutTheme() {
-        ExerciseListScreen(
-            exercises = arrayOf(
-                Exercise(
-                    description = "this is the description",
-                    id = 0,
-                    muscleGroups = emptyList(),
-                    tags = listOf(
-                        Tag(
-                            color = Color.BLUE,
-                            id = 0,
-                            title = "Strength"
+        ExerciseListContent(
+            uiState = ExerciseListUiState(
+                exercises = listOf(
+                    Exercise(
+                        description = "this is the description",
+                        id = 0,
+                        muscleGroups = emptyList(),
+                        tags = listOf(
+                            Tag(
+                                color = Color.BLUE,
+                                id = 0,
+                                title = "Strength"
 
+                            ),
+                            Tag(
+                                color = Color.BLUE,
+                                id = 0,
+                                title = "Chest"
+
+                            ),
+                            Tag(
+                                color = Color.BLUE,
+                                id = 0,
+                                title = "Arms"
+
+                            )
                         ),
-                        Tag(
-                            color = Color.BLUE,
-                            id = 0,
-                            title = "Chest"
+                        title = "Bench press"
 
-                        ),
-                        Tag(
-                            color = Color.BLUE,
-                            id = 0,
-                            title = "Arms"
-
-                        )
                     ),
-                    title = "Bench press"
+                    Exercise(
+                        description = "this is the description",
+                        id = 1,
+                        muscleGroups = emptyList(),
+                        tags = listOf(
+                            Tag(
+                                color = Color.BLUE,
+                                id = 0,
+                                title = "Mobility"
+                            ),
+                            Tag(
+                                color = Color.BLUE,
+                                id = 0,
+                                title = "Warmup"
 
-                ),
-                Exercise(
-                    description = "this is the description",
-                    id = 1,
-                    muscleGroups = emptyList(),
-                    tags = listOf(
-                        Tag(
-                            color = Color.BLUE,
-                            id = 0,
-                            title = "Mobility"
+                            ),
+                            Tag(
+                                color = Color.BLUE,
+                                id = 0,
+                                title = "Arms"
+                            )
                         ),
-                        Tag(
-                            color = Color.BLUE,
-                            id = 0,
-                            title = "Warmup"
+                        title = "Shoulder circles"
+                    ),
+                    Exercise(
+                        description = "this is the description",
+                        id = 2,
+                        muscleGroups = emptyList(),
+                        tags = listOf(
+                            Tag(
+                                color = Color.BLUE,
+                                id = 0,
+                                title = "Strength"
+                            ),
+                            Tag(
+                                color = Color.BLUE,
+                                id = 0,
+                                title = "Arms"
+                            )
+                        ),
+                        title = "Bicep curls"
 
-                        ),
-                        Tag(
-                            color = Color.BLUE,
-                            id = 0,
-                            title = "Arms"
-                        )
                     ),
-                    title = "Shoulder circles"
-                ),
-                Exercise(
-                    description = "this is the description",
-                    id = 2,
-                    muscleGroups = emptyList(),
-                    tags = listOf(
-                        Tag(
-                            color = Color.BLUE,
-                            id = 0,
-                            title = "Strength"
+                    Exercise(
+                        description = "this is the description",
+                        id = 3,
+                        muscleGroups = emptyList(),
+                        tags = listOf(
+                            Tag(
+                                color = Color.BLUE,
+                                id = 0,
+                                title = "Strength"
+                            ),
+                            Tag(
+                                color = Color.BLUE,
+                                id = 0,
+                                title = "Chest"
+                            )
                         ),
-                        Tag(
-                            color = Color.BLUE,
-                            id = 0,
-                            title = "Arms"
-                        )
-                    ),
-                    title = "Bicep curls"
-
-                ),
-                Exercise(
-                    description = "this is the description",
-                    id = 3,
-                    muscleGroups = emptyList(),
-                    tags = listOf(
-                        Tag(
-                            color = Color.BLUE,
-                            id = 0,
-                            title = "Strength"
-                        ),
-                        Tag(
-                            color = Color.BLUE,
-                            id = 0,
-                            title = "Chest"
-                        )
-                    ),
-                    title = "Chest cable flys"
+                        title = "Chest cable flys"
+                    )
                 )
-            ),
-            //onAddButtonTapped = { }
+            )
         )
     }
 }
+
