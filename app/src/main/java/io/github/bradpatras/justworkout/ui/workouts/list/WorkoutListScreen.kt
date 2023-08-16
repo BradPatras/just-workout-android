@@ -1,6 +1,7 @@
 package io.github.bradpatras.justworkout.ui.workouts.list
 
 import android.content.res.Configuration
+import android.graphics.Color
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -23,6 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
+import io.github.bradpatras.justworkout.models.Exercise
+import io.github.bradpatras.justworkout.models.Tag
 import io.github.bradpatras.justworkout.models.Workout
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 import java.util.Date
@@ -90,11 +93,30 @@ fun WorkoutListPreview() {
                 workouts = listOf(
                     Workout(
                         datesCompleted = listOf(Date()),
-                        exercises = emptyList(),
+                        exercises = listOf(
+                            Exercise(
+                                description = "this is the description",
+                                id = 2,
+                                muscleGroups = emptyList(),
+                                tags = listOf(
+                                    Tag(
+                                        color = Color.BLUE,
+                                        id = 0,
+                                        title = "Strength"
+                                    ),
+                                    Tag(
+                                        color = Color.BLUE,
+                                        id = 0,
+                                        title = "Arms"
+                                    )
+                                ),
+                                title = "Bicep curls"
+
+                            )
+                        ),
                         id = 0,
                         notes = "these are the notes",
                         title = "Basic Chest Workout"
-
                     )
                 )
             )
