@@ -5,6 +5,7 @@ package io.github.bradpatras.justworkout.ui.exercises.list
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.graphics.Color
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,7 +18,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -46,11 +50,24 @@ fun ExerciseListScreen(
 fun ExerciseListContent(
     uiState: ExerciseListUiState
 ) {
-    LazyColumn(
-        contentPadding = PaddingValues(12.dp)
-    ) {
-        items(uiState.exercises) { exercise ->
-            ExerciseListItem(exercise = exercise)
+    Column {
+        TopAppBar(
+            title = { Text("Exercises") },
+            scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
+            colors = TopAppBarDefaults.largeTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            )
+        )
+
+        LazyColumn(
+            contentPadding = PaddingValues(12.dp)
+        ) {
+            items(uiState.exercises) { exercise ->
+                ExerciseListItem(exercise = exercise)
+            }
         }
     }
 

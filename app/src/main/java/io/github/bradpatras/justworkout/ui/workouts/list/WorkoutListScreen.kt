@@ -3,6 +3,7 @@ package io.github.bradpatras.justworkout.ui.workouts.list
 import android.content.res.Configuration
 import android.graphics.Color
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,10 +12,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,12 +30,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.models.Tag
 import io.github.bradpatras.justworkout.models.Workout
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 import java.util.Date
 
+@RootNavGraph(start = true)
 @Destination
 @Composable
 fun WorkoutListScreen(
@@ -42,15 +50,29 @@ fun WorkoutListScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutListContent(
     uiState: WorkoutListUiState
 ) {
-    LazyColumn(
-        contentPadding = PaddingValues(12.dp)
-    ) {
-        items(uiState.workouts) { workout ->
-            WorkoutListItem(workout = workout)
+    Column {
+        TopAppBar(
+            title = { Text("Workouts") },
+            scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
+            colors = TopAppBarDefaults.largeTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            )
+        )
+
+        LazyColumn(
+            contentPadding = PaddingValues(12.dp)
+        ) {
+            items(uiState.workouts) { workout ->
+                WorkoutListItem(workout = workout)
+            }
         }
     }
 
@@ -112,11 +134,75 @@ fun WorkoutListPreview() {
                                 ),
                                 title = "Bicep curls"
 
+                            ),
+                            Exercise(
+                                description = "this is the description",
+                                id = 2,
+                                muscleGroups = emptyList(),
+                                tags = listOf(
+                                    Tag(
+                                        color = Color.BLUE,
+                                        id = 0,
+                                        title = "Strength"
+                                    ),
+                                    Tag(
+                                        color = Color.BLUE,
+                                        id = 0,
+                                        title = "Arms"
+                                    )
+                                ),
+                                title = "Seated Rows"
+
                             )
                         ),
                         id = 0,
                         notes = "these are the notes",
-                        title = "Basic Chest Workout"
+                        title = "Basic Pull Workout"
+                    ),
+                    Workout(
+                        datesCompleted = listOf(Date()),
+                        exercises = listOf(
+                            Exercise(
+                                description = "this is the description",
+                                id = 2,
+                                muscleGroups = emptyList(),
+                                tags = listOf(
+                                    Tag(
+                                        color = Color.BLUE,
+                                        id = 0,
+                                        title = "Strength"
+                                    ),
+                                    Tag(
+                                        color = Color.BLUE,
+                                        id = 0,
+                                        title = "Arms"
+                                    )
+                                ),
+                                title = "Lat raises"
+
+                            ),Exercise(
+                                description = "this is the description",
+                                id = 2,
+                                muscleGroups = emptyList(),
+                                tags = listOf(
+                                    Tag(
+                                        color = Color.BLUE,
+                                        id = 0,
+                                        title = "Strength"
+                                    ),
+                                    Tag(
+                                        color = Color.BLUE,
+                                        id = 0,
+                                        title = "Arms"
+                                    )
+                                ),
+                                title = "Bench press"
+
+                            )
+                        ),
+                        id = 0,
+                        notes = "these are the notes",
+                        title = "Basic Push Workout"
                     )
                 )
             )

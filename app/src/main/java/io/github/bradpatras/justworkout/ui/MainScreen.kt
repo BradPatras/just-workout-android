@@ -21,6 +21,7 @@ import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.ui.destinations.ExerciseDetailsScreenDestination
 import io.github.bradpatras.justworkout.ui.destinations.ExerciseListScreenDestination
 import io.github.bradpatras.justworkout.ui.destinations.HomeScreenDestination
+import io.github.bradpatras.justworkout.ui.destinations.WorkoutListScreenDestination
 
 @Composable
 fun MainScreen() {
@@ -35,7 +36,7 @@ fun MainScreen() {
             navController = navController,
             modifier = Modifier
                 .padding(it)
-                .fillMaxSize(),
+                .fillMaxSize()
         )
     }
 }
@@ -45,20 +46,20 @@ fun BottomBar(navController: NavController) {
     val currentDestination = navController.appCurrentDestinationAsState().value ?: NavGraphs.root.startAppDestination
     BottomAppBar {
         NavigationBarItem(
-            selected = HomeScreenDestination == currentDestination,
+            selected = WorkoutListScreenDestination == currentDestination,
             onClick = {
                 navController.navigate(
-                    HomeScreenDestination
+                    WorkoutListScreenDestination
                 ) {
                     launchSingleTop = true
                     restoreState = true
                 }
             },
             icon = {
-                Icon(Icons.Default.Home, "home tab")
+                Icon(Icons.Default.Home, "workouts list tab")
             },
             label = {
-                Text("Home")
+                Text("Workouts")
             }
         )
         NavigationBarItem(

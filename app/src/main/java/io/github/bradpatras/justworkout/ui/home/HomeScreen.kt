@@ -18,7 +18,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.NavGraph
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
-@RootNavGraph(start = true)
+
 @Destination
 @Composable
 fun HomeScreen() {
