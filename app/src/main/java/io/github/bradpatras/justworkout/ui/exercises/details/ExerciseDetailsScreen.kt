@@ -17,7 +17,9 @@ import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -46,15 +48,7 @@ fun ExerciseDetailsScreen(
             .padding(24.dp)
             .fillMaxWidth()
     ) {
-        Text(
-            text = exercise.title,
-            modifier = Modifier
-                .padding(vertical = 4.dp)
-                .align(Alignment.Start),
-            style = MaterialTheme.typography.headlineLarge,
-            textAlign = TextAlign.Start,
-            color = MaterialTheme.colorScheme.onSurface
-        )
+        MediumTopAppBar(title = { Text(text = exercise.title) })
 
         FlowRow(
             modifier = Modifier.align(Alignment.Start)
