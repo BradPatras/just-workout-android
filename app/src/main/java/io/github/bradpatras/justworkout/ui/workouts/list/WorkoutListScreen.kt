@@ -59,11 +59,11 @@ fun WorkoutListContent(
         TopAppBar(
             title = { Text("Workouts") },
             scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
-            colors = TopAppBarDefaults.largeTopAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
             )
         )
 
@@ -84,7 +84,7 @@ fun WorkoutListContent(
             onClick = { },
             shape = RoundedCornerShape(12.dp)
         ) {
-            Icon(Icons.Filled.Add, "add exercise")
+            Icon(Icons.Filled.Add, "add workout")
         }
     }
 }
