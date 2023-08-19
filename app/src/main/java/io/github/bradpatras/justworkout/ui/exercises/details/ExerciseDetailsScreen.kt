@@ -21,6 +21,8 @@ import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,34 +47,43 @@ fun ExerciseDetailsScreen(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .padding(24.dp)
             .fillMaxWidth()
+            .background(color = MaterialTheme.colorScheme.surface)
     ) {
-        MediumTopAppBar(title = { Text(text = exercise.title) })
+        LargeTopAppBar(
+            title = { Text(text = exercise.title) },
+            scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
+        )
 
-        FlowRow(
-            modifier = Modifier.align(Alignment.Start)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp)
         ) {
-            exercise.muscleGroups.forEach {
-                MuscleGroupChip(muscleGroup = it)
+            FlowRow(
+                modifier = Modifier.align(Alignment.Start)
+            ) {
+                exercise.muscleGroups.forEach {
+                    MuscleGroupChip(muscleGroup = it)
+                }
             }
+
+            Divider(
+                color = MaterialTheme.colorScheme.outlineVariant,
+                modifier = Modifier
+                    .padding(vertical = 4.dp)
+            )
+
+            Text(
+                text = exercise.description,
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
+                    .align(Alignment.Start),
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Start,
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
-
-        Divider(
-            color = MaterialTheme.colorScheme.outlineVariant,
-            modifier = Modifier
-                .padding(vertical = 4.dp)
-        )
-
-        Text(
-            text = exercise.description,
-            modifier = Modifier
-                .padding(vertical = 16.dp)
-                .align(Alignment.Start),
-            style = MaterialTheme.typography.bodyMedium,
-            textAlign = TextAlign.Start,
-            color = MaterialTheme.colorScheme.onSurface
-        )
 
         FlowRow(
             modifier = Modifier.align(Alignment.CenterHorizontally)
