@@ -119,38 +119,14 @@ fun WorkoutListPreview() {
                             Exercise(
                                 description = "this is the description",
                                 id = 2,
-                                muscleGroups = emptyList(),
-                                tags = listOf(
-                                    Tag(
-                                        color = Color.BLUE,
-                                        id = 0,
-                                        title = "Strength"
-                                    ),
-                                    Tag(
-                                        color = Color.BLUE,
-                                        id = 0,
-                                        title = "Arms"
-                                    )
-                                ),
+                                tags = emptyList(),
                                 title = "Bicep curls"
 
                             ),
                             Exercise(
                                 description = "this is the description",
                                 id = 2,
-                                muscleGroups = emptyList(),
-                                tags = listOf(
-                                    Tag(
-                                        color = Color.BLUE,
-                                        id = 0,
-                                        title = "Strength"
-                                    ),
-                                    Tag(
-                                        color = Color.BLUE,
-                                        id = 0,
-                                        title = "Arms"
-                                    )
-                                ),
+                                tags = emptyList(),
                                 title = "Seated Rows"
 
                             )
@@ -165,37 +141,13 @@ fun WorkoutListPreview() {
                             Exercise(
                                 description = "this is the description",
                                 id = 2,
-                                muscleGroups = emptyList(),
-                                tags = listOf(
-                                    Tag(
-                                        color = Color.BLUE,
-                                        id = 0,
-                                        title = "Strength"
-                                    ),
-                                    Tag(
-                                        color = Color.BLUE,
-                                        id = 0,
-                                        title = "Arms"
-                                    )
-                                ),
+                                tags = emptyList(),
                                 title = "Lat raises"
 
                             ),Exercise(
                                 description = "this is the description",
                                 id = 2,
-                                muscleGroups = emptyList(),
-                                tags = listOf(
-                                    Tag(
-                                        color = Color.BLUE,
-                                        id = 0,
-                                        title = "Strength"
-                                    ),
-                                    Tag(
-                                        color = Color.BLUE,
-                                        id = 0,
-                                        title = "Arms"
-                                    )
-                                ),
+                                tags = emptyList(),
                                 title = "Bench press"
 
                             )

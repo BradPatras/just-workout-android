@@ -107,22 +107,18 @@ fun ExerciseListPreview() {
                     Exercise(
                         description = "this is the description",
                         id = 0,
-                        muscleGroups = emptyList(),
                         tags = listOf(
                             Tag(
-                                color = Color.BLUE,
                                 id = 0,
                                 title = "Strength"
 
                             ),
                             Tag(
-                                color = Color.BLUE,
                                 id = 0,
                                 title = "Chest"
 
                             ),
                             Tag(
-                                color = Color.BLUE,
                                 id = 0,
                                 title = "Arms"
 
@@ -134,21 +130,17 @@ fun ExerciseListPreview() {
                     Exercise(
                         description = "this is the description",
                         id = 1,
-                        muscleGroups = emptyList(),
                         tags = listOf(
                             Tag(
-                                color = Color.BLUE,
                                 id = 0,
                                 title = "Mobility"
                             ),
                             Tag(
-                                color = Color.BLUE,
                                 id = 0,
                                 title = "Warmup"
 
                             ),
                             Tag(
-                                color = Color.BLUE,
                                 id = 0,
                                 title = "Arms"
                             )
@@ -158,15 +150,12 @@ fun ExerciseListPreview() {
                     Exercise(
                         description = "this is the description",
                         id = 2,
-                        muscleGroups = emptyList(),
                         tags = listOf(
                             Tag(
-                                color = Color.BLUE,
                                 id = 0,
                                 title = "Strength"
                             ),
                             Tag(
-                                color = Color.BLUE,
                                 id = 0,
                                 title = "Arms"
                             )
@@ -177,15 +166,12 @@ fun ExerciseListPreview() {
                     Exercise(
                         description = "this is the description",
                         id = 3,
-                        muscleGroups = emptyList(),
                         tags = listOf(
                             Tag(
-                                color = Color.BLUE,
                                 id = 0,
                                 title = "Strength"
                             ),
                             Tag(
-                                color = Color.BLUE,
                                 id = 0,
                                 title = "Chest"
                             )

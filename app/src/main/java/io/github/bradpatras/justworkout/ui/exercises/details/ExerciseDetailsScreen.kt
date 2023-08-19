@@ -33,7 +33,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import io.github.bradpatras.justworkout.models.Exercise
-import io.github.bradpatras.justworkout.models.MuscleGroup
 import io.github.bradpatras.justworkout.models.Tag
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 
@@ -63,8 +62,8 @@ fun ExerciseDetailsScreen(
             FlowRow(
                 modifier = Modifier.align(Alignment.Start)
             ) {
-                exercise.muscleGroups.forEach {
-                    MuscleGroupChip(muscleGroup = it)
+                exercise.tags.forEach {
+                    TagChip(tag = it)
                 }
             }
 
@@ -84,24 +83,16 @@ fun ExerciseDetailsScreen(
                 color = MaterialTheme.colorScheme.onSurface
             )
         }
-
-        FlowRow(
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            exercise.tags.forEach {
-                TagChip(tag = it)
-            }
-        }
     }
 }
 
 @Composable
-fun MuscleGroupChip(muscleGroup: MuscleGroup) {
+fun TagChip(tag: Tag) {
     AssistChip(
         onClick = {},
         label = {
             Text(
-                text = muscleGroup.title,
+                text = tag.title,
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onTertiaryContainer
             )
@@ -114,42 +105,6 @@ fun MuscleGroupChip(muscleGroup: MuscleGroup) {
     )
 }
 
-@Composable
-fun TagChip(tag: Tag) {
-    AssistChip(
-        onClick = {},
-        colors = AssistChipDefaults.assistChipColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer
-        ),
-        border = AssistChipDefaults.assistChipBorder(
-            borderColor = Color.Transparent
-        ),
-        label = {
-            Text(
-                text = tag.title,
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .horizontalScroll(
-                        state = ScrollState(0),
-                        enabled = true
-                    ),
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
-            )
-        },
-        shape = CircleShape,
-        modifier = Modifier.padding(horizontal = 4.dp),
-        leadingIcon = {
-            Box(
-                modifier = Modifier
-                    .size(8.dp)
-                    .clip(CircleShape)
-                    .background(Color(tag.color))
-            )
-        }
-    )
-}
-
 @Preview(showSystemUi = true, showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun ExerciseDetailsPreview() {
@@ -158,26 +113,14 @@ fun ExerciseDetailsPreview() {
             exercise = Exercise(
                 description = "Elbows in, shoulder blades pinched, don't bounce the bar off your chest",
                 id = 0,
-                muscleGroups = listOf(
-                    MuscleGroup(
+                tags = listOf(
+                    Tag(
                         id = 0,
                         title = "Tricep"
                     ),
-                    MuscleGroup(
+                    Tag(
                         id = 1,
                         title = "Chest"
-                    )
-                ),
-                tags = listOf(
-                    Tag(
-                        color = Color.Blue.hashCode(),
-                        id = 0,
-                        title = "Strength"
-                    ),
-                    Tag(
-                        color = Color.Green.hashCode(),
-                        id = 1,
-                        title = "Push"
                     )
                 ),
                 title = "Bench press"
