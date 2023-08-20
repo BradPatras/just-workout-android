@@ -1,9 +1,10 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 package io.github.bradpatras.justworkout.ui.exercises.list
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.graphics.Color
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,6 +20,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -34,21 +36,34 @@ import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.models.Tag
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.navigate
+import io.github.bradpatras.justworkout.ui.destinations.ExerciseDetailsScreenDestination
+
 @Destination
 @Composable
 fun ExerciseListScreen(
-    viewModel: ExerciseListViewModel = viewModel()
+    viewModel: ExerciseListViewModel = viewModel(),
+    destinationsNavigator: DestinationsNavigator
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     ExerciseListContent(
-        uiState = uiState
+        uiState = uiState,
+        onItemClick = { exercise ->
+            destinationsNavigator.navigate(
+                ExerciseDetailsScreenDestination(exercise = exercise)
+            )
+        }
     )
 }
 
 @Composable
 fun ExerciseListContent(
-    uiState: ExerciseListUiState
+    uiState: ExerciseListUiState,
+    onItemClick: (Exercise) -> Unit
 ) {
     Column {
         TopAppBar(
@@ -66,7 +81,13 @@ fun ExerciseListContent(
             contentPadding = PaddingValues(12.dp)
         ) {
             items(uiState.exercises) { exercise ->
-                ExerciseListItem(exercise = exercise)
+                Surface(
+                    Modifier.clickable {
+                        onItemClick(exercise)
+                    }
+                ) {
+                    ExerciseListItem(exercise = exercise)
+                }
             }
         }
     }
@@ -102,84 +123,8 @@ private fun ExerciseListItem(exercise: Exercise) {
 fun ExerciseListPreview() {
     JustWorkoutTheme() {
         ExerciseListContent(
-            uiState = ExerciseListUiState(
-                exercises = listOf(
-                    Exercise(
-                        description = "this is the description",
-                        id = 0,
-                        tags = listOf(
-                            Tag(
-                                id = 0,
-                                title = "Strength"
-
-                            ),
-                            Tag(
-                                id = 0,
-                                title = "Chest"
-
-                            ),
-                            Tag(
-                                id = 0,
-                                title = "Arms"
-
-                            )
-                        ),
-                        title = "Bench press"
-
-                    ),
-                    Exercise(
-                        description = "this is the description",
-                        id = 1,
-                        tags = listOf(
-                            Tag(
-                                id = 0,
-                                title = "Mobility"
-                            ),
-                            Tag(
-                                id = 0,
-                                title = "Warmup"
-
-                            ),
-                            Tag(
-                                id = 0,
-                                title = "Arms"
-                            )
-                        ),
-                        title = "Shoulder circles"
-                    ),
-                    Exercise(
-                        description = "this is the description",
-                        id = 2,
-                        tags = listOf(
-                            Tag(
-                                id = 0,
-                                title = "Strength"
-                            ),
-                            Tag(
-                                id = 0,
-                                title = "Arms"
-                            )
-                        ),
-                        title = "Bicep curls"
-
-                    ),
-                    Exercise(
-                        description = "this is the description",
-                        id = 3,
-                        tags = listOf(
-                            Tag(
-                                id = 0,
-                                title = "Strength"
-                            ),
-                            Tag(
-                                id = 0,
-                                title = "Chest"
-                            )
-                        ),
-                        title = "Chest cable flys"
-                    )
-                )
-            )
+            uiState = ExerciseListUiState(),
+            onItemClick = { }
         )
     }
 }

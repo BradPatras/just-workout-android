@@ -111,53 +111,7 @@ private fun WorkoutListItem(workout: Workout) {
 fun WorkoutListPreview() {
     JustWorkoutTheme {
         WorkoutListContent(
-            uiState = WorkoutListUiState(
-                workouts = listOf(
-                    Workout(
-                        datesCompleted = listOf(Date()),
-                        exercises = listOf(
-                            Exercise(
-                                description = "this is the description",
-                                id = 2,
-                                tags = emptyList(),
-                                title = "Bicep curls"
-
-                            ),
-                            Exercise(
-                                description = "this is the description",
-                                id = 2,
-                                tags = emptyList(),
-                                title = "Seated Rows"
-
-                            )
-                        ),
-                        id = 0,
-                        notes = "these are the notes",
-                        title = "Basic Pull Workout"
-                    ),
-                    Workout(
-                        datesCompleted = listOf(Date()),
-                        exercises = listOf(
-                            Exercise(
-                                description = "this is the description",
-                                id = 2,
-                                tags = emptyList(),
-                                title = "Lat raises"
-
-                            ),Exercise(
-                                description = "this is the description",
-                                id = 2,
-                                tags = emptyList(),
-                                title = "Bench press"
-
-                            )
-                        ),
-                        id = 0,
-                        notes = "these are the notes",
-                        title = "Basic Push Workout"
-                    )
-                )
-            )
+            uiState = WorkoutListUiState()
         )
     }
 }
