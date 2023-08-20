@@ -7,10 +7,11 @@ import io.github.bradpatras.justworkout.database.exercise.asExercise
 import io.github.bradpatras.justworkout.database.exercise.asExerciseEntity
 import io.github.bradpatras.justworkout.models.Workout
 import java.util.Date
+import java.util.UUID
 
 @Entity(tableName = "workout")
 data class WorkoutEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: UUID,
     val title: String,
     val notes: String,
     val exercises: List<ExerciseEntity>,

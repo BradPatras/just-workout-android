@@ -7,10 +7,11 @@ import io.github.bradpatras.justworkout.database.tag.asTag
 import io.github.bradpatras.justworkout.database.tag.asTagEntity
 import io.github.bradpatras.justworkout.database.tag.asTag
 import io.github.bradpatras.justworkout.models.Exercise
+import java.util.UUID
 
 @Entity(tableName = "exercise")
 data class ExerciseEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: UUID,
     val description: String,
     val tags: List<TagEntity>,
     val title: String

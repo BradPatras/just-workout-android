@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class ExerciseListViewModel: ViewModel() {
+class ExerciseListViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(ExerciseListUiState())
     val uiState: StateFlow<ExerciseListUiState> = _uiState.asStateFlow()
 }

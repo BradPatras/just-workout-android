@@ -2,8 +2,6 @@
 
 package io.github.bradpatras.justworkout.ui.exercises.list
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.graphics.Color
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,16 +29,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.ramcosta.composedestinations.annotation.Destination
-import io.github.bradpatras.justworkout.models.Exercise
-import io.github.bradpatras.justworkout.models.Tag
-import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.navigate
+import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.ui.destinations.ExerciseDetailsScreenDestination
+import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
+import java.util.UUID
 
 @Destination
 @Composable
@@ -52,6 +47,18 @@ fun ExerciseListScreen(
 
     ExerciseListContent(
         uiState = uiState,
+        onAddButtonClick = {
+            val newExercise = Exercise(
+                "",
+                UUID.randomUUID(),
+                emptyList(),
+                ""
+            )
+
+//            destinationsNavigator.navigate(
+//                // navigate to edit screen
+//            )
+        },
         onItemClick = { exercise ->
             destinationsNavigator.navigate(
                 ExerciseDetailsScreenDestination(exercise = exercise)
@@ -63,6 +70,7 @@ fun ExerciseListScreen(
 @Composable
 fun ExerciseListContent(
     uiState: ExerciseListUiState,
+    onAddButtonClick: () -> Unit,
     onItemClick: (Exercise) -> Unit
 ) {
     Column {
@@ -97,7 +105,7 @@ fun ExerciseListContent(
         contentAlignment = Alignment.BottomEnd
     ) {
         FloatingActionButton(
-            onClick = { }, //onAddButtonTapped() },
+            onClick = { onAddButtonClick() },
             shape = RoundedCornerShape(12.dp)
         ) {
             Icon(Icons.Filled.Add, "add exercise")
@@ -120,12 +128,13 @@ private fun ExerciseListItem(exercise: Exercise) {
     }
 }
 
-@Preview(showSystemUi = true, showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun ExerciseListPreview() {
-    JustWorkoutTheme() {
+    JustWorkoutTheme {
         ExerciseListContent(
             uiState = ExerciseListUiState(),
+            onAddButtonClick = { },
             onItemClick = { }
         )
     }

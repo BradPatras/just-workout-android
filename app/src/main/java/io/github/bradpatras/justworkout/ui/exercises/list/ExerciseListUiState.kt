@@ -2,25 +2,26 @@ package io.github.bradpatras.justworkout.ui.exercises.list
 
 import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.models.Tag
+import java.util.UUID
 
 data class ExerciseListUiState(
     val exercises: List<Exercise> = listOf(
         Exercise(
             description = "this is the description",
-            id = 0,
+            id = UUID.randomUUID(),
             tags = listOf(
                 Tag(
-                    id = 0,
+                    id = UUID.randomUUID(),
                     title = "Strength"
 
                 ),
                 Tag(
-                    id = 0,
+                    id = UUID.randomUUID(),
                     title = "Chest"
 
                 ),
                 Tag(
-                    id = 0,
+                    id = UUID.randomUUID(),
                     title = "Arms"
 
                 )
@@ -30,19 +31,19 @@ data class ExerciseListUiState(
         ),
         Exercise(
             description = "this is the description",
-            id = 1,
+            id = UUID.randomUUID(),
             tags = listOf(
                 Tag(
-                    id = 0,
+                    id = UUID.randomUUID(),
                     title = "Mobility"
                 ),
                 Tag(
-                    id = 0,
+                    id = UUID.randomUUID(),
                     title = "Warmup"
 
                 ),
                 Tag(
-                    id = 0,
+                    id = UUID.randomUUID(),
                     title = "Arms"
                 )
             ),
@@ -50,14 +51,14 @@ data class ExerciseListUiState(
         ),
         Exercise(
             description = "this is the description",
-            id = 2,
+            id = UUID.randomUUID(),
             tags = listOf(
                 Tag(
-                    id = 0,
+                    id = UUID.randomUUID(),
                     title = "Strength"
                 ),
                 Tag(
-                    id = 0,
+                    id = UUID.randomUUID(),
                     title = "Arms"
                 )
             ),
@@ -66,14 +67,14 @@ data class ExerciseListUiState(
         ),
         Exercise(
             description = "this is the description",
-            id = 3,
+            id = UUID.randomUUID(),
             tags = listOf(
                 Tag(
-                    id = 0,
+                    id = UUID.randomUUID(),
                     title = "Strength"
                 ),
                 Tag(
-                    id = 0,
+                    id = UUID.randomUUID(),
                     title = "Chest"
                 )
             ),
