@@ -15,7 +15,6 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -91,19 +90,21 @@ fun WorkoutListContent(
 
 @Composable
 private fun WorkoutListItem(workout: Workout) {
-    ListItem(
-        headlineContent = {
-            Text(text = workout.title)
-        },
-        supportingContent = {
-            if (workout.exercises.isEmpty()) {
-                Text(text = "No exercises added")
-            } else {
-                Text(text = workout.exercises.joinToString { it.title })
+    Column {
+        ListItem(
+            headlineContent = {
+                Text(text = workout.title)
+            },
+            supportingContent = {
+                if (workout.exercises.isEmpty()) {
+                    Text(text = "No exercises added")
+                } else {
+                    Text(text = workout.exercises.joinToString { it.title })
+                }
             }
-        }
-    )
-    Divider()
+        )
+        Divider()
+    }
 }
 
 @Preview(showSystemUi = true, showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)

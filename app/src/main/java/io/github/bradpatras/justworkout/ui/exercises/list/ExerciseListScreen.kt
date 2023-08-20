@@ -107,15 +107,17 @@ fun ExerciseListContent(
 
 @Composable
 private fun ExerciseListItem(exercise: Exercise) {
-    ListItem(
-        headlineContent = {
-            Text(text = exercise.title)
-        },
-        supportingContent = {
-            Text(text = exercise.tags.joinToString { it.title })
-        }
-    )
-    Divider()
+    Column {
+        ListItem(
+            headlineContent = {
+                Text(text = exercise.title)
+            },
+            supportingContent = {
+                Text(text = exercise.tags.joinToString { it.title })
+            }
+        )
+        Divider()
+    }
 }
 
 @Preview(showSystemUi = true, showBackground = true, uiMode = UI_MODE_NIGHT_YES)
