@@ -10,9 +10,8 @@ import kotlinx.coroutines.flow.asStateFlow
 class ExerciseEditViewModel(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val args = ExerciseEditScreenDestination.argsFrom(savedStateHandle)
     private val _uiState = MutableStateFlow(
-        ExerciseEditUiState(exercise = args.exercise)
+        ExerciseEditScreenDestination.argsFrom(savedStateHandle)
     )
     val uiState: StateFlow<ExerciseEditUiState> = _uiState.asStateFlow()
 }

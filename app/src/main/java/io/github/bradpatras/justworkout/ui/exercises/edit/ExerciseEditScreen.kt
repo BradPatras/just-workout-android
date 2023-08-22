@@ -47,7 +47,11 @@ fun ExerciseEditContent(
             .background(color = MaterialTheme.colorScheme.surface)
     ) {
         TopAppBar(
-            title = { Text(text = "Create exercise") },
+            title = {
+                Text(
+                    text = if (uiState.isNew) "Create exercise" else "Add exercise"
+                )
+            },
             navigationIcon = {
                 IconButton(onClick = { destinationsNavigator.navigateUp() }) {
                     Icon(
