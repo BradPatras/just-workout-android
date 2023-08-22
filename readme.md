@@ -11,3 +11,5 @@ Taking architectural inspiration from [skydove's pokedex project](https://github
 [Compose Previews with ViewModels](https://developer.android.com/jetpack/compose/tooling/previews#preview-viewmodel)
 
 [Compose Destinations Library Docs](https://composedestinations.rafaelcosta.xyz/)
+
+[Compose Destinations article explaining the navArgsDelegate feature](https://proandroiddev.com/compose-destinations-simpler-and-safer-navigation-in-compose-with-no-compromises-74a59c6b727d)
