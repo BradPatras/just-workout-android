@@ -34,19 +34,30 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.models.Tag
+import io.github.bradpatras.justworkout.ui.destinations.ExerciseEditScreenDestination
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 import java.util.UUID
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
-@Destination
+@Destination(navArgsDelegate = ExerciseDetailsUiState::class)
 @Composable
 fun ExerciseDetailsScreen(
-    exercise: Exercise,
     destinationsNavigator: DestinationsNavigator,
     viewModel: ExerciseDetailsViewModel = viewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState()
 
+    ExerciseDetailsContent(
+        uiState = uiState.value,
+        destinationsNavigator = destinationsNavigator
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@Composable
+fun ExerciseDetailsContent(
+    uiState: ExerciseDetailsUiState,
+    destinationsNavigator: DestinationsNavigator
+) {
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -55,7 +66,7 @@ fun ExerciseDetailsScreen(
             .background(color = MaterialTheme.colorScheme.surface)
     ) {
         TopAppBar(
-            title = { Text(text = exercise.title) },
+            title = { Text(text = uiState.exercise.title) },
             navigationIcon = {
                 IconButton(onClick = { destinationsNavigator.navigateUp() }) {
                     Icon(
@@ -65,7 +76,13 @@ fun ExerciseDetailsScreen(
                 }
             },
             actions = {
-                IconButton(onClick = { /* navigate to edit screen */ }) {
+                IconButton(
+                    onClick = {
+                        destinationsNavigator.navigate(
+                            ExerciseEditScreenDestination(exercise = uiState.exercise)
+                        )
+                    }
+                ) {
                     Icon(
                         imageVector = Icons.Filled.Edit,
                         contentDescription = "Localized description"
@@ -83,7 +100,7 @@ fun ExerciseDetailsScreen(
             FlowRow(
                 modifier = Modifier.align(Alignment.Start)
             ) {
-                exercise.tags.forEach {
+                uiState.exercise.tags.forEach {
                     TagChip(tag = it)
                 }
             }
@@ -95,7 +112,7 @@ fun ExerciseDetailsScreen(
             )
 
             Text(
-                text = exercise.description,
+                text = uiState.exercise.description,
                 modifier = Modifier
                     .padding(vertical = 16.dp)
                     .align(Alignment.Start),
@@ -130,21 +147,23 @@ fun TagChip(tag: Tag) {
 @Composable
 fun ExerciseDetailsPreview() {
     JustWorkoutTheme() {
-        ExerciseDetailsScreen(
-            exercise = Exercise(
-                description = "Elbows in, shoulder blades pinched, don't bounce the bar off your chest",
-                id = UUID.randomUUID(),
-                tags = listOf(
-                    Tag(
-                        id = UUID.randomUUID(),
-                        title = "Tricep"
+        ExerciseDetailsContent(
+            uiState = ExerciseDetailsUiState(
+                exercise = Exercise(
+                    description = "Elbows in, shoulder blades pinched, don't bounce the bar off your chest",
+                    id = UUID.randomUUID(),
+                    tags = listOf(
+                        Tag(
+                            id = UUID.randomUUID(),
+                            title = "Tricep"
+                        ),
+                        Tag(
+                            id = UUID.randomUUID(),
+                            title = "Chest"
+                        )
                     ),
-                    Tag(
-                        id = UUID.randomUUID(),
-                        title = "Chest"
-                    )
-                ),
-                title = "Bench press"
+                    title = "Bench press"
+                )
             ),
             destinationsNavigator = EmptyDestinationsNavigator
         )

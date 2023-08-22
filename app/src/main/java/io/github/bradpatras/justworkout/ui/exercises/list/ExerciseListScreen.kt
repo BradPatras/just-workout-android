@@ -34,6 +34,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.ui.destinations.ExerciseDetailsScreenDestination
+import io.github.bradpatras.justworkout.ui.destinations.ExerciseEditScreenDestination
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 import java.util.UUID
 
@@ -52,12 +53,12 @@ fun ExerciseListScreen(
                 "",
                 UUID.randomUUID(),
                 emptyList(),
-                ""
+                "New exercise"
             )
 
-//            destinationsNavigator.navigate(
-//                // navigate to edit screen
-//            )
+            destinationsNavigator.navigate(
+                ExerciseEditScreenDestination(exercise = newExercise)
+            )
         },
         onItemClick = { exercise ->
             destinationsNavigator.navigate(
