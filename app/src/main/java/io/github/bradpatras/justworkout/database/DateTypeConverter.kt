@@ -11,6 +11,21 @@ class DateTypeConverter {
 
     @TypeConverter
     fun dateToTimestamp(date: Date?): Long? {
-        return date?.time?.toLong()
+        return date?.time
+    }
+
+    @TypeConverter
+    fun fromTimestampListString(value: String): List<Date> {
+        return value
+            .split(",")
+            .mapNotNull { it.toLongOrNull() }
+            .mapNotNull { fromTimestamp(it) }
+    }
+
+    @TypeConverter
+    fun dateListToTimestampList(dates: List<Date>): String {
+        return dates
+            .mapNotNull { dateToTimestamp(it) }
+            .joinToString(",")
     }
 }

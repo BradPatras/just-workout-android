@@ -9,5 +9,6 @@ data class Workout(
     val exercises: List<Exercise>,
     val id: UUID,
     val notes: String,
+    val tags: List<Tag>,
     val title: String
 ) : Serializable

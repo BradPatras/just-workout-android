@@ -10,8 +10,9 @@ interface ExerciseDao {
     @Delete
     suspend fun delete(exercise: ExerciseEntity)
 
+    @Transaction
     @Query("SELECT * FROM exercise")
-    suspend fun getAll(): List<ExerciseEntity>
+    suspend fun getAll(): List<ExerciseWithTagsEntity>
 
     @Update
     suspend fun update(vararg exercises: ExerciseEntity)
