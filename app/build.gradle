@@ -51,6 +51,10 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes true
+}
+
 dependencies {
     // android stuff
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1"
@@ -82,11 +86,14 @@ dependencies {
     def room_version = '2.5.2'
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
     // hilt
-    implementation "com.google.dagger:hilt-android:2.44.2"
-    kapt "com.google.dagger:hilt-compiler:2.44"
+    // Before upgrading to 2.47, check this thread https://github.com/google/dagger/issues/3965
+    def hilt_version = '2.46'
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
 
     // testing/debug
     testImplementation 'junit:junit:4.13.2'
@@ -96,8 +103,4 @@ dependencies {
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
-}
-
-kapt {
-    correctErrorTypes true
 }
