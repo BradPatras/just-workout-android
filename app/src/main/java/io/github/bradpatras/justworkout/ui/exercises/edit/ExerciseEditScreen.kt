@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -26,7 +27,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun ExerciseEditScreen(
     navigator: DestinationsNavigator,
-    viewModel: ExerciseEditViewModel = viewModel()
+    viewModel: ExerciseEditViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState()
 

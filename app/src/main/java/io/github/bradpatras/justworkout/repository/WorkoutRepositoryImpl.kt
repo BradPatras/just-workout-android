@@ -3,15 +3,17 @@ package io.github.bradpatras.justworkout.repository
 import io.github.bradpatras.justworkout.database.workout.WorkoutDao
 import io.github.bradpatras.justworkout.database.workout.asWorkout
 import io.github.bradpatras.justworkout.database.workout.asWorkoutEntity
+import io.github.bradpatras.justworkout.di.IoDispatcher
 import io.github.bradpatras.justworkout.models.Workout
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onCompletion
+import javax.inject.Inject
 
-class WorkoutRepositoryImpl constructor(
+class WorkoutRepositoryImpl @Inject constructor(
     private val workoutDao: WorkoutDao,
-    private val ioDispatcher: CoroutineDispatcher
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): WorkoutRepository {
     override fun fetchWorkouts(
         onComplete: () -> Unit,

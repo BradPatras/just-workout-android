@@ -21,7 +21,7 @@ import io.github.bradpatras.justworkout.database.workout.WorkoutEntity
     exportSchema = false,
     version = 1
 )
-@TypeConverters(DateTypeConverter::class)
+@TypeConverters(DateTypeConverter::class, UuidTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun exerciseDao(): ExerciseDao
     abstract fun tagDao(): TagDao

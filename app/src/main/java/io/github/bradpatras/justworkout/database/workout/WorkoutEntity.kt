@@ -11,7 +11,7 @@ import java.util.UUID
 
 @Entity(tableName = "workout")
 data class WorkoutEntity(
-    @PrimaryKey(autoGenerate = true) val id: UUID,
+    @PrimaryKey val workoutId: UUID,
     val title: String,
     val notes: String,
     val exercises: List<ExerciseEntity>,
@@ -21,7 +21,7 @@ data class WorkoutEntity(
 fun WorkoutEntity.asWorkout() = Workout(
     datesCompleted = datesCompleted,
     exercises = exercises.map { it.asExercise() },
-    id = id,
+    id = workoutId,
     notes = notes,
     title = title
 )
@@ -29,7 +29,7 @@ fun WorkoutEntity.asWorkout() = Workout(
 fun Workout.asWorkoutEntity() = WorkoutEntity(
     datesCompleted = datesCompleted,
     exercises = exercises.map { it.asExerciseEntity() },
-    id = id,
+    workoutId = id,
     notes = notes,
     title = title
 )

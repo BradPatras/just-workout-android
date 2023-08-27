@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -41,7 +42,7 @@ import java.util.UUID
 @Destination
 @Composable
 fun ExerciseListScreen(
-    viewModel: ExerciseListViewModel = viewModel(),
+    viewModel: ExerciseListViewModel = hiltViewModel(),
     destinationsNavigator: DestinationsNavigator
 ) {
     val uiState by viewModel.uiState.collectAsState()
