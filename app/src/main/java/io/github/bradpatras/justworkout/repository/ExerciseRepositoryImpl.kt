@@ -4,7 +4,7 @@ import io.github.bradpatras.justworkout.database.exercise.ExerciseDao
 import io.github.bradpatras.justworkout.database.exercise.ExerciseTagCrossRef
 import io.github.bradpatras.justworkout.database.exercise.ExerciseTagCrossRefDao
 import io.github.bradpatras.justworkout.database.exercise.asExercise
-import io.github.bradpatras.justworkout.database.exercise.asExerciseWithTagsEntity
+import io.github.bradpatras.justworkout.database.exercise.asExerciseWithTags
 import io.github.bradpatras.justworkout.di.IoDispatcher
 import io.github.bradpatras.justworkout.models.Exercise
 import kotlinx.coroutines.CoroutineDispatcher
@@ -35,7 +35,7 @@ class ExerciseRepositoryImpl @Inject constructor(
         onComplete: () -> Unit,
         onError: (Error) -> Unit
     ) = flow<Unit> {
-        val entity = exercise.asExerciseWithTagsEntity()
+        val entity = exercise.asExerciseWithTags()
         exerciseDao
             .update(exercises = arrayOf(entity.exercise))
 
@@ -56,7 +56,7 @@ class ExerciseRepositoryImpl @Inject constructor(
         onComplete: () -> Unit,
         onError: (Error) -> Unit
     ) = flow<Unit> {
-        val entity = exercise.asExerciseWithTagsEntity()
+        val entity = exercise.asExerciseWithTags()
         exerciseDao
             .delete(exercise = entity.exercise)
 
@@ -73,7 +73,7 @@ class ExerciseRepositoryImpl @Inject constructor(
         onComplete: () -> Unit,
         onError: (Error) -> Unit
     ) = flow<Unit> {
-        val entity = exercise.asExerciseWithTagsEntity()
+        val entity = exercise.asExerciseWithTags()
         exerciseDao
             .insert(exercises = arrayOf(entity.exercise))
 

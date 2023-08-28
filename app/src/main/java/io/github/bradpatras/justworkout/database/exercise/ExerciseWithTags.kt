@@ -8,7 +8,7 @@ import io.github.bradpatras.justworkout.database.tag.asTag
 import io.github.bradpatras.justworkout.database.tag.asTagEntity
 import io.github.bradpatras.justworkout.models.Exercise
 
-data class ExerciseWithTagsEntity(
+data class ExerciseWithTags(
     @Embedded val exercise: ExerciseEntity,
     @Relation(
         parentColumn = "exerciseId",
@@ -18,14 +18,14 @@ data class ExerciseWithTagsEntity(
     val tags: List<TagEntity>
 )
 
-fun ExerciseWithTagsEntity.asExercise() = Exercise(
+fun ExerciseWithTags.asExercise() = Exercise(
     description = exercise.description,
     id = exercise.exerciseId,
     tags = tags.map { it.asTag() },
     title = exercise.title
 )
 
-fun Exercise.asExerciseWithTagsEntity() = ExerciseWithTagsEntity(
+fun Exercise.asExerciseWithTags() = ExerciseWithTags(
     exercise = ExerciseEntity(
         exerciseId = id,
         description = description,

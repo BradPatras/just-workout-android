@@ -27,7 +27,8 @@ data class WorkoutListUiState(
             ),
             id = UUID.randomUUID(),
             notes = "these are the notes",
-            title = "Basic Pull Workout"
+            title = "Basic Pull Workout",
+            tags = emptyList()
         ),
         Workout(
             datesCompleted = listOf(Date()),
@@ -48,7 +49,8 @@ data class WorkoutListUiState(
             ),
             id = UUID.randomUUID(),
             notes = "these are the notes",
-            title = "Basic Push Workout"
+            title = "Basic Push Workout",
+            tags = emptyList()
         )
     )
 )

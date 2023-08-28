@@ -12,7 +12,7 @@ interface ExerciseDao {
 
     @Transaction
     @Query("SELECT * FROM exercise")
-    suspend fun getAll(): List<ExerciseWithTagsEntity>
+    suspend fun getAll(): List<ExerciseWithTags>
 
     @Update
     suspend fun update(vararg exercises: ExerciseEntity)

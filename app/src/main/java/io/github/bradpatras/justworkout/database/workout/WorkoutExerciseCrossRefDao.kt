@@ -5,14 +5,15 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import java.util.UUID
 
 @Dao
 interface WorkoutExerciseCrossRefDao {
     @Insert
-    suspend fun insert(vararg crossRefs: WorkoutExerciseCrossRef)
+    suspend fun insert(crossRefs: List<WorkoutExerciseCrossRef>)
 
-    @Delete
-    suspend fun delete(crossRef: WorkoutExerciseCrossRef)
+    @Query("DELETE FROM workout_exercise_cross_ref WHERE workoutId = :workoutId")
+    suspend fun deleteByWorkout(workoutId: UUID)
 
     @Query("SELECT * FROM workout_exercise_cross_ref")
     suspend fun getAll(): List<WorkoutExerciseCrossRef>

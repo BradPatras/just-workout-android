@@ -1,6 +1,10 @@
 package io.github.bradpatras.justworkout.repository
 
 import io.github.bradpatras.justworkout.database.workout.WorkoutDao
+import io.github.bradpatras.justworkout.database.workout.WorkoutExerciseCrossRef
+import io.github.bradpatras.justworkout.database.workout.WorkoutExerciseCrossRefDao
+import io.github.bradpatras.justworkout.database.workout.WorkoutTagCrossRef
+import io.github.bradpatras.justworkout.database.workout.WorkoutTagCrossRefDao
 import io.github.bradpatras.justworkout.database.workout.asWorkout
 import io.github.bradpatras.justworkout.database.workout.asWorkoutEntity
 import io.github.bradpatras.justworkout.di.IoDispatcher
@@ -13,6 +17,8 @@ import javax.inject.Inject
 
 class WorkoutRepositoryImpl @Inject constructor(
     private val workoutDao: WorkoutDao,
+    private val workoutExerciseCrossRefDao: WorkoutExerciseCrossRefDao,
+    private val workoutTagCrossRefDao: WorkoutTagCrossRefDao,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): WorkoutRepository {
     override fun fetchWorkouts(
@@ -32,9 +38,29 @@ class WorkoutRepositoryImpl @Inject constructor(
         onComplete: () -> Unit,
         onError: (Error) -> Unit
     ) = flow<Unit> {
+        val entity = workout.asWorkoutEntity()
         workoutDao
-            .update(workouts = arrayOf(workout.asWorkoutEntity()))
-            .also { emit(Unit) }
+            .update(workouts = arrayOf(entity.workout))
+
+        workoutExerciseCrossRefDao
+            .deleteByWorkout(workoutId = workout.id)
+        workoutExerciseCrossRefDao
+            .insert(
+                entity.exercises.map {
+                    WorkoutExerciseCrossRef(workoutId = workout.id, it.exercise.exerciseId)
+                }
+            )
+
+        workoutTagCrossRefDao
+            .deleteByWorkout(workoutId = workout.id)
+        workoutTagCrossRefDao
+            .insert(
+                entity.tags.map {
+                    WorkoutTagCrossRef(workoutId = workout.id, it.tagId)
+                }
+            )
+
+        emit(Unit)
     }
         .onCompletion { onComplete() }
         .flowOn(ioDispatcher)
@@ -44,9 +70,14 @@ class WorkoutRepositoryImpl @Inject constructor(
         onComplete: () -> Unit,
         onError: (Error) -> Unit
     ) = flow<Unit> {
+        val entity = workout.asWorkoutEntity()
         workoutDao
-            .delete(workout = workout.asWorkoutEntity())
-            .also { emit(Unit) }
+            .delete(workout = entity.workout)
+
+        workoutExerciseCrossRefDao.deleteByWorkout(workoutId = workout.id)
+        workoutTagCrossRefDao.deleteByWorkout(workoutId = workout.id)
+
+        emit(Unit)
     }
         .onCompletion { onComplete() }
         .flowOn(ioDispatcher)
@@ -56,9 +87,29 @@ class WorkoutRepositoryImpl @Inject constructor(
         onComplete: () -> Unit,
         onError: (Error) -> Unit
     ) = flow<Unit> {
+        val entity = workout.asWorkoutEntity()
         workoutDao
-            .insert(workouts = arrayOf(workout.asWorkoutEntity()))
-            .also { emit(Unit) }
+            .insert(workouts = arrayOf(entity.workout))
+
+        workoutExerciseCrossRefDao
+            .insert(
+                entity.exercises.map {
+                   WorkoutExerciseCrossRef(
+                       workoutId = workout.id,
+                       exerciseId = it.exercise.exerciseId
+                   )
+                }
+            )
+
+        workoutTagCrossRefDao
+            .insert(
+                entity.tags.map {
+                    WorkoutTagCrossRef(
+                        workoutId = workout.id,
+                        tagId = it.tagId
+                    )
+                }
+            )
     }
         .onCompletion { onComplete() }
         .flowOn(ioDispatcher)
