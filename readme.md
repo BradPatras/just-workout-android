@@ -13,3 +13,5 @@ Taking architectural inspiration from [skydove's pokedex project](https://github
 [Compose Destinations Library Docs](https://composedestinations.rafaelcosta.xyz/)
 
 [Compose Destinations article explaining the navArgsDelegate feature](https://proandroiddev.com/compose-destinations-simpler-and-safer-navigation-in-compose-with-no-compromises-74a59c6b727d)
+
+[Room db article on defining relationships](https://developer.android.com/training/data-storage/room/relationships)
