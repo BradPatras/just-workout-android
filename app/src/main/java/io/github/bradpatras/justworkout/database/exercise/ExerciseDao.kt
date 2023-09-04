@@ -1,6 +1,7 @@
 package io.github.bradpatras.justworkout.database.exercise
 
 import androidx.room.*
+import java.util.UUID
 
 @Dao
 interface ExerciseDao {
@@ -9,6 +10,11 @@ interface ExerciseDao {
 
     @Delete
     suspend fun delete(exercise: ExerciseEntity)
+
+    @Transaction
+    @Query("SELECT * FROM exercise WHERE exerciseId = :id")
+    suspend fun get(id: UUID): ExerciseWithTags
+
 
     @Transaction
     @Query("SELECT * FROM exercise")

@@ -10,15 +10,25 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
 import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.bradpatras.justworkout.repository.ExerciseRepository
+import io.github.bradpatras.justworkout.repository.TagRepository
+import io.github.bradpatras.justworkout.repository.WorkoutRepository
 import io.github.bradpatras.justworkout.ui.MainScreen
 import io.github.bradpatras.justworkout.ui.NavGraphs
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
+import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject lateinit var exerciseRepository: ExerciseRepository
+    @Inject lateinit var tagRepository: TagRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -29,6 +39,18 @@ class MainActivity : ComponentActivity() {
                 ) {
                     MainScreen()
                 }
+            }
+        }
+
+        lifecycleScope.launch {
+            (Mocks.mockTagList1 + Mocks.mockTagsList2).forEach {
+                tagRepository.createTag(it, {}, {}).single()
+                Timber.i("creating tag")
+            }
+
+            Mocks.mockExerciseList.forEach {
+                Timber.i("creating exercise")
+                exerciseRepository.createExercise(it, {},  {}).single()
             }
         }
     }

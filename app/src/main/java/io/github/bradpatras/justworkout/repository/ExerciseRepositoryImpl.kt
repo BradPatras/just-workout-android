@@ -8,9 +8,11 @@ import io.github.bradpatras.justworkout.database.exercise.asExerciseWithTags
 import io.github.bradpatras.justworkout.di.IoDispatcher
 import io.github.bradpatras.justworkout.models.Exercise
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onCompletion
+import java.util.UUID
 import javax.inject.Inject
 
 class ExerciseRepositoryImpl @Inject constructor(
@@ -18,6 +20,19 @@ class ExerciseRepositoryImpl @Inject constructor(
     private val exerciseTagCrossRefDao: ExerciseTagCrossRefDao,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): ExerciseRepository {
+    override fun fetchExercise(
+        id: UUID,
+        onComplete: () -> Unit,
+        onError: (Error) -> Unit
+    ) = flow<Exercise> {
+        exerciseDao
+            .get(id)
+            .asExercise()
+            .also { emit(it) }
+    }
+        .onCompletion { onComplete() }
+        .flowOn(ioDispatcher)
+
     override fun fetchExercises(
         onComplete: () -> Unit,
         onError: (Error) -> Unit

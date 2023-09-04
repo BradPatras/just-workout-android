@@ -58,7 +58,7 @@ fun ExerciseListScreen(
             )
 
             destinationsNavigator.navigate(
-                ExerciseEditScreenDestination(exercise = newExercise, isNew = true)
+                ExerciseEditScreenDestination(id = UUID.randomUUID(), isNew = true)
             )
         },
         onItemClick = { exercise ->

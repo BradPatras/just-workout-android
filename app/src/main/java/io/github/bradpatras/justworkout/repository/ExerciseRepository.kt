@@ -3,8 +3,16 @@ package io.github.bradpatras.justworkout.repository
 import androidx.annotation.WorkerThread
 import io.github.bradpatras.justworkout.models.Exercise
 import kotlinx.coroutines.flow.Flow
+import java.util.UUID
 
 interface ExerciseRepository {
+    @WorkerThread
+    fun fetchExercise(
+        id: UUID,
+        onComplete: () -> Unit,
+        onError: (Error) -> Unit
+    ): Flow<Exercise>
+
     @WorkerThread
     fun fetchExercises(
         onComplete: () -> Unit,

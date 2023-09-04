@@ -6,51 +6,5 @@ import java.util.Date
 import java.util.UUID
 
 data class WorkoutListUiState(
-    val workouts: List<Workout> = listOf(
-        Workout(
-            datesCompleted = listOf(Date()),
-            exercises = listOf(
-                Exercise(
-                    description = "this is the description",
-                    id = UUID.randomUUID(),
-                    tags = emptyList(),
-                    title = "Bicep curls"
-
-                ),
-                Exercise(
-                    description = "this is the description",
-                    id = UUID.randomUUID(),
-                    tags = emptyList(),
-                    title = "Seated Rows"
-
-                )
-            ),
-            id = UUID.randomUUID(),
-            notes = "these are the notes",
-            title = "Basic Pull Workout",
-            tags = emptyList()
-        ),
-        Workout(
-            datesCompleted = listOf(Date()),
-            exercises = listOf(
-                Exercise(
-                    description = "this is the description",
-                    id = UUID.randomUUID(),
-                    tags = emptyList(),
-                    title = "Lat raises"
-
-                ), Exercise(
-                    description = "this is the description",
-                    id = UUID.randomUUID(),
-                    tags = emptyList(),
-                    title = "Bench press"
-
-                )
-            ),
-            id = UUID.randomUUID(),
-            notes = "these are the notes",
-            title = "Basic Push Workout",
-            tags = emptyList()
-        )
-    )
+    val workouts: List<Workout> = emptyList()
 )

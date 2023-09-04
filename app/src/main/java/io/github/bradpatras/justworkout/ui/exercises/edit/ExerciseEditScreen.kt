@@ -23,7 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@Destination(navArgsDelegate = ExerciseEditUiState::class)
+@Destination(navArgsDelegate = ExerciseEditScreenNavArgs::class)
 @Composable
 fun ExerciseEditScreen(
     navigator: DestinationsNavigator,

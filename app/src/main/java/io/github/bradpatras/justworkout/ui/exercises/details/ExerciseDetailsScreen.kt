@@ -80,7 +80,10 @@ fun ExerciseDetailsContent(
                 IconButton(
                     onClick = {
                         destinationsNavigator.navigate(
-                            ExerciseEditScreenDestination(exercise = uiState.exercise, isNew = false)
+                            ExerciseEditScreenDestination(
+                                id = uiState.exercise.id,
+                                isNew = false
+                            )
                         )
                     }
                 ) {
