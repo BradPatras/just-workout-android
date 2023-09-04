@@ -5,7 +5,7 @@ import java.util.UUID
 
 @Dao
 interface ExerciseDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg exercises: ExerciseEntity)
 
     @Delete

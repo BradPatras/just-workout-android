@@ -3,13 +3,14 @@ package io.github.bradpatras.justworkout.database.exercise
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import java.util.UUID
 
 @Dao
 interface ExerciseTagCrossRefDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(crossRefs: List<ExerciseTagCrossRef>)
 
     @Delete

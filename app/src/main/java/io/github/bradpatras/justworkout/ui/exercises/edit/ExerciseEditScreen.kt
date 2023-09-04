@@ -50,7 +50,7 @@ fun ExerciseEditContent(
         TopAppBar(
             title = {
                 Text(
-                    text = if (uiState.isNew) "Create exercise" else "Add exercise"
+                    text = if (uiState.isNew) "Create exercise" else "Edit exercise"
                 )
             },
             navigationIcon = {

@@ -4,7 +4,7 @@ import androidx.room.*
 
 @Dao
 interface WorkoutDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg workouts: WorkoutEntity)
 
     @Delete
