@@ -35,6 +35,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.models.Tag
+import io.github.bradpatras.justworkout.ui.composables.TagChip
 import io.github.bradpatras.justworkout.ui.destinations.ExerciseEditScreenDestination
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 import java.util.UUID
@@ -126,25 +127,6 @@ fun ExerciseDetailsContent(
             )
         }
     }
-}
-
-@Composable
-fun TagChip(tag: Tag) {
-    AssistChip(
-        onClick = {},
-        label = {
-            Text(
-                text = tag.title,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onTertiaryContainer
-            )
-        },
-        modifier = Modifier.padding(horizontal = 4.dp),
-        border = null,
-        colors = AssistChipDefaults.assistChipColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer
-        )
-    )
 }
 
 @Preview(showSystemUi = true, showBackground = true, uiMode = UI_MODE_NIGHT_YES)

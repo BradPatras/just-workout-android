@@ -1,6 +1,13 @@
 # Just Workout
 Workout database app to assist in coming up with fresh and effective strength training workouts.
 
+## Project structure
+- **app/.../justworkout/**
+    - **models/**
+    - **database/**
+    - **repository/**
+    - **ui/**
+
 ## Dev docs
 Taking some architectural inspiration from [skydove's pokedex project](https://github.com/skydoves/Pokedex).
 
