@@ -2,11 +2,13 @@
 Workout database app to assist in coming up with fresh and effective strength training workouts.
 
 ## Project structure
-- **app/.../justworkout/**
-    - **models/**
-    - **database/**
-    - **repository/**
-    - **ui/**
+The app is not technically modularized but the package structure mimics how I would modularize it. This keeps responsibilities clear and if I were to actually modularize in the future it would be pretty simple.
+- `app/.../justworkout/`
+    - `models/` - Domain models common to the entire app
+    - `database/` - Room databse Entities and DAOs
+    - `repository/` - Abstraction layer to decouple data fetching from the core app 
+    - `di/` - Dependency injection utilities and shared components
+    - `ui/` - Composables and ViewModels
 
 ## Dev docs
 Taking some architectural inspiration from [skydove's pokedex project](https://github.com/skydoves/Pokedex).
