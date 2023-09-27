@@ -43,13 +43,20 @@ fun ExerciseEditScreen(
 ) {
     val uiState = viewModel.uiState.collectAsState()
 
-    ExerciseEditContent(uiState = uiState.value, destinationsNavigator = navigator)
+    ExerciseEditContent(
+        uiState = uiState.value,
+        onTitleChanged = { viewModel.onTitleChanged(it) },
+        onDescriptionChanged = { viewModel.onDescriptionChanged(it) },
+        destinationsNavigator = navigator
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExerciseEditContent(
     uiState: ExerciseEditUiState,
+    onTitleChanged: (String) -> Unit,
+    onDescriptionChanged: (String) -> Unit,
     destinationsNavigator: DestinationsNavigator
 ) {
     Column(
@@ -97,14 +104,14 @@ fun ExerciseEditContent(
         ) {
             OutlinedTextField(
                 value = uiState.title,
-                onValueChange = {  },
+                onValueChange = { onTitleChanged(it) },
                 modifier = Modifier
                     .fillMaxWidth()
             )
 
             OutlinedTextField(
                 value = uiState.description,
-                onValueChange = { },
+                onValueChange = { onDescriptionChanged(it) },
                 modifier = Modifier
                     .fillMaxWidth()
             )
@@ -123,6 +130,8 @@ fun ExerciseEditPreview() {
                 title = "This is the title",
                 isNew = false
             ),
+            { },
+            { },
             destinationsNavigator = EmptyDestinationsNavigator
         )
     }

@@ -52,4 +52,12 @@ class ExerciseEditViewModel @Inject constructor(
             )
         }
     }
+
+    fun onTitleChanged(title: String) {
+        _uiState.value = _uiState.value.copy(title = title)
+    }
+
+    fun onDescriptionChanged(description: String) {
+        _uiState.value = _uiState.value.copy(description = description)
+    }
 }
