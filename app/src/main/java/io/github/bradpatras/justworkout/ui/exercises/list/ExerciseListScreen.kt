@@ -50,13 +50,6 @@ fun ExerciseListScreen(
     ExerciseListContent(
         uiState = uiState,
         onAddButtonClick = {
-            val newExercise = Exercise(
-                "",
-                UUID.randomUUID(),
-                emptyList(),
-                "New exercise"
-            )
-
             destinationsNavigator.navigate(
                 ExerciseEditScreenDestination(id = UUID.randomUUID(), isNew = true)
             )

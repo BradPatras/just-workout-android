@@ -5,8 +5,8 @@ import java.util.UUID
 
 @Dao
 interface ExerciseDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(vararg exercises: ExerciseEntity)
+    @Upsert
+    suspend fun createOrUpdate(vararg exercises: ExerciseEntity)
 
     @Delete
     suspend fun delete(exercise: ExerciseEntity)
@@ -19,7 +19,4 @@ interface ExerciseDao {
     @Transaction
     @Query("SELECT * FROM exercise")
     suspend fun getAll(): List<ExerciseWithTags>
-
-    @Update
-    suspend fun update(vararg exercises: ExerciseEntity)
 }

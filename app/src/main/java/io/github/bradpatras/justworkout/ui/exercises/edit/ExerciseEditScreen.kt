@@ -47,6 +47,7 @@ fun ExerciseEditScreen(
         uiState = uiState.value,
         onTitleChanged = { viewModel.onTitleChanged(it) },
         onDescriptionChanged = { viewModel.onDescriptionChanged(it) },
+        onCheckmarkTapped = { viewModel.onCheckmarkTapped() },
         destinationsNavigator = navigator
     )
 }
@@ -57,6 +58,7 @@ fun ExerciseEditContent(
     uiState: ExerciseEditUiState,
     onTitleChanged: (String) -> Unit,
     onDescriptionChanged: (String) -> Unit,
+    onCheckmarkTapped: () -> Unit,
     destinationsNavigator: DestinationsNavigator
 ) {
     Column(
@@ -83,8 +85,7 @@ fun ExerciseEditContent(
             actions = {
                 IconButton(
                     onClick = {
-                        // viewModel.applyChanges
-                        destinationsNavigator.navigateUp()
+                        onCheckmarkTapped()
                     }
                 ) {
                     Icon(
@@ -104,6 +105,7 @@ fun ExerciseEditContent(
         ) {
             OutlinedTextField(
                 value = uiState.title,
+                label = { Text("Title") },
                 onValueChange = { onTitleChanged(it) },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -111,9 +113,11 @@ fun ExerciseEditContent(
 
             OutlinedTextField(
                 value = uiState.description,
+                label = { Text("Description") },
                 onValueChange = { onDescriptionChanged(it) },
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                minLines = 3,
             )
         }
     }
@@ -130,6 +134,7 @@ fun ExerciseEditPreview() {
                 title = "This is the title",
                 isNew = false
             ),
+            { },
             { },
             { },
             destinationsNavigator = EmptyDestinationsNavigator

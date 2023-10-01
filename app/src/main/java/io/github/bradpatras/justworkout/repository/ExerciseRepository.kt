@@ -20,7 +20,7 @@ interface ExerciseRepository {
     ): Flow<List<Exercise>>
 
     @WorkerThread
-    fun updateExercise(
+    fun createOrUpdateExercise(
         exercise: Exercise,
         onComplete: () -> Unit,
         onError: (Error) -> Unit
@@ -28,13 +28,6 @@ interface ExerciseRepository {
 
     @WorkerThread
     fun deleteExercise(
-        exercise: Exercise,
-        onComplete: () -> Unit,
-        onError: (Error) -> Unit
-    ): Flow<Unit>
-
-    @WorkerThread
-    fun createExercise(
         exercise: Exercise,
         onComplete: () -> Unit,
         onError: (Error) -> Unit

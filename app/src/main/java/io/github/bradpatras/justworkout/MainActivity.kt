@@ -6,18 +6,12 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
-import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.bradpatras.justworkout.repository.ExerciseRepository
 import io.github.bradpatras.justworkout.repository.TagRepository
-import io.github.bradpatras.justworkout.repository.WorkoutRepository
 import io.github.bradpatras.justworkout.ui.MainScreen
-import io.github.bradpatras.justworkout.ui.NavGraphs
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
@@ -50,7 +44,7 @@ class MainActivity : ComponentActivity() {
 
             Mocks.mockExerciseList.forEach {
                 Timber.i("creating exercise")
-                exerciseRepository.createExercise(it, {},  {}).single()
+                exerciseRepository.createOrUpdateExercise(it, {},  {}).single()
             }
         }
     }

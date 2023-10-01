@@ -4,9 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.repository.ExerciseRepository
 import io.github.bradpatras.justworkout.ui.destinations.ExerciseEditScreenDestination
-import kotlinx.coroutines.async
+import io.github.bradpatras.justworkout.utility.UuidProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ExerciseEditViewModel @Inject constructor(
     private val exerciseRepository: ExerciseRepository,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val navArgs = ExerciseEditScreenDestination.argsFrom(savedStateHandle)
     private val _uiState = MutableStateFlow(
@@ -36,7 +37,7 @@ class ExerciseEditViewModel @Inject constructor(
         viewModelScope.launch {
 
             val exercise = exerciseRepository.fetchExercise(
-                id = navArgs.id,
+                id = id,
                 onComplete = { /* TODO */ },
                 onError = { /* TODO */ }
             )
@@ -59,5 +60,21 @@ class ExerciseEditViewModel @Inject constructor(
 
     fun onDescriptionChanged(description: String) {
         _uiState.value = _uiState.value.copy(description = description)
+    }
+
+    fun onCheckmarkTapped() {
+        viewModelScope.launch {
+            exerciseRepository.createOrUpdateExercise(
+                exercise = Exercise(
+                    description = _uiState.value.description,
+                    id = navArgs.id,
+                    tags = emptyList(),
+                    title = _uiState.value.title
+                ),
+                onComplete = { },
+                onError = { }
+            )
+                .single()
+        }
     }
 }
