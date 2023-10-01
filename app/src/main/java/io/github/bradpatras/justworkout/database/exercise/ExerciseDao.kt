@@ -15,7 +15,6 @@ interface ExerciseDao {
     @Query("SELECT * FROM exercise WHERE exerciseId = :id")
     suspend fun get(id: UUID): ExerciseWithTags
 
-
     @Transaction
     @Query("SELECT * FROM exercise")
     suspend fun getAll(): List<ExerciseWithTags>
