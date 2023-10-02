@@ -9,6 +9,7 @@ The app is not technically modularized but the package structure mimics how I wo
     - `repository/` - Abstraction layer to decouple data fetching from the core app 
     - `di/` - Dependency injection utilities and shared components
     - `ui/` - Composables and ViewModels
+    - `utility/` - Shared utilities
 
 ## Dev docs
 Taking some architectural inspiration from [skydove's pokedex project](https://github.com/skydoves/Pokedex).
