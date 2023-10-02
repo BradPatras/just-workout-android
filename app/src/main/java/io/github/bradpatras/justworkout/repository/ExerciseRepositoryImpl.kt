@@ -22,30 +22,17 @@ class ExerciseRepositoryImpl @Inject constructor(
     private val exerciseTagCrossRefDao: ExerciseTagCrossRefDao,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): ExerciseRepository {
-    override fun fetchExercise(
-        id: UUID,
-        onComplete: () -> Unit,
-        onError: (Error) -> Unit
-    ) = exerciseDao
+    override fun fetchExercise(id: UUID) = exerciseDao
         .get(id)
         .map { it.asExercise() }
-        .onCompletion { onComplete() }
         .flowOn(ioDispatcher)
 
-    override fun fetchExercises(
-        onComplete: () -> Unit,
-        onError: (Error) -> Unit
-    ) = exerciseDao
+    override fun fetchExercises() = exerciseDao
         .getAll()
         .map { list -> list.map { it.asExercise() } }
-        .onCompletion { onComplete() }
         .flowOn(ioDispatcher)
 
-    override fun createOrUpdateExercise(
-        exercise: Exercise,
-        onComplete: () -> Unit,
-        onError: (Error) -> Unit
-    ) = flow<Unit> {
+    override fun createOrUpdateExercise(exercise: Exercise) = flow<Unit> {
         val entity = exercise.asExerciseWithTags()
         exerciseDao
             .createOrUpdate(exercises = arrayOf(entity.exercise))
@@ -59,14 +46,9 @@ class ExerciseRepositoryImpl @Inject constructor(
 
         emit(Unit)
     }
-        .onCompletion { onComplete() }
         .flowOn(ioDispatcher)
 
-    override fun deleteExercise(
-        exercise: Exercise,
-        onComplete: () -> Unit,
-        onError: (Error) -> Unit
-    ) = flow<Unit> {
+    override fun deleteExercise(exercise: Exercise) = flow<Unit> {
         val entity = exercise.asExerciseWithTags()
         exerciseDao
             .delete(exercise = entity.exercise)
@@ -76,6 +58,5 @@ class ExerciseRepositoryImpl @Inject constructor(
 
         emit(Unit)
     }
-        .onCompletion { onComplete() }
         .flowOn(ioDispatcher)
 }

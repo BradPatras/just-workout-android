@@ -8,27 +8,27 @@ interface TagRepository {
     @WorkerThread
     fun fetchTags(
         onComplete: () -> Unit,
-        onError: (Error) -> Unit
+        onException: (Exception) -> Unit
     ): Flow<List<Tag>>
 
     @WorkerThread
     fun updateTag(
         tag: Tag,
         onComplete: () -> Unit,
-        onError: (Error) -> Unit
+        onException: (Exception) -> Unit
     ): Flow<Unit>
 
     @WorkerThread
     fun deleteTag(
         tag: Tag,
         onComplete: () -> Unit,
-        onError: (Error) -> Unit
+        onException: (Exception) -> Unit
     ): Flow<Unit>
 
     @WorkerThread
     fun createTag(
         tag: Tag,
         onComplete: () -> Unit,
-        onError: (Error) -> Unit
+        onException: (Exception) -> Unit
     ): Flow<Unit>
 }

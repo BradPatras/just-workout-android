@@ -26,7 +26,7 @@ class ExerciseListViewModel @Inject constructor(
     val uiState: StateFlow<ExerciseListUiState> = _uiState.asStateFlow()
 
     init {
-        repository.fetchExercises(onComplete = { }, onError = { })
+        repository.fetchExercises()
             .distinctUntilChanged()
             .onEach { exercises ->
                 _uiState.value = ExerciseListUiState(exercises)

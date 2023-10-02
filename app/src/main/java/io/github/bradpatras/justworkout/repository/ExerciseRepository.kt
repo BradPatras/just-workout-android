@@ -7,29 +7,14 @@ import java.util.UUID
 
 interface ExerciseRepository {
     @WorkerThread
-    fun fetchExercise(
-        id: UUID,
-        onComplete: () -> Unit,
-        onError: (Error) -> Unit
-    ): Flow<Exercise>
+    fun fetchExercise(id: UUID): Flow<Exercise>
 
     @WorkerThread
-    fun fetchExercises(
-        onComplete: () -> Unit,
-        onError: (Error) -> Unit
-    ): Flow<List<Exercise>>
+    fun fetchExercises(): Flow<List<Exercise>>
 
     @WorkerThread
-    fun createOrUpdateExercise(
-        exercise: Exercise,
-        onComplete: () -> Unit,
-        onError: (Error) -> Unit
-    ): Flow<Unit>
+    fun createOrUpdateExercise(exercise: Exercise): Flow<Unit>
 
     @WorkerThread
-    fun deleteExercise(
-        exercise: Exercise,
-        onComplete: () -> Unit,
-        onError: (Error) -> Unit
-    ): Flow<Unit>
+    fun deleteExercise(exercise: Exercise): Flow<Unit>
 }

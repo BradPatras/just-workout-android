@@ -17,7 +17,7 @@ class TagRepositoryImpl @Inject constructor(
 ): TagRepository {
     override fun fetchTags(
         onComplete: () -> Unit,
-        onError: (Error) -> Unit
+        onException: (Exception) -> Unit
     ) = flow<List<Tag>> {
         tagDao
             .getAll()
@@ -30,7 +30,7 @@ class TagRepositoryImpl @Inject constructor(
     override fun updateTag(
         tag: Tag,
         onComplete: () -> Unit,
-        onError: (Error) -> Unit
+        onException: (Exception) -> Unit
     ) = flow<Unit> {
         tagDao
             .update(tags = arrayOf(tag.asTagEntity()))
@@ -42,7 +42,7 @@ class TagRepositoryImpl @Inject constructor(
     override fun deleteTag(
         tag: Tag,
         onComplete: () -> Unit,
-        onError: (Error) -> Unit
+        onException: (Exception) -> Unit
     ) = flow<Unit> {
         tagDao
             .delete(tag = tag.asTagEntity())
@@ -54,7 +54,7 @@ class TagRepositoryImpl @Inject constructor(
     override fun createTag(
         tag: Tag,
         onComplete: () -> Unit,
-        onError: (Error) -> Unit
+        onException: (Exception) -> Unit
     ) = flow<Unit> {
         tagDao
             .insert(tags = arrayOf(tag.asTagEntity()))

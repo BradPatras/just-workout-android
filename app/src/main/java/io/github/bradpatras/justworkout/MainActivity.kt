@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
 
             Mocks.mockExerciseList.forEach {
                 Timber.i("creating exercise")
-                exerciseRepository.createOrUpdateExercise(it, {},  {}).single()
+                exerciseRepository.createOrUpdateExercise(it).single()
             }
         }
     }

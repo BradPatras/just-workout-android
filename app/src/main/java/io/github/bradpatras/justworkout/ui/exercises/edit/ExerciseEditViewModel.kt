@@ -36,12 +36,7 @@ class ExerciseEditViewModel @Inject constructor(
     private fun fetchExercise(id: UUID) {
         viewModelScope.launch {
 
-            val exercise = exerciseRepository.fetchExercise(
-                id = id,
-                onComplete = { /* TODO */ },
-                onError = { /* TODO */ }
-            )
-                .single()
+            val exercise = exerciseRepository.fetchExercise(id = id).single()
 
             _uiState.emit(
                 ExerciseEditUiState(
@@ -70,9 +65,7 @@ class ExerciseEditViewModel @Inject constructor(
                     id = navArgs.id,
                     tags = emptyList(),
                     title = _uiState.value.title
-                ),
-                onComplete = { },
-                onError = { }
+                )
             )
                 .single()
         }
