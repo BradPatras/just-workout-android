@@ -1,6 +1,7 @@
 package io.github.bradpatras.justworkout.database.workout
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WorkoutDao {
@@ -9,7 +10,7 @@ interface WorkoutDao {
 
     @Transaction
     @Query("SELECT * FROM workout")
-    suspend fun getAll(): List<WorkoutWithTagsAndExercises>
+    fun getAll(): Flow<List<WorkoutWithTagsAndExercises>>
 
     @Update
     suspend fun createOrUpdate(vararg workouts: WorkoutEntity)

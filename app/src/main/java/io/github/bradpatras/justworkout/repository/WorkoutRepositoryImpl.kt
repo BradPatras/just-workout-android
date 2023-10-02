@@ -12,6 +12,7 @@ import io.github.bradpatras.justworkout.models.Workout
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import javax.inject.Inject
 
@@ -24,12 +25,9 @@ class WorkoutRepositoryImpl @Inject constructor(
     override fun fetchWorkouts(
         onComplete: () -> Unit,
         onError: (Error) -> Unit
-    ) = flow<List<Workout>> {
-        workoutDao
-            .getAll()
-            .map { it.asWorkout() }
-            .also { emit(it) }
-    }
+    ) = workoutDao
+        .getAll()
+        .map { list -> list.map { it.asWorkout() } }
         .onCompletion { onComplete() }
         .flowOn(ioDispatcher)
 
