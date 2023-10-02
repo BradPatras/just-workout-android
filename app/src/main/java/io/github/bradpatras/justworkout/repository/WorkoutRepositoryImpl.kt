@@ -33,14 +33,14 @@ class WorkoutRepositoryImpl @Inject constructor(
         .onCompletion { onComplete() }
         .flowOn(ioDispatcher)
 
-    override fun updateWorkout(
+    override fun createOrUpdateWorkout(
         workout: Workout,
         onComplete: () -> Unit,
         onError: (Error) -> Unit
     ) = flow<Unit> {
         val entity = workout.asWorkoutEntity()
         workoutDao
-            .update(workouts = arrayOf(entity.workout))
+            .createOrUpdate(workouts = arrayOf(entity.workout))
 
         workoutExerciseCrossRefDao
             .deleteByWorkout(workoutId = workout.id)
@@ -78,38 +78,6 @@ class WorkoutRepositoryImpl @Inject constructor(
         workoutTagCrossRefDao.deleteByWorkout(workoutId = workout.id)
 
         emit(Unit)
-    }
-        .onCompletion { onComplete() }
-        .flowOn(ioDispatcher)
-
-    override fun createWorkout(
-        workout: Workout,
-        onComplete: () -> Unit,
-        onError: (Error) -> Unit
-    ) = flow<Unit> {
-        val entity = workout.asWorkoutEntity()
-        workoutDao
-            .insert(workouts = arrayOf(entity.workout))
-
-        workoutExerciseCrossRefDao
-            .insert(
-                entity.exercises.map {
-                   WorkoutExerciseCrossRef(
-                       workoutId = workout.id,
-                       exerciseId = it.exercise.exerciseId
-                   )
-                }
-            )
-
-        workoutTagCrossRefDao
-            .insert(
-                entity.tags.map {
-                    WorkoutTagCrossRef(
-                        workoutId = workout.id,
-                        tagId = it.tagId
-                    )
-                }
-            )
     }
         .onCompletion { onComplete() }
         .flowOn(ioDispatcher)

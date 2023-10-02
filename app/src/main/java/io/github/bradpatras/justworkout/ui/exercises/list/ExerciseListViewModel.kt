@@ -8,7 +8,13 @@ import io.github.bradpatras.justworkout.utility.UuidProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,14 +26,11 @@ class ExerciseListViewModel @Inject constructor(
     val uiState: StateFlow<ExerciseListUiState> = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            repository.fetchExercises(
-                onComplete = { },
-                onError = { }
-            )
-                .collect { exercises ->
-                    _uiState.emit(ExerciseListUiState(exercises))
-                }
-        }
+        repository.fetchExercises(onComplete = { }, onError = { })
+            .distinctUntilChanged()
+            .onEach { exercises ->
+                _uiState.value = ExerciseListUiState(exercises)
+            }
+            .launchIn(viewModelScope)
     }
 }

@@ -4,9 +4,6 @@ import androidx.room.*
 
 @Dao
 interface WorkoutDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(vararg workouts: WorkoutEntity)
-
     @Delete
     suspend fun delete(workout: WorkoutEntity)
 
@@ -15,5 +12,5 @@ interface WorkoutDao {
     suspend fun getAll(): List<WorkoutWithTagsAndExercises>
 
     @Update
-    suspend fun update(vararg workouts: WorkoutEntity)
+    suspend fun createOrUpdate(vararg workouts: WorkoutEntity)
 }

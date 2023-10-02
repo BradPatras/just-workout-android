@@ -9,8 +9,10 @@ import io.github.bradpatras.justworkout.di.IoDispatcher
 import io.github.bradpatras.justworkout.models.Exercise
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import java.util.UUID
 import javax.inject.Inject
@@ -24,24 +26,18 @@ class ExerciseRepositoryImpl @Inject constructor(
         id: UUID,
         onComplete: () -> Unit,
         onError: (Error) -> Unit
-    ) = flow<Exercise> {
-        exerciseDao
-            .get(id)
-            .asExercise()
-            .also { emit(it) }
-    }
+    ) = exerciseDao
+        .get(id)
+        .map { it.asExercise() }
         .onCompletion { onComplete() }
         .flowOn(ioDispatcher)
 
     override fun fetchExercises(
         onComplete: () -> Unit,
         onError: (Error) -> Unit
-    ) = flow<List<Exercise>> {
-        exerciseDao
-            .getAll()
-            .map { it.asExercise() }
-            .also { emit(it) }
-    }
+    ) = exerciseDao
+        .getAll()
+        .map { list -> list.map { it.asExercise() } }
         .onCompletion { onComplete() }
         .flowOn(ioDispatcher)
 

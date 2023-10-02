@@ -1,6 +1,7 @@
 package io.github.bradpatras.justworkout.database.exercise
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
 @Dao
@@ -13,9 +14,9 @@ interface ExerciseDao {
 
     @Transaction
     @Query("SELECT * FROM exercise WHERE exerciseId = :id")
-    suspend fun get(id: UUID): ExerciseWithTags
+    fun get(id: UUID): Flow<ExerciseWithTags>
 
     @Transaction
     @Query("SELECT * FROM exercise")
-    suspend fun getAll(): List<ExerciseWithTags>
+    fun getAll(): Flow<List<ExerciseWithTags>>
 }

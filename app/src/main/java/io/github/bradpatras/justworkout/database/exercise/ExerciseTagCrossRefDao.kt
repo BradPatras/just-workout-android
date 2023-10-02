@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
 @Dao
@@ -20,7 +21,7 @@ interface ExerciseTagCrossRefDao {
     suspend fun deleteByExercise(exerciseId: UUID)
 
     @Query("SELECT * FROM exercise_tag_cross_ref")
-    suspend fun getAll(): List<ExerciseTagCrossRef>
+    fun getAll(): Flow<List<ExerciseTagCrossRef>>
 
     @Update
     suspend fun update(vararg crossRefs: ExerciseTagCrossRef)

@@ -47,7 +47,10 @@ fun ExerciseEditScreen(
         uiState = uiState.value,
         onTitleChanged = { viewModel.onTitleChanged(it) },
         onDescriptionChanged = { viewModel.onDescriptionChanged(it) },
-        onCheckmarkTapped = { viewModel.onCheckmarkTapped() },
+        onCheckmarkTapped = {
+            viewModel.onCheckmarkTapped()
+            navigator.popBackStack()
+        },
         destinationsNavigator = navigator
     )
 }
