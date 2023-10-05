@@ -11,14 +11,20 @@ import androidx.compose.ui.unit.dp
 import io.github.bradpatras.justworkout.models.Tag
 
 @Composable
-fun TagChip(tag: Tag) {
+fun TagChip(
+    title: String,
+    onClick: (() -> Unit)? = null
+) {
     AssistChip(
-        onClick = {},
+        onClick = onClick ?: { },
         label = {
             Text(
-                text = tag.title,
+                text = title,
                 style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onTertiaryContainer
+                color = if (onClick == null)
+                    MaterialTheme.colorScheme.onTertiaryContainer
+                else
+                    MaterialTheme.colorScheme.onSecondaryContainer
             )
         },
         modifier = Modifier.padding(horizontal = 4.dp),

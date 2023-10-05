@@ -106,7 +106,7 @@ fun ExerciseDetailsContent(
                 modifier = Modifier.align(Alignment.Start)
             ) {
                 uiState.exercise.tags.forEach {
-                    TagChip(tag = it)
+                    TagChip(title = it.title)
                 }
             }
 

@@ -4,6 +4,8 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -33,6 +35,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import io.github.bradpatras.justworkout.Mocks
+import io.github.bradpatras.justworkout.models.Tag
+import io.github.bradpatras.justworkout.ui.composables.TagChip
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 
 @Destination(navArgsDelegate = ExerciseEditScreenNavArgs::class)
@@ -55,7 +59,7 @@ fun ExerciseEditScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ExerciseEditContent(
     uiState: ExerciseEditUiState,
@@ -122,6 +126,22 @@ fun ExerciseEditContent(
                     .fillMaxWidth(),
                 minLines = 3,
             )
+
+            FlowRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                uiState.tags.forEach {
+                    TagChip(title = it.title)
+                }
+
+                TagChip(
+                    title = "Add Tag +",
+                    onClick = {
+                        // Show Tag screen
+                    }
+                )
+            }
         }
     }
 }

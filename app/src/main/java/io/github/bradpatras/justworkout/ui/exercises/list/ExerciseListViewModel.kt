@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExerciseListViewModel @Inject constructor(
-    private val repository: ExerciseRepository,
+    repository: ExerciseRepository,
     val uuidProvider: UuidProvider,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ExerciseListUiState())
