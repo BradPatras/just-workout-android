@@ -1,7 +1,9 @@
 package io.github.bradpatras.justworkout.ui.exercises.edit
 
 import android.content.res.Configuration
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -9,8 +11,11 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -55,6 +60,7 @@ fun ExerciseEditScreen(
             viewModel.onCheckmarkTapped()
             navigator.popBackStack()
         },
+        onDeleteTagTapped = { viewModel.onDeleteTagTapped(it) },
         destinationsNavigator = navigator
     )
 }
@@ -66,6 +72,7 @@ fun ExerciseEditContent(
     onTitleChanged: (String) -> Unit,
     onDescriptionChanged: (String) -> Unit,
     onCheckmarkTapped: () -> Unit,
+    onDeleteTagTapped: (Tag) -> Unit,
     destinationsNavigator: DestinationsNavigator
 ) {
     Column(
@@ -132,13 +139,31 @@ fun ExerciseEditContent(
                     .fillMaxWidth()
             ) {
                 uiState.tags.forEach {
-                    TagChip(title = it.title)
+                    TagChip(
+                        title = it.title,
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Filled.Clear,
+                                "remove tag button",
+                                tint = MaterialTheme.colorScheme.error
+                            )
+                        },
+                        onClick = {
+                            onDeleteTagTapped(it)
+                        }
+                    )
                 }
 
                 TagChip(
-                    title = "Add Tag +",
+                    title = "Add Tag",
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            "add tag button"
+                        )
+                    },
                     onClick = {
-                        // Show Tag screen
+                        // Show Tag select screen
                     }
                 )
             }
@@ -157,6 +182,7 @@ fun ExerciseEditPreview() {
                 title = "This is the title",
                 isNew = false
             ),
+            { },
             { },
             { },
             { },

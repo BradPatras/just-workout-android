@@ -82,6 +82,16 @@ object Mocks {
             id = IncrementalUuid.next(),
             title = "Arms"
 
+        ),
+        Tag(
+            id = IncrementalUuid.next(),
+            title = "Legs"
+
+        ),
+        Tag(
+            id = IncrementalUuid.next(),
+            title = "Warmup"
+
         )
     )
 

@@ -5,13 +5,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.bradpatras.justworkout.models.Exercise
+import io.github.bradpatras.justworkout.models.Tag
 import io.github.bradpatras.justworkout.repository.ExerciseRepository
 import io.github.bradpatras.justworkout.ui.destinations.ExerciseEditScreenDestination
 import io.github.bradpatras.justworkout.utility.UuidProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
@@ -35,8 +39,7 @@ class ExerciseEditViewModel @Inject constructor(
 
     private fun fetchExercise(id: UUID) {
         viewModelScope.launch {
-
-            val exercise = exerciseRepository.fetchExercise(id = id).single()
+            val exercise = exerciseRepository.fetchExercise(id = id).first()
 
             _uiState.emit(
                 ExerciseEditUiState(
@@ -69,5 +72,9 @@ class ExerciseEditViewModel @Inject constructor(
             )
                 .single()
         }
+    }
+
+    fun onDeleteTagTapped(tag: Tag) {
+        _uiState.value = _uiState.value.copy(tags = _uiState.value.tags.filterNot { tag == it })
     }
 }
