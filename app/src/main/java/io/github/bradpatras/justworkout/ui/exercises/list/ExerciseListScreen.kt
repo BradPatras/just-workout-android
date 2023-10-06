@@ -83,7 +83,10 @@ fun ExerciseListContent(
         LazyColumn(
             contentPadding = PaddingValues(12.dp)
         ) {
-            items(uiState.exercises) { exercise ->
+            items(
+                items = uiState.exercises,
+                key = { it.id }
+            ) { exercise ->
                 Surface(
                     Modifier.clickable {
                         onItemClick(exercise)
