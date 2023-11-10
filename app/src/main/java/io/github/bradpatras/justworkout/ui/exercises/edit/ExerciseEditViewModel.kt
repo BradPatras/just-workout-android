@@ -66,7 +66,7 @@ class ExerciseEditViewModel @Inject constructor(
                 exercise = Exercise(
                     description = _uiState.value.description,
                     id = navArgs.id,
-                    tags = emptyList(),
+                    tags = _uiState.value.tags,
                     title = _uiState.value.title
                 )
             )

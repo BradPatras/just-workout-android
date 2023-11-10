@@ -23,7 +23,7 @@ data class WorkoutWithTagsAndExercises(
     val exercises: List<ExerciseWithTags>,
     @Relation(
         parentColumn = "workoutId",
-        entityColumn = "tagId",
+        entityColumn = "title",
         associateBy = Junction(WorkoutTagCrossRef::class)
     )
     val tags: List<TagEntity>

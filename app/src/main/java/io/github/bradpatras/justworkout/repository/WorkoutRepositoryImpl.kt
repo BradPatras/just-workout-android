@@ -46,7 +46,7 @@ class WorkoutRepositoryImpl @Inject constructor(
         workoutTagCrossRefDao
             .insert(
                 entity.tags.map {
-                    WorkoutTagCrossRef(workoutId = workout.id, it.tagId)
+                    WorkoutTagCrossRef(workoutId = workout.id, it.title)
                 }
             )
 

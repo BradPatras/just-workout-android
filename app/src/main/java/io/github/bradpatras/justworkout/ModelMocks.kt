@@ -69,27 +69,22 @@ object IncrementalUuid {
 object Mocks {
     val mockTagList1: List<Tag> = listOf(
         Tag(
-            id = IncrementalUuid.next(),
             title = "Strength"
 
         ),
         Tag(
-            id = IncrementalUuid.next(),
             title = "Chest"
 
         ),
         Tag(
-            id = IncrementalUuid.next(),
             title = "Arms"
 
         ),
         Tag(
-            id = IncrementalUuid.next(),
             title = "Legs"
 
         ),
         Tag(
-            id = IncrementalUuid.next(),
             title = "Warmup"
 
         )
@@ -97,11 +92,9 @@ object Mocks {
 
     val mockTagsList2 = listOf(
         Tag(
-            id = IncrementalUuid.next(),
             title = "Mobility"
         ),
         Tag(
-            id = IncrementalUuid.next(),
             title = "Warmup"
 
         )
