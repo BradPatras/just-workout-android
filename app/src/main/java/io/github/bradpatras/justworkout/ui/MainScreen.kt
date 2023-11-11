@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.BottomAppBar
@@ -81,7 +82,7 @@ fun BottomBar(navController: NavController) {
                 }
             },
             icon = {
-                Icon(Icons.Default.Home, "workouts list tab")
+                Icon(Icons.Default.DateRange, "workouts list tab")
             },
             label = {
                 Text("Workouts")

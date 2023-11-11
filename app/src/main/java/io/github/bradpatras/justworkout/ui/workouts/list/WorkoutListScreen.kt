@@ -33,7 +33,6 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
 import io.github.bradpatras.justworkout.models.Workout
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 
-@RootNavGraph(start = true)
 @Destination
 @Composable
 fun WorkoutListScreen(
