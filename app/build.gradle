@@ -79,7 +79,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
     // navigation annotations
-    implementation 'io.github.raamcosta.compose-destinations:core:1.9.51'
+    implementation 'io.github.raamcosta.compose-destinations:animations-core:1.9.51'
     ksp 'io.github.raamcosta.compose-destinations:ksp:1.9.51' // broken? check: https://github.com/google/ksp/issues/1401
 
     // room db

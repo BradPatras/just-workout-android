@@ -1,6 +1,7 @@
 package io.github.bradpatras.justworkout.ui
 
-import androidx.compose.foundation.Image
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -16,22 +17,29 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
 import com.ramcosta.composedestinations.navigation.navigate
-import io.github.bradpatras.justworkout.models.Exercise
-import io.github.bradpatras.justworkout.ui.destinations.ExerciseDetailsScreenDestination
+import com.ramcosta.composedestinations.rememberNavHostEngine
 import io.github.bradpatras.justworkout.ui.destinations.ExerciseListScreenDestination
-import io.github.bradpatras.justworkout.ui.destinations.HomeScreenDestination
 import io.github.bradpatras.justworkout.ui.destinations.WorkoutListScreenDestination
 
 @Composable
 fun MainScreen() {
+    val navEngine = rememberNavHostEngine(
+        rootDefaultAnimations = RootNavGraphDefaultAnimations(
+            enterTransition = { fadeIn() },
+            exitTransition = { fadeOut() }
+        )
+    )
     val navController = rememberNavController()
+
     Scaffold(
         bottomBar = {
             BottomBar(navController)
         }
     ) {
         DestinationsNavHost(
+            engine = navEngine,
             navGraph = NavGraphs.root,
             navController = navController,
             modifier = Modifier
@@ -45,23 +53,6 @@ fun MainScreen() {
 fun BottomBar(navController: NavController) {
     val currentDestination = navController.appCurrentDestinationAsState().value ?: NavGraphs.root.startAppDestination
     BottomAppBar {
-        NavigationBarItem(
-            selected = WorkoutListScreenDestination == currentDestination,
-            onClick = {
-                navController.navigate(
-                    WorkoutListScreenDestination
-                ) {
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            },
-            icon = {
-                Icon(Icons.Default.Home, "workouts list tab")
-            },
-            label = {
-                Text("Workouts")
-            }
-        )
         NavigationBarItem(
             selected = ExerciseListScreenDestination == currentDestination,
             onClick = {
@@ -77,6 +68,23 @@ fun BottomBar(navController: NavController) {
             },
             label = {
                 Text("Exercises")
+            }
+        )
+        NavigationBarItem(
+            selected = WorkoutListScreenDestination == currentDestination,
+            onClick = {
+                navController.navigate(
+                    WorkoutListScreenDestination
+                ) {
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            },
+            icon = {
+                Icon(Icons.Default.Home, "workouts list tab")
+            },
+            label = {
+                Text("Workouts")
             }
         )
     }
