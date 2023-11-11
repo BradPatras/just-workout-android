@@ -147,8 +147,7 @@ private fun ExerciseListItem(exercise: Exercise) {
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
-                        .clickable { /*TODO*/ }
-                        .padding(8.dp),
+                        .clickable { /*TODO*/ },
                     contentAlignment = Alignment.CenterEnd
                 ) {
                     Icon(
