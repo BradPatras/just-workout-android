@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -18,6 +19,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -68,12 +70,12 @@ fun ExerciseDetailsContent(
             .background(color = MaterialTheme.colorScheme.surface)
     ) {
         TopAppBar(
-            title = { Text(text = uiState.exercise.title) },
+            title = { Text(text = "Exercise Details") },
             navigationIcon = {
                 IconButton(onClick = { destinationsNavigator.navigateUp() }) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Localized description"
+                        contentDescription = "Back button"
                     )
                 }
             },
@@ -90,18 +92,29 @@ fun ExerciseDetailsContent(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Edit,
-                        contentDescription = "Localized description"
+                        contentDescription = "Edit exercise button"
                     )
                 }
             },
-            scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
+            scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
         )
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp)
+                .padding(horizontal = 24.dp)
         ) {
+
+            Text(
+                text = uiState.exercise.title,
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
+                    .align(Alignment.Start),
+                style = MaterialTheme.typography.headlineSmall,
+                textAlign = TextAlign.Start,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
             FlowRow(
                 modifier = Modifier.align(Alignment.Start)
             ) {
@@ -146,7 +159,7 @@ fun ExerciseDetailsPreview() {
                             title = "Chest"
                         )
                     ),
-                    title = "Bench press"
+                    title = "Bench press test a really long title that will not fit in the topbar"
                 )
             ),
             destinationsNavigator = EmptyDestinationsNavigator
