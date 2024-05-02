@@ -6,9 +6,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
@@ -27,6 +30,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.VerticalAlignmentLine
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,6 +41,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import io.github.bradpatras.justworkout.R
 import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.models.Tag
 import io.github.bradpatras.justworkout.ui.composables.TagChip
@@ -102,42 +109,48 @@ fun ExerciseDetailsContent(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-
             Text(
                 text = uiState.exercise.title,
                 modifier = Modifier
-                    .padding(vertical = 16.dp)
                     .align(Alignment.Start),
                 style = MaterialTheme.typography.headlineSmall,
                 textAlign = TextAlign.Start,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            FlowRow(
-                modifier = Modifier.align(Alignment.Start)
-            ) {
-                uiState.exercise.tags.forEach {
-                    TagChip(title = it.title)
-                }
+            Divider(
+                color = MaterialTheme.colorScheme.outlineVariant
+            )
+
+            if (uiState.exercise.description.isNotBlank()) {
+                Text(
+                    text = uiState.exercise.description,
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Start,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
             }
 
-            Divider(
-                color = MaterialTheme.colorScheme.outlineVariant,
-                modifier = Modifier
-                    .padding(vertical = 4.dp)
-            )
+            if (uiState.exercise.tags.isNotEmpty()) {
+                Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.outline_tag),
+                        contentDescription = "Tags icon",
+                        tint = MaterialTheme.colorScheme.outline
+                    )
 
-            Text(
-                text = uiState.exercise.description,
-                modifier = Modifier
-                    .padding(vertical = 16.dp)
-                    .align(Alignment.Start),
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Start,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Text(
+                        text = uiState.exercise.tags.joinToString(", ") { it.title },
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
         }
     }
 }
@@ -149,7 +162,7 @@ fun ExerciseDetailsPreview() {
         ExerciseDetailsContent(
             uiState = ExerciseDetailsUiState(
                 exercise = Exercise(
-                    description = "Elbows in, shoulder blades pinched, don't bounce the bar off your chest",
+                    description = "This is the description, this is where you can give some extra info abou tthis exercise",
                     id = UUID.randomUUID(),
                     tags = listOf(
                         Tag(
