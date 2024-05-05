@@ -87,6 +87,14 @@ object Mocks {
         Tag(
             title = "Warmup"
 
+        ),
+        Tag(
+            title = "Mobility"
+
+        ),
+        Tag(
+            title = "Biceps"
+
         )
     )
 
