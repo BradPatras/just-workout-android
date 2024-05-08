@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -40,6 +41,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -92,19 +94,23 @@ fun ExerciseListContent(
             )
         )
 
-        LazyColumn(
-            contentPadding = PaddingValues(8.dp),
-        ) {
-            items(
-                items = uiState.exercises,
-                key = { it.id }
-            ) { exercise ->
-                Surface(
-                    Modifier.clickable {
-                        onItemClick(exercise)
+        if (uiState.isLoading) {
+            CircularProgressIndicator()
+        } else {
+            LazyColumn(
+                contentPadding = PaddingValues(8.dp),
+            ) {
+                items(
+                    items = uiState.exercises,
+                    key = { it.id }
+                ) { exercise ->
+                    Surface(
+                        Modifier.clickable {
+                            onItemClick(exercise)
+                        }
+                    ) {
+                        ExerciseListItem(exercise = exercise)
                     }
-                ) {
-                    ExerciseListItem(exercise = exercise)
                 }
             }
         }

@@ -22,14 +22,14 @@ class ExerciseListViewModel @Inject constructor(
     repository: ExerciseRepository,
     val uuidProvider: UuidProvider,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(ExerciseListUiState())
+    private val _uiState = MutableStateFlow(ExerciseListUiState(isLoading = true))
     val uiState: StateFlow<ExerciseListUiState> = _uiState.asStateFlow()
 
     init {
         repository.fetchExercises()
             .distinctUntilChanged()
             .onEach { exercises ->
-                _uiState.value = ExerciseListUiState(exercises)
+                _uiState.value = ExerciseListUiState(exercises, isLoading = false)
             }
             .launchIn(viewModelScope)
     }

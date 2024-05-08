@@ -36,16 +36,16 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        lifecycleScope.launch {
-            (Mocks.mockTagList1 + Mocks.mockTagsList2).forEach {
-                tagRepository.createTag(it, {}, {}).single()
-                Timber.i("creating tag")
-            }
-
-            Mocks.mockExerciseList.forEach {
-                Timber.i("creating exercise")
-                exerciseRepository.createOrUpdateExercise(it).single()
-            }
-        }
+//        lifecycleScope.launch {
+//            (Mocks.mockTagList1 + Mocks.mockTagsList2).forEach {
+//                tagRepository.createTag(it, {}, {}).single()
+//                Timber.i("creating tag")
+//            }
+//
+//            Mocks.mockExerciseList.forEach {
+//                Timber.i("creating exercise")
+//                exerciseRepository.createOrUpdateExercise(it).single()
+//            }
+//        }
     }
 }
