@@ -22,6 +22,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -150,22 +151,22 @@ private fun ExerciseListItem(exercise: Exercise) {
                 }
             },
             trailingContent = {
-                Box(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .clickable { /*TODO*/ },
-                    contentAlignment = Alignment.CenterEnd
-                ) {
-                    Icon(
-                        Icons.Default.MoreVert,
-                        "list item more button",
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
+//                Box(
+//                    modifier = Modifier
+//                        .clip(CircleShape)
+//                        .clickable { /*TODO*/ },
+//                    contentAlignment = Alignment.CenterEnd
+//                ) {
+//                    Icon(
+//                        Icons.Default.MoreVert,
+//                        "list item more button",
+//                        modifier = Modifier.size(24.dp)
+//                    )
+//                }
 
             }
         )
-        Divider()
+        HorizontalDivider()
     }
 }
 
