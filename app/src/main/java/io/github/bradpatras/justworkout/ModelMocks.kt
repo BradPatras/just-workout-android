@@ -100,10 +100,10 @@ object Mocks {
 
     val mockTagsList2 = listOf(
         Tag(
-            title = "Mobility"
+            title = "Running"
         ),
         Tag(
-            title = "Warmup"
+            title = "Knee Rehab"
 
         )
     )

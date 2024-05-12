@@ -47,7 +47,7 @@ fun TagChip(
         label = {
             Text(
                 text = title,
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onTertiaryContainer
             )
         },
@@ -75,10 +75,7 @@ private fun Chip(
     Surface(
         modifier = modifier
             .padding(horizontal = 1.dp, vertical = 4.dp)
-            .clickable(
-                indication = if (onClick == null) null else LocalIndication.current,
-                interactionSource = remember { MutableInteractionSource() }
-            ) {
+            .clickable {
                 onClick?.invoke()
             },
         shape = ShapeDefaults.Small,
