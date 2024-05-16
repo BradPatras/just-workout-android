@@ -1,6 +1,7 @@
 package io.github.bradpatras.justworkout.ui.tags
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -25,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -83,7 +83,9 @@ fun TagsSelectContent(
             )
 
             FlowRow(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalArrangement = Arrangement.spacedBy(0.dp)
             ) {
                 val tags = uiState.allTags.filter {
                     if (searchText.isNotBlank()) {
@@ -97,16 +99,15 @@ fun TagsSelectContent(
 
                 val searchMatchesTag = tags.map { it.title.lowercase() }.contains(searchText.lowercase().trim())
                 if (!searchMatchesTag && searchText.isNotBlank()) {
-                    TagChip(title = "Create new tag \"$searchText\"")
+                    TagChip(title = "Create new tag \"$searchText\"", selected = false)
                 }
 
                 tags.forEach {
-                    if (selectedTitles.contains(it.title)) {
-                        TagChip(title = "${it.title} ✔", onClick = { tagTapped(it) })
-                    } else {
-                        TagChip(title = it.title, onClick = { tagTapped(it) })
-                    }
-
+                    TagChip(
+                        title = it.title,
+                        onClick = { tagTapped(it) },
+                        selected = selectedTitles.contains(it.title)
+                    )
                 }
             }
 
