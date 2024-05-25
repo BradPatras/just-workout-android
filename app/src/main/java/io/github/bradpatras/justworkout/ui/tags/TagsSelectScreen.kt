@@ -30,18 +30,37 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyleBottomSheet
 import io.github.bradpatras.justworkout.Mocks
 import io.github.bradpatras.justworkout.models.Tag
 import io.github.bradpatras.justworkout.ui.composables.TagChip
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Destination(style = DestinationStyleBottomSheet::class)
-fun TagsSelectScreen() {
-
+fun TagsSelectScreen(destinationsNavigator: DestinationsNavigator) {
+    ModalBottomSheet(
+        onDismissRequest = {
+           destinationsNavigator.navigateUp()
+        },
+        sheetState = SheetState(
+            skipPartiallyExpanded = false,
+            density = LocalDensity.current,
+            initialValue = SheetValue.Hidden,
+        )
+    ) {
+        TagsSelectContent(
+            uiState = TagsSelectUiState(
+                allTags = Mocks.mockTagsList2 + Mocks.mockTagList1,
+                selectedTags = Mocks.mockTagsList2
+            ),
+            { }
+        )
+    }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TagsSelectContent(
     uiState: TagsSelectUiState,
@@ -50,70 +69,59 @@ fun TagsSelectContent(
     val selectedTitles = uiState.selectedTags.map { it.title }
     var searchText by remember { mutableStateOf("") }
 
-    ModalBottomSheet(
-        onDismissRequest = { /*TODO*/ },
-        sheetState = SheetState(
-            skipPartiallyExpanded = true,
-            density = LocalDensity.current,
-            initialValue = SheetValue.Expanded,
-            skipHiddenState = true
-        )
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp)
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
+        Text(
+            text = "Select Tags",
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        OutlinedTextField(
+            value = searchText,
+            onValueChange = { searchText = it },
+            label = { Text("Search or Create") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        HorizontalDivider(
+            modifier = Modifier.padding(vertical = 12.dp)
+        )
+
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement = Arrangement.spacedBy(0.dp)
         ) {
-            Text(
-                text = "Tags",
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            OutlinedTextField(
-                value = searchText,
-                onValueChange = { searchText = it },
-                label = { Text("Search or Create") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            HorizontalDivider(
-                modifier = Modifier.padding(vertical = 12.dp)
-            )
-
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalArrangement = Arrangement.spacedBy(0.dp)
-            ) {
-                val tags = uiState.allTags.filter {
-                    if (searchText.isNotBlank()) {
-                        return@filter it.title.lowercase().contains(searchText.lowercase())
-                    } else {
-                        return@filter true
-                    }
-                }.sortedBy {
-                    it.title
+            val tags = uiState.allTags.filter {
+                if (searchText.isNotBlank()) {
+                    return@filter it.title.lowercase().contains(searchText.lowercase())
+                } else {
+                    return@filter true
                 }
-
-                val searchMatchesTag = tags.map { it.title.lowercase() }.contains(searchText.lowercase().trim())
-                if (!searchMatchesTag && searchText.isNotBlank()) {
-                    TagChip(title = "Create new tag \"$searchText\"", selected = false)
-                }
-
-                tags.forEach {
-                    TagChip(
-                        title = it.title,
-                        onClick = { tagTapped(it) },
-                        selected = selectedTitles.contains(it.title)
-                    )
-                }
+            }.sortedBy {
+                it.title
             }
 
-            Spacer(modifier = Modifier.size(24.dp))
+            val searchMatchesTag = tags.map { it.title.lowercase() }.contains(searchText.lowercase().trim())
+            if (!searchMatchesTag && searchText.isNotBlank()) {
+                TagChip(title = "Create new tag \"$searchText\"", selected = false)
+            }
+
+            tags.forEach {
+                TagChip(
+                    title = it.title,
+                    onClick = { tagTapped(it) },
+                    selected = selectedTitles.contains(it.title)
+                )
+            }
         }
 
+        Spacer(modifier = Modifier.size(24.dp))
     }
 }
 

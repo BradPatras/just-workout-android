@@ -2,10 +2,15 @@ package io.github.bradpatras.justworkout.ui.exercises.edit
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
@@ -21,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,6 +35,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import io.github.bradpatras.justworkout.Mocks
 import io.github.bradpatras.justworkout.models.Tag
+import io.github.bradpatras.justworkout.ui.destinations.TagsSelectScreenDestination
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 
 @Destination(navArgsDelegate = ExerciseEditScreenNavArgs::class)
@@ -122,14 +129,28 @@ fun ExerciseEditContent(
                     minLines = 3,
                 )
 
-                OutlinedTextField(
-                    value = uiState.tags.joinToString { it.title },
-                    label = { Text("Tags") },
-                    onValueChange = { onDescriptionChanged(it) },
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    readOnly = true,
-                )
+                Box(
+                    modifier = Modifier.wrapContentSize()
+                ) {
+                    OutlinedTextField(
+                        value = uiState.tags.joinToString { it.title },
+                        label = { Text("Tags") },
+                        onValueChange = {},
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusable(false),
+                        readOnly = true,
+                    )
+
+                    Box(modifier = Modifier
+                        .matchParentSize()
+                        .clickable {
+                            destinationsNavigator.navigate(
+                                TagsSelectScreenDestination()
+                            )
+                        }
+                    )
+                }
             }
         }
     }
