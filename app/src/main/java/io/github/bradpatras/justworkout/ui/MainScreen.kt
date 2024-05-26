@@ -1,15 +1,12 @@
 package io.github.bradpatras.justworkout.ui
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
@@ -24,21 +21,18 @@ import com.google.accompanist.navigation.material.ExperimentalMaterialNavigation
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.ramcosta.composedestinations.DestinationsNavHost
-import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
-import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
+import com.ramcosta.composedestinations.generated.NavGraphs
+import com.ramcosta.composedestinations.generated.destinations.ExerciseListScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.WorkoutListScreenDestination
 import com.ramcosta.composedestinations.navigation.navigate
-import io.github.bradpatras.justworkout.ui.destinations.ExerciseListScreenDestination
-import io.github.bradpatras.justworkout.ui.destinations.WorkoutListScreenDestination
+import com.ramcosta.composedestinations.rememberNavHostEngine
+import com.ramcosta.composedestinations.utils.currentDestinationAsState
+import com.ramcosta.composedestinations.utils.startDestination
 
 @OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun MainScreen() {
-    val navEngine = rememberAnimatedNavHostEngine(
-        rootDefaultAnimations = RootNavGraphDefaultAnimations(
-            enterTransition = { fadeIn() },
-            exitTransition = { fadeOut() }
-        )
-    )
+    val navEngine = rememberNavHostEngine()
     val bottomSheetNavigator = rememberBottomSheetNavigator()
     val navController = rememberNavController(bottomSheetNavigator)
 
@@ -65,7 +59,7 @@ fun MainScreen() {
 
 @Composable
 fun BottomBar(navController: NavController) {
-    val currentDestination = navController.appCurrentDestinationAsState().value ?: NavGraphs.root.startAppDestination
+    val currentDestination = navController.currentDestinationAsState().value ?: NavGraphs.root.startDestination
     BottomAppBar {
         NavigationBarItem(
             selected = ExerciseListScreenDestination == currentDestination,

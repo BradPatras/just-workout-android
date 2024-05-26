@@ -11,9 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -32,16 +31,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.ExerciseEditScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import io.github.bradpatras.justworkout.R
 import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.models.Tag
-import io.github.bradpatras.justworkout.ui.destinations.ExerciseEditScreenDestination
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 import java.util.UUID
 
-@Destination(navArgsDelegate = ExerciseDetailsUiState::class)
+@Destination<RootGraph>(navArgs = ExerciseDetailsUiState::class)
 @Composable
 fun ExerciseDetailsScreen(
     destinationsNavigator: DestinationsNavigator,
@@ -73,7 +73,7 @@ fun ExerciseDetailsContent(
             navigationIcon = {
                 IconButton(onClick = { destinationsNavigator.navigateUp() }) {
                     Icon(
-                        imageVector = Icons.Filled.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back button"
                     )
                 }

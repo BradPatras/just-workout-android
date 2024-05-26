@@ -3,11 +3,11 @@ package io.github.bradpatras.justworkout.ui.exercises.edit
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ramcosta.composedestinations.generated.destinations.ExerciseEditScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.models.Tag
 import io.github.bradpatras.justworkout.repository.ExerciseRepository
-import io.github.bradpatras.justworkout.ui.destinations.ExerciseEditScreenDestination
 import io.github.bradpatras.justworkout.utility.UuidProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

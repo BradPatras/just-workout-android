@@ -36,16 +36,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.ExerciseDetailsScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.ExerciseEditScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import io.github.bradpatras.justworkout.Mocks
 import io.github.bradpatras.justworkout.models.Exercise
-import io.github.bradpatras.justworkout.ui.destinations.ExerciseDetailsScreenDestination
-import io.github.bradpatras.justworkout.ui.destinations.ExerciseEditScreenDestination
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 
-@RootNavGraph(start = true)
-@Destination
+@Destination<RootGraph>(start = true)
 @Composable
 fun ExerciseListScreen(
     viewModel: ExerciseListViewModel = hiltViewModel(),

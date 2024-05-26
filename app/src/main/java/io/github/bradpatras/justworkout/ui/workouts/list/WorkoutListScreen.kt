@@ -30,11 +30,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.annotation.RootGraph
 import io.github.bradpatras.justworkout.models.Workout
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 
-@Destination
+@Destination<RootGraph>
 @Composable
 fun WorkoutListScreen(
     viewModel: WorkoutListViewModel = hiltViewModel()

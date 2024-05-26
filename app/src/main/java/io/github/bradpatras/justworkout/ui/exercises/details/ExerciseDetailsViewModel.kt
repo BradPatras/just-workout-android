@@ -2,8 +2,8 @@ package io.github.bradpatras.justworkout.ui.exercises.details
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.ramcosta.composedestinations.generated.destinations.ExerciseDetailsScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.bradpatras.justworkout.ui.destinations.ExerciseDetailsScreenDestination
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
