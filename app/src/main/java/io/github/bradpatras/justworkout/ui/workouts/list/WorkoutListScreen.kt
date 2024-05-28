@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -31,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import io.github.bradpatras.justworkout.Mocks
 import io.github.bradpatras.justworkout.models.Workout
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 
@@ -73,7 +75,9 @@ fun WorkoutListContent(
     }
 
     Box(
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxSize(),
         contentAlignment = Alignment.BottomEnd
     ) {
         FloatingActionButton(
@@ -109,7 +113,9 @@ private fun WorkoutListItem(workout: Workout) {
 fun WorkoutListPreview() {
     JustWorkoutTheme {
         WorkoutListContent(
-            uiState = WorkoutListUiState()
+            uiState = WorkoutListUiState(
+                Mocks.mockWorkoutList
+            )
         )
     }
 }
