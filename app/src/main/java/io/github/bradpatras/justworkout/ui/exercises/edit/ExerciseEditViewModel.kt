@@ -79,7 +79,7 @@ class ExerciseEditViewModel @Inject constructor(
         }
     }
 
-    fun onDeleteTagTapped(tag: Tag) {
-        _uiState.value = _uiState.value.copy(tags = _uiState.value.tags.filterNot { tag == it })
+    fun onTagsSelectionChanged(tags: List<Tag>) {
+        _uiState.value = _uiState.value.copy(tags = tags)
     }
 }

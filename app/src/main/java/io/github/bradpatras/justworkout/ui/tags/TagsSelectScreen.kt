@@ -37,8 +37,14 @@ import io.github.bradpatras.justworkout.ui.composables.TagChip
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Destination<RootGraph>(style = DestinationStyleBottomSheet::class)
-fun TagsSelectScreen(destinationsNavigator: DestinationsNavigator) {
+@Destination<RootGraph>(
+    navArgs = TagsSelectScreenNavArgs::class,
+    style = DestinationStyleBottomSheet::class
+)
+fun TagsSelectScreen(
+    viewModel: TagsSelectViewModel,
+    destinationsNavigator: DestinationsNavigator
+) {
     ModalBottomSheet(
         onDismissRequest = {
            destinationsNavigator.navigateUp()

@@ -55,7 +55,9 @@ fun ExerciseEditScreen(
             viewModel.onCheckmarkTapped()
             navigator.popBackStack()
         },
-        onDeleteTagTapped = { viewModel.onDeleteTagTapped(it) },
+        onTagsSelectionChanged = {
+            viewModel.onTagsSelectionChanged(it)
+        },
         destinationsNavigator = navigator
     )
 }
@@ -67,7 +69,7 @@ fun ExerciseEditContent(
     onTitleChanged: (String) -> Unit,
     onDescriptionChanged: (String) -> Unit,
     onCheckmarkTapped: () -> Unit,
-    onDeleteTagTapped: (Tag) -> Unit,
+    onTagsSelectionChanged: (List<Tag>) -> Unit,
     destinationsNavigator: DestinationsNavigator
 ) {
     if (!uiState.isLoading) {
@@ -147,7 +149,7 @@ fun ExerciseEditContent(
                         .matchParentSize()
                         .clickable {
                             destinationsNavigator.navigate(
-                                TagsSelectScreenDestination()
+                                TagsSelectScreenDestination(selectedTags = uiState.tags.toTypedArray())
                             )
                         }
                     )
