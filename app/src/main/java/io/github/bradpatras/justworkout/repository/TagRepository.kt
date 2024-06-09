@@ -6,10 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface TagRepository {
     @WorkerThread
-    fun fetchTags(
-        onComplete: () -> Unit,
-        onException: (Exception) -> Unit
-    ): Flow<List<Tag>>
+    fun fetchTags(): Flow<List<Tag>>
 
     @WorkerThread
     fun updateTag(
@@ -27,8 +24,6 @@ interface TagRepository {
 
     @WorkerThread
     fun createTag(
-        tag: Tag,
-        onComplete: () -> Unit,
-        onException: (Exception) -> Unit
+        tag: Tag
     ): Flow<Unit>
 }

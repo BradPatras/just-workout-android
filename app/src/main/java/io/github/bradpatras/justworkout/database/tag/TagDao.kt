@@ -4,8 +4,8 @@ import androidx.room.*
 
 @Dao
 interface TagDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(vararg tags: TagEntity)
+    @Upsert
+    suspend fun createOrUpdate(vararg tags: TagEntity)
 
     @Delete
     suspend fun delete(tag: TagEntity)

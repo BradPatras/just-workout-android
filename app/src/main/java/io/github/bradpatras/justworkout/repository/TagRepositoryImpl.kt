@@ -15,16 +15,12 @@ class TagRepositoryImpl @Inject constructor(
     private val tagDao: TagDao,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): TagRepository {
-    override fun fetchTags(
-        onComplete: () -> Unit,
-        onException: (Exception) -> Unit
-    ) = flow<List<Tag>> {
+    override fun fetchTags() = flow<List<Tag>> {
         tagDao
             .getAll()
             .map { it.asTag() }
             .also { emit(it) }
     }
-        .onCompletion { onComplete() }
         .flowOn(ioDispatcher)
 
     override fun updateTag(
@@ -52,14 +48,11 @@ class TagRepositoryImpl @Inject constructor(
         .flowOn(ioDispatcher)
 
     override fun createTag(
-        tag: Tag,
-        onComplete: () -> Unit,
-        onException: (Exception) -> Unit
+        tag: Tag
     ) = flow<Unit> {
         tagDao
-            .insert(tags = arrayOf(tag.asTagEntity()))
+            .createOrUpdate(tags = arrayOf(tag.asTagEntity()))
             .also { emit(Unit) }
     }
-        .onCompletion { onComplete() }
         .flowOn(ioDispatcher)
 }

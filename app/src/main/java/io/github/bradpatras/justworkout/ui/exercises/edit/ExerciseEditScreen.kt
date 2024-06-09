@@ -35,17 +35,25 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.TagsSelectScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import com.ramcosta.composedestinations.result.ResultRecipient
+import com.ramcosta.composedestinations.result.onResult
 import io.github.bradpatras.justworkout.Mocks
 import io.github.bradpatras.justworkout.models.Tag
+import io.github.bradpatras.justworkout.ui.tags.TagsSelectScreenNavArgs
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 
 @Destination<RootGraph>(navArgs = ExerciseEditScreenNavArgs::class)
 @Composable
 fun ExerciseEditScreen(
     navigator: DestinationsNavigator,
-    viewModel: ExerciseEditViewModel = hiltViewModel()
+    viewModel: ExerciseEditViewModel = hiltViewModel(),
+    resultRecipient: ResultRecipient<TagsSelectScreenDestination, TagsSelectScreenNavArgs>
 ) {
     val uiState = viewModel.uiState.collectAsState()
+
+    resultRecipient.onResult {
+        viewModel.onTagsSelectionChanged(it.selectedTags.toList())
+    }
 
     ExerciseEditContent(
         uiState = uiState.value,
@@ -54,9 +62,6 @@ fun ExerciseEditScreen(
         onCheckmarkTapped = {
             viewModel.onCheckmarkTapped()
             navigator.popBackStack()
-        },
-        onTagsSelectionChanged = {
-            viewModel.onTagsSelectionChanged(it)
         },
         destinationsNavigator = navigator
     )
@@ -69,7 +74,6 @@ fun ExerciseEditContent(
     onTitleChanged: (String) -> Unit,
     onDescriptionChanged: (String) -> Unit,
     onCheckmarkTapped: () -> Unit,
-    onTagsSelectionChanged: (List<Tag>) -> Unit,
     destinationsNavigator: DestinationsNavigator
 ) {
     if (!uiState.isLoading) {
@@ -171,7 +175,6 @@ fun ExerciseEditPreview() {
                 title = "This is the title",
                 isNew = false
             ),
-            { },
             { },
             { },
             { },

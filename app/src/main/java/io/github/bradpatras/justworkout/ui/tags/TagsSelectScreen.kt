@@ -18,6 +18,7 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,10 +28,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.bottomsheet.spec.DestinationStyleBottomSheet
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.result.ResultBackNavigator
 import io.github.bradpatras.justworkout.Mocks
 import io.github.bradpatras.justworkout.models.Tag
 import io.github.bradpatras.justworkout.ui.composables.TagChip
@@ -42,12 +44,18 @@ import io.github.bradpatras.justworkout.ui.composables.TagChip
     style = DestinationStyleBottomSheet::class
 )
 fun TagsSelectScreen(
-    viewModel: TagsSelectViewModel,
-    destinationsNavigator: DestinationsNavigator
+    viewModel: TagsSelectViewModel = hiltViewModel(),
+    backNavigator: ResultBackNavigator<TagsSelectScreenNavArgs>
 ) {
+    val uiState = viewModel.uiState.collectAsState()
+
     ModalBottomSheet(
         onDismissRequest = {
-           destinationsNavigator.navigateUp()
+           backNavigator.navigateBack(
+               TagsSelectScreenNavArgs(
+                   uiState.value.selectedTags.toTypedArray()
+               )
+           )
         },
         sheetState = SheetState(
             skipPartiallyExpanded = false,
@@ -56,11 +64,9 @@ fun TagsSelectScreen(
         )
     ) {
         TagsSelectContent(
-            uiState = TagsSelectUiState(
-                allTags = Mocks.mockTagsList2 + Mocks.mockTagList1,
-                selectedTags = Mocks.mockTagsList2
-            ),
-            { }
+            uiState = uiState.value,
+            tagTapped = { viewModel.tagTapped(it) },
+            createTagTapped = { viewModel.createTagTapped(it) }
         )
     }
 }
@@ -69,7 +75,8 @@ fun TagsSelectScreen(
 @Composable
 fun TagsSelectContent(
     uiState: TagsSelectUiState,
-    tagTapped: (Tag) -> Unit
+    tagTapped: (Tag) -> Unit,
+    createTagTapped: (String) -> Unit
 ) {
     val selectedTitles = uiState.selectedTags.map { it.title }
     var searchText by remember { mutableStateOf("") }
@@ -114,7 +121,14 @@ fun TagsSelectContent(
 
             val searchMatchesTag = tags.map { it.title.lowercase() }.contains(searchText.lowercase().trim())
             if (!searchMatchesTag && searchText.isNotBlank()) {
-                TagChip(title = "Create new tag \"$searchText\"", selected = false)
+                TagChip(
+                    title = "Create new tag \"$searchText\"",
+                    onClick = {
+                        createTagTapped(searchText)
+                        searchText = ""
+                    },
+                    selected = false
+                )
             }
 
             tags.forEach {
@@ -135,9 +149,11 @@ fun TagsSelectContent(
 fun TagsSelectContentPreview() {
     TagsSelectContent(
         uiState = TagsSelectUiState(
+            isLoading = false,
             allTags = Mocks.mockTagList1 + Mocks.mockTagsList2,
             selectedTags = Mocks.mockTagsList2
         ),
+        { },
         { }
     )
 }
