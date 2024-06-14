@@ -40,7 +40,7 @@ class ExerciseRepositoryImpl @Inject constructor(
         exerciseTagCrossRefDao.deleteByExercise(exercise.id)
         exerciseTagCrossRefDao.insert(
             exercise.tags.map {
-                ExerciseTagCrossRef(exerciseId = exercise.id, title = it.title)
+                ExerciseTagCrossRef(exerciseId = exercise.id, tagId = it.tagId)
             }
         )
 

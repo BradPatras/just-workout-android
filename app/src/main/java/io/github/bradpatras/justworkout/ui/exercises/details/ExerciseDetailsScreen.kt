@@ -162,9 +162,11 @@ fun ExerciseDetailsPreview() {
                     id = UUID.randomUUID(),
                     tags = listOf(
                         Tag(
+                            tagId = UUID.randomUUID(),
                             title = "Tricep"
                         ),
                         Tag(
+                            tagId = UUID.randomUUID(),
                             title = "Chest"
                         )
                     ),

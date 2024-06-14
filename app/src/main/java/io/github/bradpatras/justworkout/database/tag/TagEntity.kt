@@ -7,13 +7,16 @@ import java.util.UUID
 
 @Entity(tableName = "tag")
 data class TagEntity(
-    @PrimaryKey val title: String
+    @PrimaryKey val tagId: UUID,
+    val title: String
 )
 
 fun TagEntity.asTag() = Tag(
+    tagId = tagId,
     title = title
 )
 
 fun Tag.asTagEntity() = TagEntity(
+    tagId = tagId,
     title = title
 )

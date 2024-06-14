@@ -12,7 +12,7 @@ data class ExerciseWithTags(
     @Embedded val exercise: ExerciseEntity,
     @Relation(
         parentColumn = "exerciseId",
-        entityColumn = "title",
+        entityColumn = "tagId",
         associateBy = Junction(ExerciseTagCrossRef::class)
     )
     val tags: List<TagEntity>

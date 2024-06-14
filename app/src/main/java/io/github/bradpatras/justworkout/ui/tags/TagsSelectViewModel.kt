@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -66,7 +67,7 @@ class TagsSelectViewModel @Inject constructor(
 
     fun createTagTapped(tagTitle: String) {
         viewModelScope.launch {
-            val newTag = Tag(tagTitle)
+            val newTag = Tag(UUID.randomUUID(), tagTitle)
             tagRepository.createTag(newTag).single()
 
             _uiState.tryEmit(
