@@ -35,17 +35,20 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.TagsSelectScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import com.ramcosta.composedestinations.result.ResultBackNavigator
 import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.onResult
 import io.github.bradpatras.justworkout.Mocks
 import io.github.bradpatras.justworkout.models.Tag
 import io.github.bradpatras.justworkout.ui.tags.TagsSelectScreenNavArgs
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
+import java.util.UUID
 
 @Destination<RootGraph>(navArgs = ExerciseEditScreenNavArgs::class)
 @Composable
 fun ExerciseEditScreen(
     navigator: DestinationsNavigator,
+    backNavigator: ResultBackNavigator<ExerciseEditScreenNavArgs>,
     viewModel: ExerciseEditViewModel = hiltViewModel(),
     resultRecipient: ResultRecipient<TagsSelectScreenDestination, TagsSelectScreenNavArgs>
 ) {
@@ -61,7 +64,9 @@ fun ExerciseEditScreen(
         onDescriptionChanged = { viewModel.onDescriptionChanged(it) },
         onCheckmarkTapped = {
             viewModel.onCheckmarkTapped()
-            navigator.popBackStack()
+            backNavigator.navigateBack(
+                ExerciseEditScreenNavArgs(uiState.value.id, isNew = false)
+            )
         },
         destinationsNavigator = navigator
     )
@@ -169,6 +174,7 @@ fun ExerciseEditPreview() {
     JustWorkoutTheme {
         ExerciseEditContent(
             uiState = ExerciseEditUiState(
+                id = UUID.randomUUID(),
                 description = "This is the description of the exercise",
                 isLoading = false,
                 tags = Mocks.mockTagList1,

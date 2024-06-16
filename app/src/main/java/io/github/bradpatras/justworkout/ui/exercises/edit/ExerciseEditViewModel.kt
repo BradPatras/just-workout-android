@@ -25,9 +25,9 @@ class ExerciseEditViewModel @Inject constructor(
     private val exerciseRepository: ExerciseRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    private val navArgs = ExerciseEditScreenDestination.argsFrom(savedStateHandle)
+    private val navArgs: ExerciseEditScreenNavArgs = ExerciseEditScreenDestination.argsFrom(savedStateHandle)
     private val _uiState = MutableStateFlow(
-        ExerciseEditUiState(description = "", isLoading = false, tags = emptyList(), title = "", isNew = navArgs.isNew)
+        ExerciseEditUiState(id = navArgs.id, description = "", isLoading = false, tags = emptyList(), title = "", isNew = navArgs.isNew)
     )
     val uiState: StateFlow<ExerciseEditUiState> = _uiState.asStateFlow()
 
@@ -47,6 +47,7 @@ class ExerciseEditViewModel @Inject constructor(
 
             _uiState.emit(
                 ExerciseEditUiState(
+                    id = exercise.id,
                     description = exercise.description,
                     isLoading = false,
                     tags = exercise.tags,

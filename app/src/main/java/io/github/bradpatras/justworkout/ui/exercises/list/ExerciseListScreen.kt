@@ -62,7 +62,7 @@ fun ExerciseListScreen(
         },
         onItemClick = { exercise ->
             destinationsNavigator.navigate(
-                ExerciseDetailsScreenDestination(exercise = exercise)
+                ExerciseDetailsScreenDestination(exercise.id)
             )
         }
     )

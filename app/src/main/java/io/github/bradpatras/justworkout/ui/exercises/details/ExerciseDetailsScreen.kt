@@ -35,19 +35,27 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.ExerciseEditScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import com.ramcosta.composedestinations.result.ResultRecipient
+import com.ramcosta.composedestinations.result.onResult
 import io.github.bradpatras.justworkout.R
 import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.models.Tag
+import io.github.bradpatras.justworkout.ui.exercises.edit.ExerciseEditScreenNavArgs
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 import java.util.UUID
 
-@Destination<RootGraph>(navArgs = ExerciseDetailsUiState::class)
+@Destination<RootGraph>(navArgs = ExerciseDetailsScreenNavArgs::class)
 @Composable
 fun ExerciseDetailsScreen(
     destinationsNavigator: DestinationsNavigator,
-    viewModel: ExerciseDetailsViewModel = hiltViewModel()
+    viewModel: ExerciseDetailsViewModel = hiltViewModel(),
+    resultRecipient: ResultRecipient<ExerciseEditScreenDestination, ExerciseEditScreenNavArgs>
 ) {
     val uiState = viewModel.uiState.collectAsState()
+
+    resultRecipient.onResult {
+        viewModel.reloadExercise()
+    }
 
     ExerciseDetailsContent(
         uiState = uiState.value,

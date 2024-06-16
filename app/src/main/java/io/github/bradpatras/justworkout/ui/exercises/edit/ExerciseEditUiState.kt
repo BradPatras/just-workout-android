@@ -4,6 +4,7 @@ import io.github.bradpatras.justworkout.models.Tag
 import java.util.UUID
 
 data class ExerciseEditUiState(
+    val id: UUID,
     val description: String,
     val isLoading: Boolean,
     val tags: List<Tag>,
