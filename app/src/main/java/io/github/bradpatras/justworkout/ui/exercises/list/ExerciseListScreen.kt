@@ -87,7 +87,14 @@ fun ExerciseListContent(
         )
 
         if (uiState.isLoading) {
-            CircularProgressIndicator()
+            Box(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
         } else {
             LazyColumn(
                 contentPadding = PaddingValues(8.dp),

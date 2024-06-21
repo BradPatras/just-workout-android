@@ -1,6 +1,7 @@
 package io.github.bradpatras.justworkout.ui.workouts.list
 
 import android.content.res.Configuration
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,12 +12,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -31,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import io.github.bradpatras.justworkout.Mocks
+import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.models.Workout
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 
@@ -42,14 +46,16 @@ fun WorkoutListScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     WorkoutListContent(
-        uiState = uiState
+        uiState = uiState,
+        onItemClick = { }
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutListContent(
-    uiState: WorkoutListUiState
+    uiState: WorkoutListUiState,
+    onItemClick: (Workout) -> Unit
 ) {
     Column {
         TopAppBar(
@@ -63,11 +69,31 @@ fun WorkoutListContent(
             )
         )
 
-        LazyColumn(
-            contentPadding = PaddingValues(12.dp)
-        ) {
-            items(uiState.workouts) { workout ->
-                WorkoutListItem(workout = workout)
+        if (uiState.isLoading) {
+            Box(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        } else {
+            LazyColumn(
+                contentPadding = PaddingValues(12.dp)
+            ) {
+                items(
+                    items = uiState.workouts,
+                    key = { it.id }
+                ) { workout ->
+                    Surface(
+                        Modifier.clickable {
+                            onItemClick(workout)
+                        }
+                    ) {
+                        WorkoutListItem(workout = workout)
+                    }
+                }
             }
         }
     }
@@ -112,8 +138,9 @@ fun WorkoutListPreview() {
     JustWorkoutTheme {
         WorkoutListContent(
             uiState = WorkoutListUiState(
+                isLoading = false,
                 Mocks.mockWorkoutList
             )
-        )
+        ) { }
     }
 }

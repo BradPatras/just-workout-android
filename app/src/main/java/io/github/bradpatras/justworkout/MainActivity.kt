@@ -7,17 +7,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.bradpatras.justworkout.repository.ExerciseRepository
 import io.github.bradpatras.justworkout.repository.TagRepository
+import io.github.bradpatras.justworkout.repository.WorkoutRepository
 import io.github.bradpatras.justworkout.ui.MainScreen
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
+import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject lateinit var exerciseRepository: ExerciseRepository
     @Inject lateinit var tagRepository: TagRepository
+    @Inject lateinit var workoutRepository: WorkoutRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,16 +38,20 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-//        lifecycleScope.launch {
-//            (Mocks.mockTagList1 + Mocks.mockTagsList2).forEach {
-//                tagRepository.createTag(it, {}, {}).single()
-//                Timber.i("creating tag")
-//            }
-//
-//            Mocks.mockExerciseList.forEach {
-//                Timber.i("creating exercise")
-//                exerciseRepository.createOrUpdateExercise(it).single()
-//            }
-//        }
+        lifecycleScope.launch {
+            (Mocks.mockTagList1 + Mocks.mockTagsList2).forEach {
+                tagRepository.createTag(it).single()
+                Timber.i("creating tag")
+            }
+
+            Mocks.mockExerciseList.forEach {
+                Timber.i("creating exercise")
+                exerciseRepository.createOrUpdateExercise(it).single()
+            }
+
+            Mocks.mockWorkoutList.forEach {
+                workoutRepository.createOrUpdateWorkout(it).single()
+            }
+        }
     }
 }

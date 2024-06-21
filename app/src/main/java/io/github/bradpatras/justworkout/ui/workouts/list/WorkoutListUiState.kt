@@ -6,5 +6,6 @@ import java.util.Date
 import java.util.UUID
 
 data class WorkoutListUiState(
+    val isLoading: Boolean,
     val workouts: List<Workout> = emptyList()
 )
