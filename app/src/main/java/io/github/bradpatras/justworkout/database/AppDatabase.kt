@@ -43,7 +43,7 @@ abstract class AppDatabase : RoomDatabase() {
         private const val NAME = "justWorkoutDatabase"
 
         fun create(context: Context): AppDatabase =
-            Room.databaseBuilder(context, AppDatabase::class.java, AppDatabase.NAME)
+            Room.databaseBuilder(context, AppDatabase::class.java, NAME)
                 .fallbackToDestructiveMigration()
                 .build()
     }
