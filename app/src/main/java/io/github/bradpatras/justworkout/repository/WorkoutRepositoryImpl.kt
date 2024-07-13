@@ -10,10 +10,12 @@ import io.github.bradpatras.justworkout.database.workout.asWorkoutEntity
 import io.github.bradpatras.justworkout.di.IoDispatcher
 import io.github.bradpatras.justworkout.models.Workout
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
+import java.util.UUID
 import javax.inject.Inject
 
 class WorkoutRepositoryImpl @Inject constructor(
@@ -22,6 +24,11 @@ class WorkoutRepositoryImpl @Inject constructor(
     private val workoutTagCrossRefDao: WorkoutTagCrossRefDao,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): WorkoutRepository {
+    override fun fetchWorkout(id: UUID): Flow<Workout> = workoutDao
+        .get(id)
+        .map { it.asWorkout() }
+        .flowOn(ioDispatcher)
+
     override fun fetchWorkouts() = workoutDao
         .getAll()
         .map { list -> list.map { it.asWorkout() } }

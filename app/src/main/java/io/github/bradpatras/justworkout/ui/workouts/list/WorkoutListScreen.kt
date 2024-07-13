@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import io.github.bradpatras.justworkout.Mocks
 import io.github.bradpatras.justworkout.models.Workout
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
@@ -40,13 +41,19 @@ import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 @Destination<RootGraph>
 @Composable
 fun WorkoutListScreen(
+    destinationsNavigator: DestinationsNavigator,
     viewModel: WorkoutListViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     WorkoutListContent(
         uiState = uiState,
-        onItemClick = { }
+        onAddButtonClick = {
+            // todo
+        },
+        onItemClick = {
+            // todo
+        }
     )
 }
 
@@ -54,6 +61,7 @@ fun WorkoutListScreen(
 @Composable
 fun WorkoutListContent(
     uiState: WorkoutListUiState,
+    onAddButtonClick: () -> Unit,
     onItemClick: (Workout) -> Unit
 ) {
     Column {
@@ -139,7 +147,9 @@ fun WorkoutListPreview() {
             uiState = WorkoutListUiState(
                 isLoading = false,
                 Mocks.mockWorkoutList
-            )
-        ) { }
+            ),
+            { },
+            { }
+        )
     }
 }
