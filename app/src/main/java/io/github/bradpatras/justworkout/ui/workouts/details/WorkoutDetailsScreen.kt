@@ -6,13 +6,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -25,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -124,10 +128,6 @@ fun WorkoutDetailsContent(
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            HorizontalDivider(
-                color = MaterialTheme.colorScheme.outlineVariant
-            )
-
             if (uiState.workout.notes.isNotBlank()) {
                 Text(
                     text = uiState.workout.notes,
@@ -137,10 +137,52 @@ fun WorkoutDetailsContent(
                 )
             }
 
+            if (uiState.workout.exercises.isNotEmpty()) {
+                HorizontalDivider()
+
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        text = "Exercises",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+
+                    uiState.workout.exercises.forEach { exercise ->
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Filled.PlayArrow,
+                                contentDescription = "",
+                                tint = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.size(16.dp)
+                            )
+
+                            Spacer(modifier = Modifier.width(8.dp))
+
+                            Text(
+                                text = exercise.title,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+                }
+            }
+
+            if (uiState.workout.datesCompleted.isNotEmpty()) {
+                HorizontalDivider()
+
+                Text(
+                    text = "Last completed: ${uiState.workout.datesCompleted.last().toString()}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Start,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+
             if (uiState.workout.tags.isNotEmpty()) {
                 Row(
                     modifier = Modifier
-                    .align(Alignment.Start)
+                        .align(Alignment.Start)
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.outline_tag),
@@ -157,29 +199,6 @@ fun WorkoutDetailsContent(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 }
-            }
-
-            if (uiState.workout.exercises.isNotEmpty()) {
-                HorizontalDivider()
-
-                uiState.workout.exercises.forEach { exercise ->
-                    Text(
-                        text = "• ${exercise.title}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            }
-
-            if (uiState.workout.datesCompleted.isNotEmpty()) {
-                HorizontalDivider()
-
-                Text(
-                    text = "Last completed: ${uiState.workout.datesCompleted.last().toString()}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Start,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
             }
         }
     }
