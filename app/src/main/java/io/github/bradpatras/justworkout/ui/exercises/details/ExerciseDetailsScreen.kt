@@ -116,28 +116,15 @@ fun ExerciseDetailsContent(
                 text = uiState.exercise.title,
                 modifier = Modifier
                     .align(Alignment.Start),
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.headlineMedium,
                 textAlign = TextAlign.Start,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            HorizontalDivider(
-                color = MaterialTheme.colorScheme.outlineVariant
-            )
-
-            if (uiState.exercise.description.isNotBlank()) {
-                Text(
-                    text = uiState.exercise.description,
-                    style = MaterialTheme.typography.bodyLarge,
-                    textAlign = TextAlign.Start,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-
             if (uiState.exercise.tags.isNotEmpty()) {
                 Row(
                     modifier = Modifier
-                    .align(Alignment.Start)
+                        .align(Alignment.Start)
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.outline_tag),
@@ -155,6 +142,15 @@ fun ExerciseDetailsContent(
                     )
                 }
             }
+
+            if (uiState.exercise.description.isNotBlank()) {
+                Text(
+                    text = uiState.exercise.description,
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Start,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
         }
     }
 }
@@ -166,7 +162,7 @@ fun ExerciseDetailsPreview() {
         ExerciseDetailsContent(
             uiState = ExerciseDetailsUiState(
                 exercise = Exercise(
-                    description = "This is the description, this is where you can give some extra info abou tthis exercise",
+                    description = "This is the description, this is where you can give some extra info about this exercise",
                     id = UUID.randomUUID(),
                     tags = listOf(
                         Tag(
@@ -178,7 +174,7 @@ fun ExerciseDetailsPreview() {
                             title = "Chest"
                         )
                     ),
-                    title = "Bench press test a really long title that will not fit in the topbar"
+                    title = "Bench Press"
                 )
             ),
             destinationsNavigator = EmptyDestinationsNavigator
