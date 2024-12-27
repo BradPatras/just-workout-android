@@ -4,5 +4,6 @@ import java.io.Serializable
 import java.util.UUID
 
 data class WorkoutDetailsScreenNavArgs(
-    val id: UUID
+    val id: UUID,
+    val isNew: Boolean
 ) : Serializable

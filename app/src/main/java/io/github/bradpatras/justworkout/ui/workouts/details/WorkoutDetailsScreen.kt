@@ -47,7 +47,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
-import com.ramcosta.composedestinations.generated.destinations.ExerciseEditScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultRecipient
@@ -67,7 +66,7 @@ import java.util.UUID
 fun WorkoutDetailsScreen(
     destinationsNavigator: DestinationsNavigator,
     viewModel: WorkoutDetailsViewModel = hiltViewModel(),
-    //resultRecipient: ResultRecipient<WorkoutEditScreenDestination, WorkoutEditScreenNavArgs>
+//    resultRecipient: ResultRecipient<WorkoutEditScreenDestination, WorkoutEditScreenNavArgs>
 ) {
     val uiState = viewModel.uiState.collectAsState()
 

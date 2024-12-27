@@ -78,9 +78,10 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
     // navigation annotations
-    implementation 'io.github.raamcosta.compose-destinations:core:2.0.0-beta07'
-    implementation 'io.github.raamcosta.compose-destinations:bottom-sheet:2.0.0-beta07'
-    ksp 'io.github.raamcosta.compose-destinations:ksp:2.0.0-beta07' // broken? check: https://github.com/google/ksp/issues/1401
+    def destinations_version = '2.1.0-beta15'
+    implementation "io.github.raamcosta.compose-destinations:core:$destinations_version"
+    implementation "io.github.raamcosta.compose-destinations:bottom-sheet:$destinations_version"
+    ksp "io.github.raamcosta.compose-destinations:ksp:$destinations_version" // broken? check: https://github.com/google/ksp/issues/1401
 
     // room db
     def room_version = '2.6.1'
