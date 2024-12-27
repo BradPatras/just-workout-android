@@ -91,7 +91,7 @@ fun TagsSelectContent(
         TopAppBar(
             title = {
                 Text(
-                    text = "Select Tags"
+                    text = "Select tags"
                 )
             },
             navigationIcon = {
