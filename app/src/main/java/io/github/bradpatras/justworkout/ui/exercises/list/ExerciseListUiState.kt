@@ -6,5 +6,6 @@ import java.util.UUID
 
 data class ExerciseListUiState(
     val exercises: List<Exercise> = emptyList(),
+    val tagFilter: List<Tag> = emptyList(),
     val isLoading: Boolean = false
 )
