@@ -118,55 +118,55 @@ fun TagsSelectContent(
                 .fillMaxWidth()
                 .padding(24.dp),
         ) {
-        OutlinedTextField(
-            value = searchText,
-            onValueChange = { searchText = it },
-            label = { Text("Search or Create") },
-            modifier = Modifier.fillMaxWidth()
-        )
+            OutlinedTextField(
+                value = searchText,
+                onValueChange = { searchText = it },
+                label = { Text("Search or Create") },
+                modifier = Modifier.fillMaxWidth()
+            )
 
-        HorizontalDivider(
-            modifier = Modifier.padding(vertical = 12.dp)
-        )
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 12.dp)
+            )
 
-        FlowRow(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            verticalArrangement = Arrangement.spacedBy(0.dp)
-        ) {
-            val tags = uiState.allTags.filter {
-                if (searchText.isNotBlank()) {
-                    return@filter it.title.lowercase().contains(searchText.lowercase())
-                } else {
-                    return@filter true
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalArrangement = Arrangement.spacedBy(0.dp)
+            ) {
+                val tags = uiState.allTags.filter {
+                    if (searchText.isNotBlank()) {
+                        return@filter it.title.lowercase().contains(searchText.lowercase())
+                    } else {
+                        return@filter true
+                    }
+                }.sortedBy {
+                    it.title
                 }
-            }.sortedBy {
-                it.title
+
+                val searchMatchesTag = tags.map { it.title.lowercase() }.contains(searchText.lowercase().trim())
+                if (!searchMatchesTag && searchText.isNotBlank()) {
+                    TagChip(
+                        title = "Create new tag \"$searchText\"",
+                        onClick = {
+                            createTagTapped(searchText)
+                            searchText = ""
+                        },
+                        selected = false
+                    )
+                }
+
+                tags.forEach {
+                    TagChip(
+                        title = it.title,
+                        onClick = { tagTapped(it) },
+                        selected = selectedTitles.contains(it.title)
+                    )
+                }
             }
 
-            val searchMatchesTag = tags.map { it.title.lowercase() }.contains(searchText.lowercase().trim())
-            if (!searchMatchesTag && searchText.isNotBlank()) {
-                TagChip(
-                    title = "Create new tag \"$searchText\"",
-                    onClick = {
-                        createTagTapped(searchText)
-                        searchText = ""
-                    },
-                    selected = false
-                )
-            }
-
-            tags.forEach {
-                TagChip(
-                    title = it.title,
-                    onClick = { tagTapped(it) },
-                    selected = selectedTitles.contains(it.title)
-                )
-            }
+            Spacer(modifier = Modifier.size(24.dp))
         }
-
-        Spacer(modifier = Modifier.size(24.dp))
-            }
     }
 }
 

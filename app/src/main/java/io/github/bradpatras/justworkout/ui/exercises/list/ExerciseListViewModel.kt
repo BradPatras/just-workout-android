@@ -29,14 +29,21 @@ class ExerciseListViewModel @Inject constructor(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ExerciseListUiState(isLoading = true))
     val uiState: StateFlow<ExerciseListUiState> = _uiState.asStateFlow()
+    private var allExercises: List<Exercise> = emptyList()
 
     init {
+        loadExercises()
+    }
+
+    fun loadExercises() {
         exerciseRepository.fetchExercises()
             .distinctUntilChanged()
-            .onEach { exercises ->
-                _uiState.value = ExerciseListUiState(
-                    exercises,
+            .zip(tagRepository.fetchTags()) { exercises, tags ->
+                allExercises = exercises
+                _uiState.value = _uiState.value.copy(
+                    exercises = exercises,
                     tagFilter = emptyList(),
+                    tags = tags,
                     isLoading = false
                 )
             }
@@ -44,18 +51,12 @@ class ExerciseListViewModel @Inject constructor(
     }
 
     fun onTagFilterSelected(tags: List<Tag>) {
-        exerciseRepository.fetchExercises()
-            .distinctUntilChanged()
-            .onEach { exercises ->
-                val filteredExercises = getFilteredExercises(exercises, tags)
-
-                _uiState.value = ExerciseListUiState(
-                    filteredExercises,
-                    tagFilter = tags,
-                    isLoading = false
-                )
-            }
-            .launchIn(viewModelScope)
+        val filteredExercises = getFilteredExercises(allExercises, tags)
+        _uiState.value = _uiState.value.copy(
+            exercises = filteredExercises,
+            tagFilter = tags,
+            tags = _uiState.value.tags
+        )
     }
 
     private fun getFilteredExercises(exercises: List<Exercise>, tagFilter: List<Tag>): List<Exercise> {
@@ -63,7 +64,7 @@ class ExerciseListViewModel @Inject constructor(
             val exercisesWithTags = exercises.filter { it.tags.isNotEmpty() }
             // Calculate scores for each item
             val scoredExercises = exercisesWithTags.map { exercise ->
-                val score = exercise.tags.intersect(tagFilter).size
+                val score = exercise.tags.intersect(tagFilter.toSet()).size
                 Pair(exercise, score)
             }
 
