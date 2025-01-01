@@ -69,6 +69,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import io.github.bradpatras.justworkout.Mocks
 import io.github.bradpatras.justworkout.R
 import io.github.bradpatras.justworkout.models.Exercise
+import io.github.bradpatras.justworkout.models.Tag
 import io.github.bradpatras.justworkout.ui.composables.TagChip
 import io.github.bradpatras.justworkout.ui.tags.TagsSelectContent
 import io.github.bradpatras.justworkout.ui.tags.TagsSelectUiState
@@ -94,19 +95,18 @@ fun ExerciseListScreen(
             destinationsNavigator.navigate(
                 ExerciseDetailsScreenDestination(exercise.id)
             )
-        }
+        },
+        onTagFilterSelected = { viewModel.onTagFilterSelected(it) }
     )
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ExerciseListContent(
     uiState: ExerciseListUiState,
     onAddButtonClick: () -> Unit,
-    onItemClick: (Exercise) -> Unit
+    onItemClick: (Exercise) -> Unit,
+    onTagFilterSelected: (List<Tag>) -> Unit
 ) {
-    val bottomSheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
 
     Column {
@@ -184,48 +184,78 @@ fun ExerciseListContent(
     }
 
     if (showBottomSheet) {
-        ModalBottomSheet(
+        TagFilterBottomSheet(
+            tags = uiState.tags,
+            selectedTags = uiState.tagFilter,
             onDismissRequest = { showBottomSheet = false },
-            sheetState = bottomSheetState
+            onFiltersApplied = { onTagFilterSelected(it) }
+        )
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun TagFilterBottomSheet(
+    tags: List<Tag>,
+    selectedTags: List<Tag>,
+    onDismissRequest: () -> Unit,
+    onFiltersApplied: (List<Tag>) -> Unit
+) {
+    val bottomSheetState = rememberModalBottomSheetState()
+    var tagSelection by remember { mutableStateOf(selectedTags) }
+
+    ModalBottomSheet(
+        onDismissRequest = onDismissRequest,
+        sheetState = bottomSheetState
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
-            Column(
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally,
+            Text(text = "Filter", style = MaterialTheme.typography.headlineSmall)
+
+            FlowRow(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalArrangement = Arrangement.spacedBy(0.dp)
             ) {
-                Text(text = "Filter", style = MaterialTheme.typography.headlineSmall)
-
-                FlowRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .padding(bottom = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    verticalArrangement = Arrangement.spacedBy(0.dp)
-                ) {
-                    uiState.tags.forEach {
-                        TagChip(
-                            title = it.title,
-                            onClick = { },
-                            selected = uiState.tagFilter.contains(it)
-                        )
-                    }
+                tags.forEach {
+                    TagChip(
+                        title = it.title,
+                        onClick = {
+                            tagSelection = tagSelection.toMutableList().apply {
+                                if (contains(it)) {
+                                    remove(it)
+                                } else {
+                                    add(it)
+                                }
+                            }
+                        },
+                        selected = tagSelection.contains(it)
+                    )
                 }
-
-                Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
-                    OutlinedButton(onClick = { /*TODO*/ }) {
-                        Text(text = "Reset", modifier = Modifier.padding(horizontal = 16.dp))
-
-                    }
-
-                    Button(onClick = { /*TODO*/ }) {
-                        Text(text = "Apply (${uiState.tagFilter.size})", modifier = Modifier.padding(horizontal = 16.dp))
-                    }
-                }
-
-                Spacer(modifier = Modifier.size(24.dp))
             }
+
+            Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
+                OutlinedButton(onClick = { tagSelection = emptyList() }) {
+                    Text(text = "Reset", modifier = Modifier.padding(horizontal = 16.dp))
+
+                }
+
+                Button(onClick = {
+                    onFiltersApplied(tagSelection)
+                    onDismissRequest()
+                }) {
+                    Text(text = "Apply (${tagSelection.size})", modifier = Modifier.padding(horizontal = 16.dp))
+                }
+            }
+
+            Spacer(modifier = Modifier.size(24.dp))
         }
     }
 }
@@ -264,7 +294,8 @@ fun ExerciseListPreview() {
                 exercises = Mocks.mockExerciseList
             ),
             onAddButtonClick = { },
-            onItemClick = { }
+            onItemClick = { },
+            onTagFilterSelected = { }
         )
     }
 }
