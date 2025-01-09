@@ -126,7 +126,7 @@ fun ExerciseListContent(
                     BadgedBox(badge = {
                         if (uiState.tagFilter.isNotEmpty()) {
                             Badge(
-                                containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                containerColor = MaterialTheme.colorScheme.onSecondary,
                                 modifier = Modifier.padding(1.dp)
                             )
                         }

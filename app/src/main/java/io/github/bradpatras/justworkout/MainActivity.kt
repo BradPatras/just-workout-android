@@ -9,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.bradpatras.justworkout.models.PreloadModels
 import io.github.bradpatras.justworkout.repository.ExerciseRepository
 import io.github.bradpatras.justworkout.repository.TagRepository
 import io.github.bradpatras.justworkout.repository.WorkoutRepository
@@ -35,22 +36,6 @@ class MainActivity : ComponentActivity() {
                 ) {
                     MainScreen()
                 }
-            }
-        }
-
-        lifecycleScope.launch {
-            (Mocks.mockTagList1 + Mocks.mockTagsList2).forEach {
-                tagRepository.createTag(it).single()
-                Timber.i("creating tag")
-            }
-
-            Mocks.mockExerciseList.forEach {
-                Timber.i("creating exercise")
-                exerciseRepository.createOrUpdateExercise(it).single()
-            }
-
-            Mocks.mockWorkoutList.forEach {
-                workoutRepository.createOrUpdateWorkout(it).single()
             }
         }
     }

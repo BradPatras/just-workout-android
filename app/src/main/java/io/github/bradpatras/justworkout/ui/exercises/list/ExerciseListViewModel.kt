@@ -59,7 +59,10 @@ class ExerciseListViewModel @Inject constructor(
         )
     }
 
-    private fun getFilteredExercises(exercises: List<Exercise>, tagFilter: List<Tag>): List<Exercise> {
+    private fun getFilteredExercises(
+        exercises: List<Exercise>,
+        tagFilter: List<Tag>
+    ): List<Exercise> {
         if (tagFilter.isNotEmpty()) {
             val exercisesWithTags = exercises.filter { it.tags.isNotEmpty() }
             // Calculate scores for each item
@@ -70,6 +73,7 @@ class ExerciseListViewModel @Inject constructor(
 
             // Sort items by score in descending order
             return scoredExercises
+                .filter { it.second > 0 }
                 .sortedByDescending { it.second }
                 .map { it.first }
         } else {
