@@ -9,13 +9,16 @@ import io.github.bradpatras.justworkout.repository.ExerciseRepository
 import io.github.bradpatras.justworkout.repository.TagRepository
 import io.github.bradpatras.justworkout.utility.UuidProvider
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -23,40 +26,32 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExerciseListViewModel @Inject constructor(
-    val exerciseRepository: ExerciseRepository,
-    val tagRepository: TagRepository,
+    exerciseRepository: ExerciseRepository,
+    tagRepository: TagRepository,
     val uuidProvider: UuidProvider,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(ExerciseListUiState(isLoading = true))
-    val uiState: StateFlow<ExerciseListUiState> = _uiState.asStateFlow()
-    private var allExercises: List<Exercise> = emptyList()
+    private val tagFilter = MutableStateFlow<List<Tag>>(emptyList())
 
-    init {
-        loadExercises()
-    }
-
-    fun loadExercises() {
-        exerciseRepository.fetchExercises()
-            .distinctUntilChanged()
-            .zip(tagRepository.fetchTags()) { exercises, tags ->
-                allExercises = exercises
-                _uiState.value = _uiState.value.copy(
-                    exercises = exercises,
-                    tagFilter = emptyList(),
-                    tags = tags,
-                    isLoading = false
-                )
-            }
-            .launchIn(viewModelScope)
-    }
+    val uiState: StateFlow<ExerciseListUiState> = combine(
+        exerciseRepository.fetchExercises(),
+        tagRepository.fetchTags(),
+        tagFilter.asStateFlow()
+    ) { exercises, tags, tagFilter ->
+        val filteredExercises = getFilteredExercises(exercises, tagFilter)
+        ExerciseListUiState(
+            exercises = filteredExercises,
+            tagFilter = tagFilter,
+            tags = tags,
+            isLoading = false
+        )
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.Eagerly,
+        ExerciseListUiState(isLoading = true)
+    )
 
     fun onTagFilterSelected(tags: List<Tag>) {
-        val filteredExercises = getFilteredExercises(allExercises, tags)
-        _uiState.value = _uiState.value.copy(
-            exercises = filteredExercises,
-            tagFilter = tags,
-            tags = _uiState.value.tags
-        )
+        tagFilter.value = tags
     }
 
     private fun getFilteredExercises(
