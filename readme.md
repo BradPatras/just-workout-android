@@ -1,5 +1,6 @@
 # Just Workout
 Workout database app to assist in coming up with fresh and effective strength training workouts.
+
 [Trello Board (private)](https://trello.com/b/qDzkvYYl/just-workout-android)
 ## Project structure
 The app is not technically modularized but the package structure mimics how I would modularize it. This keeps responsibilities clear and if I were to actually modularize in the future it would be pretty simple.
