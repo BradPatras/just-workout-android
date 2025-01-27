@@ -53,7 +53,6 @@ import java.util.UUID
 @Composable
 fun ExerciseEditScreen(
     navigator: DestinationsNavigator,
-    backNavigator: ResultBackNavigator<ExerciseEditScreenNavArgs>,
     viewModel: ExerciseEditViewModel = hiltViewModel(),
     resultRecipient: ResultRecipient<TagsSelectScreenDestination, TagsSelectScreenNavArgs>
 ) {
@@ -69,9 +68,7 @@ fun ExerciseEditScreen(
         onDescriptionChanged = { viewModel.onDescriptionChanged(it) },
         onCheckmarkTapped = {
             viewModel.onCheckmarkTapped()
-            backNavigator.navigateBack(
-                ExerciseEditScreenNavArgs(uiState.value.id, isNew = false)
-            )
+            navigator.popBackStack()
         },
         destinationsNavigator = navigator
     )

@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
@@ -33,28 +34,21 @@ class ExerciseEditViewModel @Inject constructor(
 
     init {
         if (!navArgs.isNew) {
-            fetchExercise(navArgs.id)
-        }
-    }
-
-    private fun fetchExercise(id: UUID) {
-        viewModelScope.launch {
-            _uiState.emit(
-                _uiState.value.copy(isLoading = true)
-            )
-
-            val exercise = exerciseRepository.fetchExercise(id = id).first()
-
-            _uiState.emit(
-                ExerciseEditUiState(
-                    id = exercise.id,
-                    description = exercise.description,
-                    isLoading = false,
-                    tags = exercise.tags,
-                    title = exercise.title,
-                    isNew = false
-                )
-            )
+            viewModelScope.launch {
+                exerciseRepository.fetchExercise(id = navArgs.id)
+                    .map {
+                        _uiState.emit(
+                            ExerciseEditUiState(
+                                id = it.id,
+                                description = it.description,
+                                isLoading = false,
+                                tags = it.tags,
+                                title = it.title,
+                                isNew = false
+                            )
+                        )
+                    }
+            }
         }
     }
 

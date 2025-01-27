@@ -14,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,12 +34,9 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.ExerciseEditScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
-import com.ramcosta.composedestinations.result.ResultRecipient
-import com.ramcosta.composedestinations.result.onResult
 import io.github.bradpatras.justworkout.R
 import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.models.Tag
-import io.github.bradpatras.justworkout.ui.exercises.edit.ExerciseEditScreenNavArgs
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 import java.util.UUID
 
@@ -48,14 +44,9 @@ import java.util.UUID
 @Composable
 fun ExerciseDetailsScreen(
     destinationsNavigator: DestinationsNavigator,
-    viewModel: ExerciseDetailsViewModel = hiltViewModel(),
-    resultRecipient: ResultRecipient<ExerciseEditScreenDestination, ExerciseEditScreenNavArgs>
+    viewModel: ExerciseDetailsViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState()
-
-    resultRecipient.onResult {
-        viewModel.reloadExercise()
-    }
 
     ExerciseDetailsContent(
         uiState = uiState.value,
