@@ -8,7 +8,6 @@ import io.github.bradpatras.justworkout.models.Tag
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onCompletion
 import javax.inject.Inject
 
 class TagRepositoryImpl @Inject constructor(
@@ -23,36 +22,15 @@ class TagRepositoryImpl @Inject constructor(
     }
         .flowOn(ioDispatcher)
 
-    override fun updateTag(
-        tag: Tag,
-        onComplete: () -> Unit,
-        onException: (Exception) -> Unit
-    ) = flow<Unit> {
-        tagDao
-            .update(tags = arrayOf(tag.asTagEntity()))
-            .also { emit(Unit) }
+    override suspend fun updateTag(tag: Tag) {
+        tagDao.update(tags = arrayOf(tag.asTagEntity()))
     }
-        .onCompletion { onComplete() }
-        .flowOn(ioDispatcher)
 
-    override fun deleteTag(
-        tag: Tag,
-        onComplete: () -> Unit,
-        onException: (Exception) -> Unit
-    ) = flow<Unit> {
-        tagDao
-            .delete(tag = tag.asTagEntity())
-            .also { emit(Unit) }
+    override suspend fun deleteTag(tag: Tag) {
+        tagDao.delete(tag = tag.asTagEntity())
     }
-        .onCompletion { onComplete() }
-        .flowOn(ioDispatcher)
 
-    override fun createTag(
-        tag: Tag
-    ) = flow<Unit> {
-        tagDao
-            .createOrUpdate(tags = arrayOf(tag.asTagEntity()))
-            .also { emit(Unit) }
+    override suspend fun createTag(tag: Tag) {
+        tagDao.createOrUpdate(tags = arrayOf(tag.asTagEntity()))
     }
-        .flowOn(ioDispatcher)
 }

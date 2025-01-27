@@ -68,7 +68,7 @@ class TagsSelectViewModel @Inject constructor(
     fun createTagTapped(tagTitle: String) {
         viewModelScope.launch {
             val newTag = Tag(UUID.randomUUID(), tagTitle)
-            tagRepository.createTag(newTag).single()
+            tagRepository.createTag(newTag)
 
             _uiState.tryEmit(
                 uiState.value.copy(

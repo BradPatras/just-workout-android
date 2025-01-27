@@ -76,7 +76,6 @@ class ExerciseEditViewModel @Inject constructor(
                     title = _uiState.value.title
                 )
             )
-                .single()
         }
     }
 

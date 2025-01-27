@@ -13,8 +13,8 @@ interface WorkoutRepository {
     fun fetchWorkouts(): Flow<List<Workout>>
 
     @WorkerThread
-    fun deleteWorkout(workout: Workout): Flow<Unit>
+    suspend fun deleteWorkout(workout: Workout)
 
     @WorkerThread
-    fun createOrUpdateWorkout(workout: Workout): Flow<Unit>
+    suspend fun createOrUpdateWorkout(workout: Workout)
 }

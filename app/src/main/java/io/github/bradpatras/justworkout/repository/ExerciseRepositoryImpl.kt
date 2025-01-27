@@ -8,12 +8,8 @@ import io.github.bradpatras.justworkout.database.exercise.asExerciseWithTags
 import io.github.bradpatras.justworkout.di.IoDispatcher
 import io.github.bradpatras.justworkout.models.Exercise
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
 import java.util.UUID
 import javax.inject.Inject
 
@@ -32,7 +28,7 @@ class ExerciseRepositoryImpl @Inject constructor(
         .map { list -> list.map { it.asExercise() } }
         .flowOn(ioDispatcher)
 
-    override fun createOrUpdateExercise(exercise: Exercise) = flow<Unit> {
+    override suspend fun createOrUpdateExercise(exercise: Exercise) {
         val entity = exercise.asExerciseWithTags()
         exerciseDao
             .createOrUpdate(exercises = arrayOf(entity.exercise))
@@ -43,20 +39,14 @@ class ExerciseRepositoryImpl @Inject constructor(
                 ExerciseTagCrossRef(exerciseId = exercise.id, tagId = it.tagId)
             }
         )
-
-        emit(Unit)
     }
-        .flowOn(ioDispatcher)
 
-    override fun deleteExercise(exercise: Exercise) = flow<Unit> {
+    override suspend fun deleteExercise(exercise: Exercise) {
         val entity = exercise.asExerciseWithTags()
         exerciseDao
             .delete(exercise = entity.exercise)
 
         exerciseTagCrossRefDao
             .deleteByExercise(exerciseId = exercise.id)
-
-        emit(Unit)
     }
-        .flowOn(ioDispatcher)
 }

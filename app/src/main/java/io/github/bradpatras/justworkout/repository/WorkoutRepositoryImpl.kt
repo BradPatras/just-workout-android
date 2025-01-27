@@ -11,10 +11,8 @@ import io.github.bradpatras.justworkout.di.IoDispatcher
 import io.github.bradpatras.justworkout.models.Workout
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
 import java.util.UUID
 import javax.inject.Inject
 
@@ -34,7 +32,7 @@ class WorkoutRepositoryImpl @Inject constructor(
         .map { list -> list.map { it.asWorkout() } }
         .flowOn(ioDispatcher)
 
-    override fun createOrUpdateWorkout(workout: Workout ) = flow<Unit> {
+    override suspend fun createOrUpdateWorkout(workout: Workout ) {
         val entity = workout.asWorkoutEntity()
         workoutDao
             .createOrUpdate(workouts = arrayOf(entity.workout))
@@ -56,20 +54,14 @@ class WorkoutRepositoryImpl @Inject constructor(
                     WorkoutTagCrossRef(workoutId = workout.id, it.tagId)
                 }
             )
-
-        emit(Unit)
     }
-        .flowOn(ioDispatcher)
 
-    override fun deleteWorkout(workout: Workout) = flow<Unit> {
+    override suspend fun deleteWorkout(workout: Workout) {
         val entity = workout.asWorkoutEntity()
         workoutDao
             .delete(workout = entity.workout)
 
         workoutExerciseCrossRefDao.deleteByWorkout(workoutId = workout.id)
         workoutTagCrossRefDao.deleteByWorkout(workoutId = workout.id)
-
-        emit(Unit)
     }
-        .flowOn(ioDispatcher)
 }
