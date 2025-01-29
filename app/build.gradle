@@ -59,11 +59,8 @@ dependencies {
     // android stuff
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7"
     implementation 'androidx.activity:activity-compose:1.10.0'
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
     implementation 'androidx.core:core-ktx:1.15.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.7'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.8.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.8.5'
 
     // compose
@@ -90,8 +87,8 @@ dependencies {
     ksp "androidx.room:room-compiler:$room_version"
 
     // hilt
-    // Before upgrading to 2.47, check this thread https://github.com/google/dagger/issues/3965
-    def hilt_version = '2.46'
+    // If you run into issues with hilt and ksp check this thread https://github.com/google/dagger/issues/3965
+    def hilt_version = '2.51.1'
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
     implementation "com.google.dagger:hilt-android:$hilt_version"
     implementation "androidx.hilt:hilt-navigation-compose:1.2.0"
