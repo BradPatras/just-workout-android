@@ -24,6 +24,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.rememberNavHostEngine
 import com.ramcosta.composedestinations.spec.DestinationSpec
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
+import com.ramcosta.composedestinations.spec.NavGraphSpec
 import com.ramcosta.composedestinations.utils.currentDestinationAsState
 import com.ramcosta.composedestinations.utils.rememberDestinationsNavigator
 import com.ramcosta.composedestinations.utils.startDestination
@@ -40,16 +41,17 @@ enum class BottomBarDestination(
 
 @Composable
 fun MainScreen() {
-    val navEngine = rememberNavHostEngine()
     val navController = rememberNavController()
+    val destinationsNavigator = navController.rememberDestinationsNavigator()
+    val currentDestination: DestinationSpec = navController.currentDestinationAsState().value
+        ?: NavGraphs.root.startDestination
 
     Scaffold(
         bottomBar = {
-            BottomBar(navController)
+            BottomBar(currentDestination, destinationsNavigator)
         }
     ) {
         DestinationsNavHost(
-            engine = navEngine,
             navGraph = NavGraphs.root,
             navController = navController,
             modifier = Modifier
@@ -60,15 +62,13 @@ fun MainScreen() {
 }
 
 @Composable
-fun BottomBar(navController: NavController) {
-    val currentDestination: DestinationSpec = navController.currentDestinationAsState().value
-        ?: NavGraphs.root.startDestination
+fun BottomBar(currentDestination: DestinationSpec, destinationsNavigator: DestinationsNavigator) {
     BottomAppBar {
         BottomBarDestination.entries.forEach { destination ->
             NavigationBarItem(
                 selected = currentDestination == destination.direction,
                 onClick = {
-                    navController.navigate(destination.direction) {
+                    destinationsNavigator.navigate(destination.direction) {
                         launchSingleTop = true
                     }
                 },
