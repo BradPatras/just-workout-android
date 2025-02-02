@@ -47,6 +47,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.ExerciseDetailsScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.ExerciseEditScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.WorkoutEditScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultRecipient
@@ -99,24 +102,24 @@ fun WorkoutDetailsContent(
                 IconButton(onClick = { destinationsNavigator.navigateUp() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back button"
+                        contentDescription = "Back"
                     )
                 }
             },
             actions = {
                 IconButton(
                     onClick = {
-//                        destinationsNavigator.navigate(
-//                            WorkoutEditScreenDestination(
-//                                id = uiState.workout.id,
-//                                isNew = false
-//                            )
-//                        )
+                        destinationsNavigator.navigate(
+                            WorkoutEditScreenDestination(
+                                id = uiState.workout.id,
+                                isNew = false
+                            )
+                        )
                     }
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Edit,
-                        contentDescription = "Edit workout button"
+                        contentDescription = "Edit workout"
                     )
                 }
             },
@@ -201,7 +204,13 @@ fun WorkoutDetailsContent(
                                 )
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(8.dp))
-                                .clickable { /* TODO */ }
+                                .clickable {
+                                    destinationsNavigator.navigate(
+                                        ExerciseDetailsScreenDestination(
+                                            id = exercise.id
+                                        )
+                                    )
+                                }
                                 .padding(vertical = 4.dp, horizontal = 12.dp)
 
                         ) {
@@ -209,6 +218,7 @@ fun WorkoutDetailsContent(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.End,
                                 modifier = Modifier.fillMaxWidth()
+                                    .padding(vertical = 6.dp)
                             ) {
                                 Text(
                                     text = exercise.title,

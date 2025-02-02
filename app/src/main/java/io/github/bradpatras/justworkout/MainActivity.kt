@@ -41,11 +41,15 @@ class MainActivity : ComponentActivity() {
 
 //        lifecycleScope.launch {
 //            for (tag in DefaultModels.tags) {
-//                tagRepository.createTag(tag).single()
+//                tagRepository.createTag(tag)
 //            }
 //
 //            for (exercise in DefaultModels.exercises) {
-//                exerciseRepository.createOrUpdateExercise(exercise).single()
+//                exerciseRepository.createOrUpdateExercise(exercise)
+//            }
+//
+//            for (workout in DefaultModels.workouts) {
+//                workoutRepository.createOrUpdateWorkout(workout)
 //            }
 //        }
     }

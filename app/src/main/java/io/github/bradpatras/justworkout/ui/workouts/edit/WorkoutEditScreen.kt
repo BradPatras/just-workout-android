@@ -1,13 +1,13 @@
-package io.github.bradpatras.justworkout.ui.exercises.edit
+@file:OptIn(ExperimentalMaterial3Api::class)
 
-import android.content.res.Configuration
+package io.github.bradpatras.justworkout.ui.workouts.edit
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
@@ -22,68 +22,48 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusEvent
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.TagsSelectScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
-import com.ramcosta.composedestinations.result.ResultBackNavigator
 import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.onResult
-import io.github.bradpatras.justworkout.Mocks
-import io.github.bradpatras.justworkout.models.Tag
 import io.github.bradpatras.justworkout.ui.tags.TagsSelectScreenNavArgs
-import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
-import java.util.UUID
 
-@Destination<RootGraph>(navArgs = ExerciseEditScreenNavArgs::class)
+@Destination<RootGraph>(navArgs = WorkoutEditScreenNavArgs::class)
 @Composable
-fun ExerciseEditScreen(
+fun WorkoutEditScreen(
     navigator: DestinationsNavigator,
-    viewModel: ExerciseEditViewModel = hiltViewModel(),
-    resultRecipient: ResultRecipient<TagsSelectScreenDestination, TagsSelectScreenNavArgs>
+    viewModel: WorkoutEditViewModel = hiltViewModel(),
+    tagSelectResultRecipient: ResultRecipient<TagsSelectScreenDestination, TagsSelectScreenNavArgs>,
+    //exerciseSelectResultRecipient: ResultRecipient<TagsSelectScreenDestination, TagsSelectScreenNavArgs>,
 ) {
     val uiState = viewModel.uiState.collectAsState()
 
-    resultRecipient.onResult {
-        viewModel.onTagsSelectionChanged(it.selectedTags.toList())
+    tagSelectResultRecipient.onResult {
+        viewModel.onTagsChanged(it.selectedTags.toList())
     }
 
-    ExerciseEditContent(
-        uiState = uiState.value,
-        onTitleChanged = { viewModel.onTitleChanged(it) },
-        onDescriptionChanged = { viewModel.onDescriptionChanged(it) },
-        onCheckmarkTapped = {
-            viewModel.onCheckmarkTapped()
-            navigator.popBackStack()
-        },
-        destinationsNavigator = navigator
-    )
+//    exerciseSelectResultRecipient.onResult {
+//        viewModel.onExercisesChanged(emptyList())
+//    }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExerciseEditContent(
-    uiState: ExerciseEditUiState,
+fun WorkoutEditContent(
+    uiState: WorkoutEditUiState,
     onTitleChanged: (String) -> Unit,
-    onDescriptionChanged: (String) -> Unit,
+    onNotesChanged: (String) -> Unit,
     onCheckmarkTapped: () -> Unit,
     destinationsNavigator: DestinationsNavigator
 ) {
-    if (!uiState.isLoading) {
+    if(!uiState.isLoading) {
         Column(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -94,7 +74,7 @@ fun ExerciseEditContent(
             TopAppBar(
                 title = {
                     Text(
-                        text = if (uiState.isNew) "Create exercise" else "Edit exercise"
+                        text = if (uiState.isNew) "Create workout" else "Edit workout"
                     )
                 },
                 navigationIcon = {
@@ -135,9 +115,9 @@ fun ExerciseEditContent(
                 )
 
                 OutlinedTextField(
-                    value = uiState.description,
-                    label = { Text("Description") },
-                    onValueChange = { onDescriptionChanged(it) },
+                    value = uiState.notes,
+                    label = { Text("Notes") },
+                    onValueChange = { onNotesChanged(it) },
                     modifier = Modifier
                         .fillMaxWidth(),
                     minLines = 3,
@@ -165,28 +145,16 @@ fun ExerciseEditContent(
                         }
                     )
                 }
+
+                OutlinedTextField(
+                    value = uiState.notes,
+                    label = { Text(uiState.exercises.joinToString { it.title }) },
+                    onValueChange = { onNotesChanged(it) },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    minLines = 3,
+                )
             }
         }
-    }
-}
-
-@Preview(showSystemUi = true, showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun ExerciseEditPreview() {
-    JustWorkoutTheme {
-        ExerciseEditContent(
-            uiState = ExerciseEditUiState(
-                id = UUID.randomUUID(),
-                description = "This is the description of the exercise",
-                isLoading = false,
-                tags = Mocks.mockTagList1,
-                title = "This is the title",
-                isNew = false
-            ),
-            { },
-            { },
-            { },
-            destinationsNavigator = EmptyDestinationsNavigator
-        )
     }
 }

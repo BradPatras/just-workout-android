@@ -3,7 +3,9 @@ package io.github.bradpatras.justworkout.ui.workouts.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.bradpatras.justworkout.repository.TagRepository
 import io.github.bradpatras.justworkout.repository.WorkoutRepository
+import io.github.bradpatras.justworkout.utility.UuidProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,13 +16,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkoutListViewModel @Inject constructor(
-    repository: WorkoutRepository
+    workoutRepository: WorkoutRepository,
+    tagRepository: TagRepository,
+    val uuidProvider: UuidProvider,
 ): ViewModel() {
     private val _uiState = MutableStateFlow(WorkoutListUiState(isLoading = true))
     val uiState: StateFlow<WorkoutListUiState> = _uiState.asStateFlow()
 
     init {
-        repository.fetchWorkouts()
+        workoutRepository.fetchWorkouts()
             .distinctUntilChanged()
             .onEach { workouts ->
                 _uiState.value = WorkoutListUiState(isLoading = false, workouts)

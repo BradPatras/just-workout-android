@@ -6,6 +6,7 @@ class DefaultModels {
     companion object {
         val tags: List<Tag> = Tags.entries.map { it.tag }
         val exercises: List<Exercise> = Exercises.entries.map { it.exercise }
+        val workouts: List<Workout> = Workouts.entries.map { it.workout }
     }
     
     enum class Tags(val tag: Tag) {
@@ -346,5 +347,22 @@ class DefaultModels {
                 title = "Forearm Plank"
             )
         ),
+    }
+
+    enum class Workouts(val workout: Workout) {
+        PUSH(
+            Workout(
+                datesCompleted = emptyList(),
+                exercises = listOf(
+                    Exercises.BENCH_PRESS.exercise,
+                    Exercises.CHEST_FLY.exercise,
+                    Exercises.TRICEP_KICKBACK.exercise
+                ),
+                id = UUID.fromString("21202f18-e309-48c8-a858-71d32edc5e67"),
+                title = "Push A",
+                tags = listOf(Tags.Push.tag),
+                notes = ""
+            )
+        )
     }
 }

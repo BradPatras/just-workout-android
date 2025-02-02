@@ -17,6 +17,6 @@ interface WorkoutDao {
     @Query("SELECT * FROM workout")
     fun getAll(): Flow<List<WorkoutWithTagsAndExercises>>
 
-    @Update
+    @Upsert
     suspend fun createOrUpdate(vararg workouts: WorkoutEntity)
 }
