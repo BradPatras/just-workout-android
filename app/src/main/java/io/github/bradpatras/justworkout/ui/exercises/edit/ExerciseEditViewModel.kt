@@ -35,19 +35,17 @@ class ExerciseEditViewModel @Inject constructor(
     init {
         if (!navArgs.isNew) {
             viewModelScope.launch {
-                exerciseRepository.fetchExercise(id = navArgs.id)
-                    .map {
-                        _uiState.emit(
-                            ExerciseEditUiState(
-                                id = it.id,
-                                description = it.description,
-                                isLoading = false,
-                                tags = it.tags,
-                                title = it.title,
-                                isNew = false
-                            )
-                        )
-                    }
+                val exercise = exerciseRepository.fetchExercise(id = navArgs.id).first()
+                _uiState.emit(
+                    ExerciseEditUiState(
+                        id = exercise.id,
+                        description = exercise.description,
+                        isLoading = false,
+                        tags = exercise.tags,
+                        title = exercise.title,
+                        isNew = false
+                    )
+                )
             }
         }
     }

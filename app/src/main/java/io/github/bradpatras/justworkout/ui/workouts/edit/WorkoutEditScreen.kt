@@ -2,6 +2,7 @@
 
 package io.github.bradpatras.justworkout.ui.workouts.edit
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
@@ -26,15 +27,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.TagsSelectScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.onResult
+import io.github.bradpatras.justworkout.Mocks
+import io.github.bradpatras.justworkout.models.DefaultModels
+import io.github.bradpatras.justworkout.ui.exercises.edit.ExerciseEditContent
+import io.github.bradpatras.justworkout.ui.exercises.edit.ExerciseEditUiState
 import io.github.bradpatras.justworkout.ui.tags.TagsSelectScreenNavArgs
+import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
+import java.util.UUID
 
 @Destination<RootGraph>(navArgs = WorkoutEditScreenNavArgs::class)
 @Composable
@@ -53,8 +62,20 @@ fun WorkoutEditScreen(
 //    exerciseSelectResultRecipient.onResult {
 //        viewModel.onExercisesChanged(emptyList())
 //    }
+
+    WorkoutEditContent(
+        uiState = uiState.value,
+        onTitleChanged = { viewModel.onTitleChanged(it) },
+        onNotesChanged = { viewModel.onNotesChanged(it) },
+        onCheckmarkTapped = {
+            viewModel.onCheckmarkTapped()
+            navigator.popBackStack()
+        },
+        destinationsNavigator = navigator
+    )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutEditContent(
     uiState: WorkoutEditUiState,
@@ -156,5 +177,27 @@ fun WorkoutEditContent(
                 )
             }
         }
+    }
+}
+
+@Preview(showSystemUi = true, showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun WorkoutEditPreview() {
+    JustWorkoutTheme {
+        WorkoutEditContent(
+            uiState = WorkoutEditUiState(
+                id = UUID.randomUUID(),
+                notes = "These are some notes about this workout",
+                isLoading = false,
+                tags = Mocks.mockTagList1,
+                title = "This is the title",
+                isNew = false,
+                exercises = listOf(DefaultModels.Exercises.CHEST_FLY.exercise, DefaultModels.Exercises.BENCH_PRESS.exercise)
+            ),
+            { },
+            { },
+            { },
+            destinationsNavigator = EmptyDestinationsNavigator
+        )
     }
 }

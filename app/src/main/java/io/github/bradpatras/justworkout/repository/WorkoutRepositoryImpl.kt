@@ -22,7 +22,7 @@ class WorkoutRepositoryImpl @Inject constructor(
     private val workoutTagCrossRefDao: WorkoutTagCrossRefDao,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): WorkoutRepository {
-    override fun fetchWorkout(id: UUID): Flow<Workout> = workoutDao
+    override fun fetchWorkout(id: UUID) = workoutDao
         .get(id)
         .map { it.asWorkout() }
         .flowOn(ioDispatcher)

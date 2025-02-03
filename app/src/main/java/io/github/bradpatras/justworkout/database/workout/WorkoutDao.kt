@@ -14,7 +14,7 @@ interface WorkoutDao {
     fun get(id: UUID): Flow<WorkoutWithTagsAndExercises>
 
     @Transaction
-    @Query("SELECT * FROM workout")
+    @Query("SELECT * FROM workout ORDER BY title COLLATE NOCASE ASC")
     fun getAll(): Flow<List<WorkoutWithTagsAndExercises>>
 
     @Upsert
