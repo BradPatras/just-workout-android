@@ -12,11 +12,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -26,8 +29,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -37,7 +45,10 @@ import com.ramcosta.composedestinations.generated.destinations.WorkoutDetailsScr
 import com.ramcosta.composedestinations.generated.destinations.WorkoutEditScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import io.github.bradpatras.justworkout.Mocks
+import io.github.bradpatras.justworkout.R
+import io.github.bradpatras.justworkout.models.Tag
 import io.github.bradpatras.justworkout.models.Workout
+import io.github.bradpatras.justworkout.ui.composables.TagFilterBottomSheet
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 
 @Destination<RootGraph>
@@ -59,7 +70,8 @@ fun WorkoutListScreen(
             destinationsNavigator.navigate(
                 WorkoutDetailsScreenDestination(it.id)
             )
-        }
+        },
+        onTagFilterSelected = { viewModel.onTagFilterSelected(it) }
     )
 }
 
@@ -68,8 +80,11 @@ fun WorkoutListScreen(
 fun WorkoutListContent(
     uiState: WorkoutListUiState,
     onAddButtonClick: () -> Unit,
-    onItemClick: (Workout) -> Unit
+    onItemClick: (Workout) -> Unit,
+    onTagFilterSelected: (List<Tag>) -> Unit
 ) {
+    var showBottomSheet by remember { mutableStateOf(false) }
+
     Column {
         TopAppBar(
             title = { Text("Workouts") },
@@ -79,7 +94,25 @@ fun WorkoutListContent(
                 navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
                 titleContentColor = MaterialTheme.colorScheme.onPrimary,
                 actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
-            )
+            ),
+            actions = {
+                IconButton(
+                    onClick = { showBottomSheet = true },
+                ) {
+                    BadgedBox(badge = {
+                        if (uiState.tagFilter.isNotEmpty()) {
+                            Badge(
+                                containerColor = MaterialTheme.colorScheme.onSecondary
+                            )
+                        }
+                    }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.filter_list) ,
+                            contentDescription = "Localized description"
+                        )
+                    }
+                }
+            },
         )
 
         if (uiState.isLoading) {
@@ -93,7 +126,7 @@ fun WorkoutListContent(
             }
         } else {
             LazyColumn(
-                contentPadding = PaddingValues(12.dp)
+                contentPadding = PaddingValues(8.dp)
             ) {
                 items(
                     items = uiState.workouts,
@@ -118,11 +151,20 @@ fun WorkoutListContent(
         contentAlignment = Alignment.BottomEnd
     ) {
         FloatingActionButton(
-            onClick = { },
+            onClick = { onAddButtonClick() },
             shape = RoundedCornerShape(12.dp)
         ) {
             Icon(Icons.Filled.Add, "add workout")
         }
+    }
+
+    if (showBottomSheet) {
+        TagFilterBottomSheet(
+            tags = uiState.tags,
+            selectedTags = uiState.tagFilter,
+            onDismissRequest = { showBottomSheet = false },
+            onFiltersApplied = { onTagFilterSelected(it) }
+        )
     }
 }
 
@@ -131,13 +173,21 @@ private fun WorkoutListItem(workout: Workout) {
     Column {
         ListItem(
             headlineContent = {
-                Text(text = workout.title)
+                Text(
+                    text = workout.title,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             },
             supportingContent = {
                 if (workout.exercises.isEmpty()) {
                     Text(text = "No exercises added")
                 } else {
-                    Text(text = workout.exercises.joinToString { it.title })
+                    Text(
+                        text = workout.exercises.joinToString { it.title },
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
             }
         )
@@ -152,8 +202,11 @@ fun WorkoutListPreview() {
         WorkoutListContent(
             uiState = WorkoutListUiState(
                 isLoading = false,
+                tagFilter = emptyList(),
+                tags = Mocks.mockTagsList2,
                 Mocks.mockWorkoutList
             ),
+            { },
             { },
             { }
         )
