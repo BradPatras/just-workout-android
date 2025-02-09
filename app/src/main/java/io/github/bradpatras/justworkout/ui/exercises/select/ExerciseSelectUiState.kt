@@ -1,9 +1,8 @@
 package io.github.bradpatras.justworkout.ui.exercises.select
 
-import io.github.bradpatras.justworkout.models.Exercise
+import io.github.bradpatras.justworkout.models.SelectableExercise
 
 data class ExerciseSelectUiState(
     val isLoading: Boolean,
-    val allExercises: List<Exercise>,
-    val selectedExercises: List<Exercise>
+    val exercises: List<SelectableExercise>,
 )

@@ -5,12 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ramcosta.composedestinations.generated.destinations.ExerciseSelectScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.bradpatras.justworkout.models.Exercise
+import io.github.bradpatras.justworkout.models.SelectableExercise
 import io.github.bradpatras.justworkout.repository.ExerciseRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,8 +24,7 @@ class ExerciseSelectViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(
         ExerciseSelectUiState(
             isLoading = false,
-            allExercises = emptyList(),
-            selectedExercises = navArgs.selectedExercises.toList()
+            exercises = emptyList()
         )
     )
 
@@ -43,24 +43,21 @@ class ExerciseSelectViewModel @Inject constructor(
             _uiState.emit(
                 ExerciseSelectUiState(
                     isLoading = false,
-                    allExercises = exercises,
-                    selectedExercises = uiState.value.selectedExercises
+                    exercises = exercises.map {
+                        SelectableExercise(it, isSelected = navArgs.selectedExercises.contains(it))
+                    }
                 )
             )
         }
     }
 
-    fun exerciseTapped(exercise: Exercise) {
-        val newSelection = uiState.value.selectedExercises.toMutableList()
-
-        if (!newSelection.remove(exercise)) {
-            newSelection.add(exercise)
+    fun exerciseTapped(exercise: SelectableExercise) {
+        _uiState.update { state ->
+            val newExercises = state.exercises.toMutableList()
+            val newExercise = exercise.copy(isSelected = !exercise.isSelected)
+            val index = state.exercises.indexOfFirst { exercise.id() == it.id() }
+            newExercises[index] = newExercise
+            uiState.value.copy(exercises = newExercises)
         }
-
-        _uiState.tryEmit(
-            uiState.value.copy(
-                selectedExercises = newSelection
-            )
-        )
     }
 }

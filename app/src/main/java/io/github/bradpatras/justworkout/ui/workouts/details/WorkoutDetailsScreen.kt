@@ -201,7 +201,7 @@ fun WorkoutDetailsContent(
                                 .border(
                                     border = BorderStroke(
                                         1.dp,
-                                        MaterialTheme.colorScheme.outlineVariant
+                                        MaterialTheme.colorScheme.outline
                                     ),
                                     shape = RoundedCornerShape(8.dp)
                                 )
@@ -235,7 +235,7 @@ fun WorkoutDetailsContent(
                                 Icon(
                                     imageVector = Icons.Filled.KeyboardArrowRight,
                                     contentDescription = "",
-                                    tint = MaterialTheme.colorScheme.onSurface,
+                                    tint = MaterialTheme.colorScheme.outline,
                                     modifier = Modifier.size(16.dp)
                                 )
                             }

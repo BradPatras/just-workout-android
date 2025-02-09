@@ -2,7 +2,6 @@
 
 package io.github.bradpatras.justworkout.ui.workouts.edit
 
-import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,18 +18,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -49,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
-import com.ramcosta.composedestinations.generated.destinations.ExerciseDetailsScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.ExerciseSelectScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.TagsSelectScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
@@ -57,8 +51,8 @@ import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.onResult
 import io.github.bradpatras.justworkout.Mocks
 import io.github.bradpatras.justworkout.models.DefaultModels
-import io.github.bradpatras.justworkout.ui.exercises.edit.ExerciseEditContent
-import io.github.bradpatras.justworkout.ui.exercises.edit.ExerciseEditUiState
+import io.github.bradpatras.justworkout.models.Exercise
+import io.github.bradpatras.justworkout.ui.exercises.select.ExerciseSelectScreenNavArgs
 import io.github.bradpatras.justworkout.ui.tags.TagsSelectScreenNavArgs
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 import sh.calvin.reorderable.ReorderableItem
@@ -71,7 +65,7 @@ fun WorkoutEditScreen(
     navigator: DestinationsNavigator,
     viewModel: WorkoutEditViewModel = hiltViewModel(),
     tagSelectResultRecipient: ResultRecipient<TagsSelectScreenDestination, TagsSelectScreenNavArgs>,
-    //exerciseSelectResultRecipient: ResultRecipient<TagsSelectScreenDestination, TagsSelectScreenNavArgs>,
+    exerciseSelectResultRecipient: ResultRecipient<ExerciseSelectScreenDestination, ExerciseSelectScreenNavArgs>,
 ) {
     val uiState = viewModel.uiState.collectAsState()
 
@@ -79,9 +73,9 @@ fun WorkoutEditScreen(
         viewModel.onTagsChanged(it.selectedTags.toList())
     }
 
-//    exerciseSelectResultRecipient.onResult {
-//        viewModel.onExercisesChanged(emptyList())
-//    }
+    exerciseSelectResultRecipient.onResult {
+        viewModel.onExercisesChanged(it.selectedExercises.toList())
+    }
 
     WorkoutEditContent(
         uiState = uiState.value,
@@ -90,6 +84,11 @@ fun WorkoutEditScreen(
         onCheckmarkTapped = {
             viewModel.onCheckmarkTapped()
             navigator.popBackStack()
+        },
+        onRemoveExerciseTapped = { removedExercise ->
+            viewModel.onExercisesChanged(
+                uiState.value.exercises.filterNot { removedExercise.id == it.id }
+            )
         },
         destinationsNavigator = navigator
     )
@@ -102,6 +101,7 @@ fun WorkoutEditContent(
     onTitleChanged: (String) -> Unit,
     onNotesChanged: (String) -> Unit,
     onCheckmarkTapped: () -> Unit,
+    onRemoveExerciseTapped: (Exercise) -> Unit,
     destinationsNavigator: DestinationsNavigator
 ) {
     val lazyListState = rememberLazyListState()
@@ -151,7 +151,7 @@ fun WorkoutEditContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(24.dp),
-                verticalArrangement = Arrangement.spacedBy(20.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 item {
                     OutlinedTextField(
@@ -212,10 +212,14 @@ fun WorkoutEditContent(
                             modifier = Modifier.weight(1f)
                         )
 
-                        IconButton(onClick = { }) {
+                        IconButton(onClick = {
+                            destinationsNavigator.navigate(
+                                ExerciseSelectScreenDestination(selectedExercises = uiState.exercises.toTypedArray())
+                            )
+                        }) {
                             Icon(
                                 imageVector = Icons.Filled.Add,
-                                contentDescription = "",
+                                contentDescription = "Add exercise",
                                 tint = MaterialTheme.colorScheme.onSurface,
                                 modifier = Modifier.size(24.dp)
                             )
@@ -227,46 +231,40 @@ fun WorkoutEditContent(
                     items = uiState.exercises,
                     key = { it.id }
                 ) { exercise ->
-                    ReorderableItem(
-                        reorderableLazyListState,
-                        key = exercise.id
+                    Box(
+                        modifier = Modifier
+                            .border(
+                                border = BorderStroke(
+                                    1.dp,
+                                    MaterialTheme.colorScheme.outline
+                                ),
+                                shape = RoundedCornerShape(4.dp)
+                            )
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(4.dp))
+                            .padding(vertical = 4.dp, horizontal = 12.dp)
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .border(
-                                    border = BorderStroke(
-                                        1.dp,
-                                        MaterialTheme.colorScheme.outlineVariant
-                                    ),
-                                    shape = RoundedCornerShape(8.dp)
-                                )
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(8.dp))
-                                .padding(vertical = 4.dp, horizontal = 12.dp)
-                                .draggableHandle()
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.End,
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(vertical = 4.dp)
                         ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                                    .padding(vertical = 6.dp)
-                            ) {
-                                Text(
-                                    text = exercise.title,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    modifier = Modifier.padding(vertical = 8.dp)
-                                        .weight(1f),
-                                )
+                            Text(
+                                text = exercise.title,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.padding(vertical = 8.dp)
+                                    .weight(1f),
+                            )
 
-                                IconButton(onClick = { /*todo*/ }) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Close,
-                                        contentDescription = "",
-                                        tint = MaterialTheme.colorScheme.onSurface,
-                                        modifier = Modifier.size(20.dp)
-                                    )
-                                }
+                            IconButton(onClick = { onRemoveExerciseTapped(exercise) }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Close,
+                                    contentDescription = "",
+                                    tint = MaterialTheme.colorScheme.onSurface,
+                                    modifier = Modifier.size(20.dp)
+                                )
                             }
                         }
                     }
@@ -292,6 +290,7 @@ fun WorkoutEditPreview() {
                 isNew = false,
                 exercises = listOf(DefaultModels.Exercises.CHEST_FLY.exercise, DefaultModels.Exercises.BENCH_PRESS.exercise)
             ),
+            { },
             { },
             { },
             { },
