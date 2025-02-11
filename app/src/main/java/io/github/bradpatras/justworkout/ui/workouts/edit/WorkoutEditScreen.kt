@@ -35,6 +35,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,6 +56,7 @@ import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.ui.exercises.select.ExerciseSelectScreenNavArgs
 import io.github.bradpatras.justworkout.ui.tags.TagsSelectScreenNavArgs
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
+import kotlinx.coroutines.launch
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
 import java.util.UUID
@@ -68,6 +70,7 @@ fun WorkoutEditScreen(
     exerciseSelectResultRecipient: ResultRecipient<ExerciseSelectScreenDestination, ExerciseSelectScreenNavArgs>,
 ) {
     val uiState = viewModel.uiState.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
 
     tagSelectResultRecipient.onResult {
         viewModel.onTagsChanged(it.selectedTags.toList())
@@ -82,8 +85,10 @@ fun WorkoutEditScreen(
         onTitleChanged = { viewModel.onTitleChanged(it) },
         onNotesChanged = { viewModel.onNotesChanged(it) },
         onCheckmarkTapped = {
-            viewModel.onCheckmarkTapped()
-            navigator.popBackStack()
+            coroutineScope.launch {
+                viewModel.onCheckmarkTapped()
+                navigator.popBackStack()
+            }
         },
         onRemoveExerciseTapped = { removedExercise ->
             viewModel.onExercisesChanged(

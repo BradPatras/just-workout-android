@@ -32,6 +32,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,6 +52,7 @@ import io.github.bradpatras.justworkout.Mocks
 import io.github.bradpatras.justworkout.models.Tag
 import io.github.bradpatras.justworkout.ui.tags.TagsSelectScreenNavArgs
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
+import kotlinx.coroutines.launch
 import java.util.UUID
 
 @Destination<RootGraph>(navArgs = ExerciseEditScreenNavArgs::class)
@@ -61,6 +63,7 @@ fun ExerciseEditScreen(
     resultRecipient: ResultRecipient<TagsSelectScreenDestination, TagsSelectScreenNavArgs>
 ) {
     val uiState = viewModel.uiState.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
 
     resultRecipient.onResult {
         viewModel.onTagsSelectionChanged(it.selectedTags.toList())
@@ -71,8 +74,10 @@ fun ExerciseEditScreen(
         onTitleChanged = { viewModel.onTitleChanged(it) },
         onDescriptionChanged = { viewModel.onDescriptionChanged(it) },
         onCheckmarkTapped = {
-            viewModel.onCheckmarkTapped()
-            navigator.popBackStack()
+            coroutineScope.launch {
+                viewModel.onCheckmarkTapped()
+                navigator.popBackStack()
+            }
         },
         destinationsNavigator = navigator
     )

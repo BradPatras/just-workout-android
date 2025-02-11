@@ -58,17 +58,15 @@ class ExerciseEditViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(description = description)
     }
 
-    fun onCheckmarkTapped() {
-        viewModelScope.launch {
-            exerciseRepository.createOrUpdateExercise(
-                exercise = Exercise(
-                    description = _uiState.value.description,
-                    id = navArgs.id,
-                    tags = _uiState.value.tags,
-                    title = _uiState.value.title
-                )
+    suspend fun onCheckmarkTapped() {
+        exerciseRepository.createOrUpdateExercise(
+            exercise = Exercise(
+                description = _uiState.value.description,
+                id = navArgs.id,
+                tags = _uiState.value.tags,
+                title = _uiState.value.title
             )
-        }
+        )
     }
 
     fun onTagsSelectionChanged(tags: List<Tag>) {

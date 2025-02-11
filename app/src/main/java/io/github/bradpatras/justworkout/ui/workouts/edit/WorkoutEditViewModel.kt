@@ -79,19 +79,17 @@ class WorkoutEditViewModel @Inject constructor(
         )
     }
 
-    fun onCheckmarkTapped() {
-        viewModelScope.launch {
-            workoutRepository.createOrUpdateWorkout(
-                workout = Workout(
-                    id = _uiState.value.id,
-                    title = _uiState.value.title,
-                    notes = _uiState.value.notes,
-                    exercises = _uiState.value.exercises,
-                    tags = _uiState.value.tags,
-                    datesCompleted = emptyList()
-                )
+    suspend fun onCheckmarkTapped() {
+        workoutRepository.createOrUpdateWorkout(
+            workout = Workout(
+                id = _uiState.value.id,
+                title = _uiState.value.title,
+                notes = _uiState.value.notes,
+                exercises = _uiState.value.exercises,
+                tags = _uiState.value.tags,
+                datesCompleted = emptyList()
             )
-        }
+        )
     }
 
 }
