@@ -7,6 +7,7 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -63,13 +64,19 @@ fun MainScreen() {
 
 @Composable
 fun BottomBar(currentDestination: DestinationSpec, destinationsNavigator: DestinationsNavigator) {
-    BottomAppBar {
+    NavigationBar {
         BottomBarDestination.entries.forEach { destination ->
             NavigationBarItem(
                 selected = currentDestination == destination.direction,
                 onClick = {
                     destinationsNavigator.navigate(destination.direction) {
                         launchSingleTop = true
+                        restoreState = true
+                        destination.direction.startDestination
+                        popUpTo(currentDestination) {
+                            saveState = true
+                            inclusive = true
+                        }
                     }
                 },
                 icon = {
