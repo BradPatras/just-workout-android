@@ -350,7 +350,7 @@ class DefaultModels {
     }
 
     enum class Workouts(val workout: Workout) {
-        PUSH(
+        PUSH_A(
             Workout(
                 datesCompleted = emptyList(),
                 exercises = listOf(
@@ -361,6 +361,90 @@ class DefaultModels {
                 id = UUID.fromString("21202f18-e309-48c8-a858-71d32edc5e67"),
                 title = "Push A",
                 tags = listOf(Tags.Push.tag),
+                notes = ""
+            )
+        ),
+        PUSH_B(
+            Workout(
+                datesCompleted = emptyList(),
+                exercises = listOf(
+                    Exercises.INCLINE_BENCH_PRESS.exercise,
+                    Exercises.PULL_DOWN.exercise,
+                    Exercises.CHEST_FLY.exercise
+                ),
+                id = UUID.fromString("b6f15a85-bdf3-448e-b4c4-0c0409a4fee5"),
+                title = "Push B",
+                tags = listOf(Tags.Push.tag),
+                notes = ""
+            )
+        ),
+        PULL_A(
+            Workout(
+                datesCompleted = emptyList(),
+                exercises = listOf(
+                    Exercises.PULL_UP.exercise,
+                    Exercises.BICEP_CURL.exercise,
+                    Exercises.REVERSE_FLY.exercise,
+                ),
+                id = UUID.fromString("1440dad4-cf5d-4f85-911c-9424a4b69486"),
+                title = "Pull A",
+                tags = listOf(Tags.Pull.tag),
+                notes = ""
+            )
+        ),
+        PULL_B(
+            Workout(
+                datesCompleted = emptyList(),
+                exercises = listOf(
+                    Exercises.AUSSIE_PULL_UP.exercise,
+                    Exercises.BICEP_CURL.exercise,
+                    Exercises.ONE_ARM_DUMBELL_ROW.exercise
+                ),
+                id = UUID.fromString("ed91ffcc-d89d-4585-8b2d-51fdac95886c"),
+                title = "Pull B",
+                tags = listOf(Tags.Pull.tag),
+                notes = ""
+            )
+        ),
+        LEGS_A(
+            Workout(
+                datesCompleted = emptyList(),
+                exercises = listOf(
+                    Exercises.DEADLIFT.exercise,
+                    Exercises.CALF_RAISE.exercise,
+                    Exercises.REVERSE_LUNGE.exercise
+                ),
+                id = UUID.fromString("cec5a7a0-bd13-4e40-9cf5-d6502ad874f3"),
+                title = "Legs A",
+                tags = listOf(Tags.Legs.tag),
+                notes = ""
+            )
+        ),
+        LEGS_B(
+            Workout(
+                datesCompleted = emptyList(),
+                exercises = listOf(
+                    Exercises.BACK_SQUAT.exercise,
+                    Exercises.CALF_RAISE.exercise,
+                    Exercises.HAMSTRING_CURL.exercise
+                ),
+                id = UUID.fromString("fc9692ac-c3f5-4896-912f-28059e1c9526"),
+                title = "Legs B",
+                tags = listOf(Tags.Legs.tag),
+                notes = ""
+            )
+        ),
+        LEGS_C(
+            Workout(
+                datesCompleted = emptyList(),
+                exercises = listOf(
+                    Exercises.BULGARIAN_SPLIT_SQUAT.exercise,
+                    Exercises.SINGLE_LEG_ROMANIAN_DEADLIFT.exercise,
+                    Exercises.CALF_RAISE.exercise
+                ),
+                id = UUID.fromString("4898279d-cdf4-4185-8e9a-dc3db3668e9f"),
+                title = "Legs C",
+                tags = listOf(Tags.Legs.tag),
                 notes = ""
             )
         )
