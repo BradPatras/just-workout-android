@@ -8,6 +8,7 @@ import io.github.bradpatras.justworkout.models.Tag
 import io.github.bradpatras.justworkout.repository.ExerciseRepository
 import io.github.bradpatras.justworkout.repository.TagRepository
 import io.github.bradpatras.justworkout.utility.UuidProvider
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -33,22 +34,24 @@ class ExerciseListViewModel @Inject constructor(
     private val tagFilter = MutableStateFlow<List<Tag>>(emptyList())
 
     val uiState: StateFlow<ExerciseListUiState> = combine(
-        exerciseRepository.fetchExercises(),
-        tagRepository.fetchTags(),
+        exerciseRepository.fetchExercises().distinctUntilChanged(),
+        tagRepository.fetchTags().distinctUntilChanged(),
         tagFilter.asStateFlow()
-    ) { exercises, tags, tagFilter ->
-        val filteredExercises = getFilteredExercises(exercises, tagFilter)
+    ) { exercises, tags, currentTagFilter ->
+        val filteredExercises = getFilteredExercises(exercises, currentTagFilter)
         ExerciseListUiState(
             exercises = filteredExercises,
-            tagFilter = tagFilter,
+            tagFilter = currentTagFilter,
             tags = tags,
             isLoading = false
         )
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.Eagerly,
-        ExerciseListUiState(isLoading = true)
-    )
+    }
+        .flowOn(Dispatchers.Default)
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            ExerciseListUiState(isLoading = true)
+        )
 
     fun onTagFilterSelected(tags: List<Tag>) {
         tagFilter.value = tags
@@ -58,21 +61,20 @@ class ExerciseListViewModel @Inject constructor(
         exercises: List<Exercise>,
         tagFilter: List<Tag>
     ): List<Exercise> {
-        if (tagFilter.isNotEmpty()) {
-            val exercisesWithTags = exercises.filter { it.tags.isNotEmpty() }
-            // Calculate scores for each item
-            val scoredExercises = exercisesWithTags.map { exercise ->
+        if (tagFilter.isEmpty()) {
+            return exercises
+        }
+
+        // Use a sequence for lazy evaluation
+        return exercises.asSequence()
+            .filter { it.tags.isNotEmpty() }
+            .map { exercise ->
                 val score = exercise.tags.intersect(tagFilter.toSet()).size
                 Pair(exercise, score)
             }
-
-            // Sort items by score in descending order
-            return scoredExercises
-                .filter { it.second > 0 }
-                .sortedByDescending { it.second }
-                .map { it.first }
-        } else {
-            return exercises
-        }
+            .filter { it.second > 0 }
+            .sortedByDescending { it.second }
+            .map { it.first }
+            .toList()
     }
 }
