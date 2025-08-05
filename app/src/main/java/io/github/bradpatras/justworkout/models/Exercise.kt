@@ -8,4 +8,10 @@ data class Exercise(
     val id: UUID,
     val tags: List<Tag>,
     val title: String
-) : Serializable
+) : Serializable {
+    fun matchesSearchQuery(query: String): Boolean {
+        return description.contains(query, ignoreCase = true)
+                || title.contains(query, ignoreCase = true)
+                || tags.any { it.title.contains(query, ignoreCase = true) }
+    }
+}

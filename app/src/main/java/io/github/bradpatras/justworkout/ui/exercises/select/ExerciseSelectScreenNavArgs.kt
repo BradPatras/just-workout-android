@@ -5,4 +5,19 @@ import java.io.Serializable
 
 data class ExerciseSelectScreenNavArgs(
     val selectedExercises: Array<Exercise>
-) : Serializable
+) : Serializable {
+
+    // Auto-generated overrides due to Array type property
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ExerciseSelectScreenNavArgs
+
+        return selectedExercises.contentEquals(other.selectedExercises)
+    }
+
+    override fun hashCode(): Int {
+        return selectedExercises.contentHashCode()
+    }
+}

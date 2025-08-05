@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ramcosta.composedestinations.generated.destinations.ExerciseSelectScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.models.SelectableExercise
 import io.github.bradpatras.justworkout.repository.ExerciseRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,10 +22,12 @@ class ExerciseSelectViewModel @Inject constructor(
     private val exerciseRepository: ExerciseRepository
 ) : ViewModel() {
     private val navArgs: ExerciseSelectScreenNavArgs = ExerciseSelectScreenDestination.argsFrom(savedStateHandle)
+    private var allExercises = emptyList<SelectableExercise>()
     private val _uiState = MutableStateFlow(
         ExerciseSelectUiState(
             isLoading = false,
-            exercises = emptyList()
+            exercises = emptyList(),
+            searchQuery = ""
         )
     )
 
@@ -39,25 +42,53 @@ class ExerciseSelectViewModel @Inject constructor(
             _uiState.emit(uiState.value.copy(isLoading = true))
 
             val exercises = exerciseRepository.fetchExercises().first()
+            allExercises = exercises.map {
+                SelectableExercise(it, isSelected = navArgs.selectedExercises.contains(it))
+            }
 
             _uiState.emit(
                 ExerciseSelectUiState(
                     isLoading = false,
-                    exercises = exercises.map {
-                        SelectableExercise(it, isSelected = navArgs.selectedExercises.contains(it))
-                    }
+                    exercises = allExercises,
+                    searchQuery = ""
                 )
             )
         }
     }
 
     fun exerciseTapped(exercise: SelectableExercise) {
+        allExercises = allExercises.toMutableList().apply {
+            val index = indexOfFirst { it.id() == exercise.id() }
+            val newExercise = exercise.copy(isSelected = !exercise.isSelected)
+            this[index] = newExercise
+        }
+
         _uiState.update { state ->
             val newExercises = state.exercises.toMutableList()
             val newExercise = exercise.copy(isSelected = !exercise.isSelected)
             val index = state.exercises.indexOfFirst { exercise.id() == it.id() }
             newExercises[index] = newExercise
             uiState.value.copy(exercises = newExercises)
+        }
+    }
+
+    fun searchQueryChanged(query: String) {
+        if (query.isEmpty()) {
+            _uiState.update {
+                uiState.value.copy(
+                    searchQuery = query,
+                    exercises = allExercises
+                )
+            }
+        } else {
+            _uiState.update {
+                uiState.value.copy(
+                    searchQuery = query,
+                    exercises = allExercises.filter {
+                        it.exercise.matchesSearchQuery(query)
+                    }
+                )
+            }
         }
     }
 }

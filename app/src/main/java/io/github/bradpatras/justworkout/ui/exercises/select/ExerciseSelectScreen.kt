@@ -2,18 +2,21 @@
 
 package io.github.bradpatras.justworkout.ui.exercises.select
 
+import android.widget.EditText
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -21,7 +24,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -57,7 +62,8 @@ fun ExerciseSelectScreen(
                 )
             )
         },
-        onCloseTapped = { backNavigator.navigateBack() }
+        onCloseTapped = { backNavigator.navigateBack() },
+        onSearchQueryChanged = { viewModel.searchQueryChanged(it) }
     )
 }
 
@@ -66,7 +72,8 @@ private fun ExerciseSelectContent(
     state: ExerciseSelectUiState,
     onExerciseTapped: (SelectableExercise) -> Unit,
     onCheckmarkTapped: () -> Unit,
-    onCloseTapped: () -> Unit
+    onCloseTapped: () -> Unit,
+    onSearchQueryChanged: (String) -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
     Column(
@@ -99,6 +106,18 @@ private fun ExerciseSelectContent(
                 }
             },
             scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
+        )
+
+        OutlinedTextField(
+            state.searchQuery,
+            onValueChange = onSearchQueryChanged,
+            placeholder = { Text("Search") },
+            singleLine = true,
+            leadingIcon = { Icon(imageVector = Icons.Filled.Search, contentDescription = "") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+
         )
 
         LazyColumn(
@@ -161,11 +180,13 @@ fun ExerciseSelectPreview() {
         ExerciseSelectContent(
             state = ExerciseSelectUiState(
                 isLoading = false,
-                exercises = DefaultModels.exercises.map { SelectableExercise(it, false) }
+                exercises = DefaultModels.exercises.map { SelectableExercise(it, false) },
+                searchQuery = ""
             ),
             onExerciseTapped = {},
             onCheckmarkTapped = {},
-            onCloseTapped = {}
+            onCloseTapped = {},
+            onSearchQueryChanged = {},
         )
     }
 }
