@@ -49,4 +49,12 @@ class ExerciseRepositoryImpl @Inject constructor(
         exerciseTagCrossRefDao
             .deleteByExercise(exerciseId = exercise.id)
     }
+
+    override suspend fun deleteExercisesByIds(exerciseIds: List<UUID>) {
+        exerciseDao
+            .deleteByIds(exerciseIds)
+
+        exerciseTagCrossRefDao
+            .deleteByExerciseIds(exerciseIds)
+    }
 }

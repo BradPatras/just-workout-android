@@ -17,4 +17,7 @@ interface ExerciseRepository {
 
     @WorkerThread
     suspend fun deleteExercise(exercise: Exercise)
+
+    @WorkerThread
+    suspend fun deleteExercisesByIds(exerciseIds: List<UUID>)
 }

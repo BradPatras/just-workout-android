@@ -20,6 +20,9 @@ interface ExerciseTagCrossRefDao {
     @Query("DELETE FROM exercise_tag_cross_ref WHERE exerciseId = :exerciseId")
     suspend fun deleteByExercise(exerciseId: UUID)
 
+    @Query("DELETE FROM exercise_tag_cross_ref WHERE exerciseId in (:exerciseIds)")
+    fun deleteByExerciseIds(exerciseIds: List<UUID>)
+
     @Query("SELECT * FROM exercise_tag_cross_ref")
     fun getAll(): Flow<List<ExerciseTagCrossRef>>
 

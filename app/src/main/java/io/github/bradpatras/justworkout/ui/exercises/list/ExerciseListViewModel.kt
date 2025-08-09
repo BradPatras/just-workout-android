@@ -3,12 +3,17 @@ package io.github.bradpatras.justworkout.ui.exercises.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.bradpatras.justworkout.di.IoDispatcher
 import io.github.bradpatras.justworkout.models.Exercise
+import io.github.bradpatras.justworkout.models.SelectableExercise
 import io.github.bradpatras.justworkout.models.Tag
 import io.github.bradpatras.justworkout.repository.ExerciseRepository
 import io.github.bradpatras.justworkout.repository.TagRepository
 import io.github.bradpatras.justworkout.utility.UuidProvider
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -17,27 +22,43 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
 class ExerciseListViewModel @Inject constructor(
-    exerciseRepository: ExerciseRepository,
+    val exerciseRepository: ExerciseRepository,
     tagRepository: TagRepository,
     val uuidProvider: UuidProvider,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private val tagFilter = MutableStateFlow<List<Tag>>(emptyList())
+    private val selectedExerciseIds = MutableStateFlow<Set<UUID>>(emptySet())
+    private val isSelectModeEnabled = MutableStateFlow(false)
+
+
+    // Flow that outputs the exercises to be displayed on the list screen based on current filters
+    val exercisesFlow: Flow<List<SelectableExercise>> = combine(
+        exerciseRepository.fetchExercises().distinctUntilChanged(),
+        tagFilter,
+        selectedExerciseIds.asStateFlow(),
+    ) { exercises, currentTagFilter, selectedExerciseIds ->
+        getFilteredExercises(exercises, currentTagFilter, selectedExerciseIds)
+    }
 
     val uiState: StateFlow<ExerciseListUiState> = combine(
-        exerciseRepository.fetchExercises().distinctUntilChanged(),
+        exercisesFlow,
+        tagFilter,
         tagRepository.fetchTags().distinctUntilChanged(),
-        tagFilter.asStateFlow()
-    ) { exercises, tags, currentTagFilter ->
-        val filteredExercises = getFilteredExercises(exercises, currentTagFilter)
+        isSelectModeEnabled,
+    ) { exercises, tags, currentTagFilter, isSelectModeEnabled ->
         ExerciseListUiState(
-            exercises = filteredExercises,
+            exercises = exercises,
             tagFilter = currentTagFilter,
             tags = tags,
-            isLoading = false
+            isLoading = false,
+            isSelectModeEnabled
         )
     }
         .flowOn(Dispatchers.Default)
@@ -51,12 +72,42 @@ class ExerciseListViewModel @Inject constructor(
         tagFilter.value = tags
     }
 
+    fun onDeleteClicked() {
+        val exerciseIdsToDelete = selectedExerciseIds.value.toList()
+        viewModelScope.launch(ioDispatcher) {
+            exerciseRepository.deleteExercisesByIds(exerciseIdsToDelete)
+        }
+
+        isSelectModeEnabled.value = false
+        selectedExerciseIds.value = emptySet()
+    }
+
+    fun onDeleteModeClicked() {
+        isSelectModeEnabled.value = true
+    }
+
+    fun onCancelClicked() {
+        isSelectModeEnabled.value = false
+        selectedExerciseIds.value = emptySet()
+    }
+
+    fun onExerciseSelectionChanged(exerciseId: UUID, isSelected: Boolean) {
+        if (isSelected) {
+            selectedExerciseIds.value = selectedExerciseIds.value.plus(exerciseId)
+        } else {
+            selectedExerciseIds.value = selectedExerciseIds.value.minus(exerciseId)
+        }
+    }
+
     private fun getFilteredExercises(
         exercises: List<Exercise>,
-        tagFilter: List<Tag>
-    ): List<Exercise> {
+        tagFilter: List<Tag>,
+        selectedExerciseIds: Set<UUID>,
+    ): List<SelectableExercise> {
         if (tagFilter.isEmpty()) {
-            return exercises
+            return exercises.map {
+                SelectableExercise(it, selectedExerciseIds.contains(it.id))
+            }
         }
 
         // Use a sequence for lazy evaluation
@@ -68,7 +119,7 @@ class ExerciseListViewModel @Inject constructor(
             }
             .filter { it.second > 0 }
             .sortedByDescending { it.second }
-            .map { it.first }
+            .map { SelectableExercise(it.first, selectedExerciseIds.contains(it.first.id)) }
             .toList()
     }
 }
