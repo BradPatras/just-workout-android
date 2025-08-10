@@ -64,4 +64,13 @@ class WorkoutRepositoryImpl @Inject constructor(
         workoutExerciseCrossRefDao.deleteByWorkout(workoutId = workout.id)
         workoutTagCrossRefDao.deleteByWorkout(workoutId = workout.id)
     }
+
+    override suspend fun deleteWorkoutsByIds(ids: List<UUID>) {
+        workoutDao
+            .delete(ids)
+        workoutExerciseCrossRefDao
+            .deleteByWorkoutIds(ids)
+        workoutTagCrossRefDao
+            .deleteByWorkoutIds(ids)
+    }
 }

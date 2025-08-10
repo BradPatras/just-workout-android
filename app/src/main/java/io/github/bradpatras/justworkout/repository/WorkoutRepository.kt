@@ -17,4 +17,8 @@ interface WorkoutRepository {
 
     @WorkerThread
     suspend fun createOrUpdateWorkout(workout: Workout)
+
+    @WorkerThread
+    suspend fun deleteWorkoutsByIds(ids: List<UUID>)
+
 }

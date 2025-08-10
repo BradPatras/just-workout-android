@@ -2,9 +2,12 @@ package io.github.bradpatras.justworkout.ui.workouts.list
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,7 +17,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -47,7 +52,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import io.github.bradpatras.justworkout.Mocks
 import io.github.bradpatras.justworkout.R
 import io.github.bradpatras.justworkout.models.Tag
-import io.github.bradpatras.justworkout.models.Workout
+import io.github.bradpatras.justworkout.ui.composables.OverflowMenu
 import io.github.bradpatras.justworkout.ui.composables.TagFilterBottomSheet
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
 
@@ -67,11 +72,18 @@ fun WorkoutListScreen(
             )
         },
         onItemClick = {
-            destinationsNavigator.navigate(
-                WorkoutDetailsScreenDestination(it.id)
-            )
+            if (uiState.isSelectMode) {
+                viewModel.onWorkoutSelectionChanged(it.first, !it.second)
+            } else {
+                destinationsNavigator.navigate(
+                    WorkoutDetailsScreenDestination(it.first.id)
+                )
+            }
         },
-        onTagFilterSelected = { viewModel.onTagFilterSelected(it) }
+        onTagFilterSelected = { viewModel.onTagFilterSelected(it) },
+        onDeleteModeButtonClick = { viewModel.onDeleteMenuItemClicked() },
+        onCancelButtonClick = { viewModel.onCancelClicked() },
+        onDeleteButtonClick = { viewModel.onDeleteClicked() },
     )
 }
 
@@ -80,14 +92,17 @@ fun WorkoutListScreen(
 fun WorkoutListContent(
     uiState: WorkoutListUiState,
     onAddButtonClick: () -> Unit,
-    onItemClick: (Workout) -> Unit,
-    onTagFilterSelected: (List<Tag>) -> Unit
+    onItemClick: (SelectableWorkout) -> Unit,
+    onTagFilterSelected: (List<Tag>) -> Unit,
+    onDeleteModeButtonClick: () -> Unit,
+    onCancelButtonClick: () -> Unit,
+    onDeleteButtonClick: () -> Unit
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
 
     Column {
         TopAppBar(
-            title = { Text("Workouts") },
+            title = { if (uiState.isSelectMode) Text("Select Workouts") else Text("Workouts") },
             scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primary,
@@ -96,19 +111,35 @@ fun WorkoutListContent(
                 actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
             ),
             actions = {
-                IconButton(
-                    onClick = { showBottomSheet = true },
-                ) {
-                    BadgedBox(badge = {
-                        if (uiState.tagFilter.isNotEmpty()) {
-                            Badge(
-                                containerColor = MaterialTheme.colorScheme.onSecondary
+                if (uiState.isSelectMode) {
+                    Button(onCancelButtonClick) {
+                        Text("Cancel")
+                    }
+                    Button(onDeleteButtonClick) {
+                        Text("Delete")
+                    }
+                } else {
+                    IconButton(
+                        onClick = { showBottomSheet = true },
+                    ) {
+                        BadgedBox(badge = {
+                            if (uiState.tagFilter.isNotEmpty()) {
+                                Badge(
+                                    containerColor = MaterialTheme.colorScheme.onSecondary
+                                )
+                            }
+                        }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.filter_list),
+                                contentDescription = "filter"
                             )
                         }
-                    }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.filter_list) ,
-                            contentDescription = "Localized description"
+                    }
+
+                    OverflowMenu {
+                        DropdownMenuItem(
+                            text = { Text("Delete...") },
+                            onClick = { onDeleteModeButtonClick() }
                         )
                     }
                 }
@@ -130,31 +161,33 @@ fun WorkoutListContent(
             ) {
                 items(
                     items = uiState.workouts,
-                    key = { it.id }
+                    key = { it.first.id }
                 ) { workout ->
                     Surface(
                         Modifier.clickable {
                             onItemClick(workout)
                         }
                     ) {
-                        WorkoutListItem(workout = workout)
+                        WorkoutListItem(workout = workout, isSelectMode = uiState.isSelectMode)
                     }
                 }
             }
         }
     }
 
-    Box(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxSize(),
-        contentAlignment = Alignment.BottomEnd
-    ) {
-        FloatingActionButton(
-            onClick = { onAddButtonClick() },
-            shape = RoundedCornerShape(12.dp)
+    if (!uiState.isSelectMode) {
+        Box(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxSize(),
+            contentAlignment = Alignment.BottomEnd
         ) {
-            Icon(Icons.Filled.Add, "add workout")
+            FloatingActionButton(
+                onClick = { onAddButtonClick() },
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Icon(Icons.Filled.Add, "add workout")
+            }
         }
     }
 
@@ -169,25 +202,45 @@ fun WorkoutListContent(
 }
 
 @Composable
-private fun WorkoutListItem(workout: Workout) {
+private fun WorkoutListItem(workout: SelectableWorkout, isSelectMode: Boolean) {
     Column {
         ListItem(
             headlineContent = {
                 Text(
-                    text = workout.title,
+                    text = workout.first.title,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
             },
             supportingContent = {
-                if (workout.exercises.isEmpty()) {
+                if (workout.first.exercises.isEmpty()) {
                     Text(text = "No exercises added")
                 } else {
                     Text(
-                        text = workout.exercises.joinToString { it.title },
+                        text = workout.first.exercises.joinToString { it.title },
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
+                }
+            },
+            trailingContent = {
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.aligned(Alignment.CenterVertically)
+                ) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    if (isSelectMode && workout.second) {
+                        Icon(
+                            painterResource(R.drawable.outline_check_circle),
+                            contentDescription = "selected"
+                        )
+                    } else if (isSelectMode) {
+                        Icon(
+                            painterResource(R.drawable.outline_circle),
+                            contentDescription = "unselected"
+                        )
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
                 }
             }
         )
@@ -204,8 +257,11 @@ fun WorkoutListPreview() {
                 isLoading = false,
                 tagFilter = emptyList(),
                 tags = Mocks.mockTagsList2,
-                Mocks.mockWorkoutList
+                Mocks.mockWorkoutList.map { Pair(it, false) }
             ),
+            { },
+            { },
+            { },
             { },
             { },
             { }

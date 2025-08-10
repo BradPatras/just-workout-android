@@ -7,5 +7,6 @@ data class WorkoutListUiState(
     val isLoading: Boolean,
     val tagFilter: List<Tag> = emptyList(),
     val tags: List<Tag> = emptyList(),
-    val workouts: List<Workout> = emptyList()
+    val workouts: List<Pair<Workout, Boolean>> = emptyList(),
+    val isSelectMode: Boolean = false,
 )

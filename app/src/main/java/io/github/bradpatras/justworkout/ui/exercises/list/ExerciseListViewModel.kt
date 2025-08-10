@@ -37,11 +37,12 @@ class ExerciseListViewModel @Inject constructor(
     private val selectedExerciseIds = MutableStateFlow<Set<UUID>>(emptySet())
     private val isSelectModeEnabled = MutableStateFlow(false)
 
-
     // Flow that outputs the exercises to be displayed on the list screen based on current filters
+    // This is broken out into a separate flow so that the `getFilteredExercises` function only needs
+    // to be called when it's specific inputs change.
     val exercisesFlow: Flow<List<SelectableExercise>> = combine(
         exerciseRepository.fetchExercises().distinctUntilChanged(),
-        tagFilter,
+        tagFilter.asStateFlow(),
         selectedExerciseIds.asStateFlow(),
     ) { exercises, currentTagFilter, selectedExerciseIds ->
         getFilteredExercises(exercises, currentTagFilter, selectedExerciseIds)
@@ -49,10 +50,10 @@ class ExerciseListViewModel @Inject constructor(
 
     val uiState: StateFlow<ExerciseListUiState> = combine(
         exercisesFlow,
-        tagFilter,
+        tagFilter.asStateFlow(),
         tagRepository.fetchTags().distinctUntilChanged(),
         isSelectModeEnabled,
-    ) { exercises, tags, currentTagFilter, isSelectModeEnabled ->
+    ) { exercises, currentTagFilter, tags, isSelectModeEnabled ->
         ExerciseListUiState(
             exercises = exercises,
             tagFilter = currentTagFilter,

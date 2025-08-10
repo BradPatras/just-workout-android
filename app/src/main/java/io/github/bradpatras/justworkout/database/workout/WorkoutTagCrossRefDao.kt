@@ -21,4 +21,7 @@ interface WorkoutTagCrossRefDao {
 
     @Update
     suspend fun update(vararg crossRefs: WorkoutTagCrossRef)
+
+    @Query("DELETE FROM workout_tag_cross_ref WHERE workoutId in (:workoutIds)")
+    suspend fun deleteByWorkoutIds(workoutIds: List<UUID>)
 }

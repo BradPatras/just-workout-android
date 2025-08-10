@@ -19,4 +19,7 @@ interface WorkoutDao {
 
     @Upsert
     suspend fun createOrUpdate(vararg workouts: WorkoutEntity)
+
+    @Query("DELETE FROM workout WHERE workoutId IN (:ids)")
+    suspend fun delete(ids: List<UUID>)
 }

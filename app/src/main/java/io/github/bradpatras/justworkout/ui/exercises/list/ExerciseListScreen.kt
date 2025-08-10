@@ -4,15 +4,10 @@
 
 package io.github.bradpatras.justworkout.ui.exercises.list
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,13 +15,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -52,7 +44,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.room.util.TableInfo
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.ExerciseDetailsScreenDestination
@@ -60,12 +51,11 @@ import com.ramcosta.composedestinations.generated.destinations.ExerciseEditScree
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import io.github.bradpatras.justworkout.Mocks
 import io.github.bradpatras.justworkout.R
-import io.github.bradpatras.justworkout.models.Exercise
 import io.github.bradpatras.justworkout.models.SelectableExercise
 import io.github.bradpatras.justworkout.models.Tag
+import io.github.bradpatras.justworkout.ui.composables.OverflowMenu
 import io.github.bradpatras.justworkout.ui.composables.TagFilterBottomSheet
 import io.github.bradpatras.justworkout.ui.theme.JustWorkoutTheme
-import org.intellij.lang.annotations.JdkConstants
 
 @Destination<RootGraph>(start = true)
 @Composable
@@ -112,7 +102,7 @@ fun ExerciseListContent(
 
     Column {
         TopAppBar(
-            title = { if (uiState.isSelectMode) Text("Select") else Text("Exercises") },
+            title = { if (uiState.isSelectMode) Text("Select Exercises") else Text("Exercises") },
             scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primary,
@@ -146,7 +136,7 @@ fun ExerciseListContent(
                             )
                         }
                     }
-                    DropdownMenu {
+                    OverflowMenu {
                         DropdownMenuItem(
                             text = { Text("Delete...") },
                             onClick = { onDeleteModeClicked() }
@@ -185,17 +175,19 @@ fun ExerciseListContent(
         }
     }
 
-    Box(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxSize(),
-        contentAlignment = Alignment.BottomEnd
-    ) {
-        FloatingActionButton(
-            onClick = { onAddButtonClick() },
-            shape = RoundedCornerShape(12.dp)
+    if (!uiState.isSelectMode) {
+        Box(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxSize(),
+            contentAlignment = Alignment.BottomEnd
         ) {
-            Icon(Icons.Filled.Add, "add exercise")
+            FloatingActionButton(
+                onClick = { onAddButtonClick() },
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Icon(Icons.Filled.Add, "add exercise")
+            }
         }
     }
 
@@ -210,28 +202,10 @@ fun ExerciseListContent(
 }
 
 @Composable
-fun DropdownMenu(content: @Composable ColumnScope.() -> Unit) {
-    var expanded by remember { mutableStateOf(false) }
-    Box(
-        modifier = Modifier
-            .padding(16.dp)
-    ) {
-        IconButton(onClick = { expanded = !expanded }) {
-            Icon(Icons.Default.MoreVert, contentDescription = "More options")
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            content = content
-        )
-    }
-}
-
-
-@Composable
 private fun ExerciseListItem(exercise: SelectableExercise, isSelectMode: Boolean) {
     Column {
         ListItem(
+
             headlineContent = {
                 Text(
                     text = exercise.title(),
