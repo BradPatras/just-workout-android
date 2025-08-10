@@ -24,4 +24,8 @@ interface WorkoutExerciseCrossRefDao {
 
     @Query("DELETE FROM workout_exercise_cross_ref WHERE workoutId in (:workoutIds)")
     suspend fun deleteByWorkoutIds(workoutIds: List<UUID>)
+
+    @Query("DELETE FROM workout_exercise_cross_ref WHERE exerciseId in (:exerciseIds)")
+    suspend fun deleteByExerciseIds(exerciseIds: List<UUID>)
+
 }

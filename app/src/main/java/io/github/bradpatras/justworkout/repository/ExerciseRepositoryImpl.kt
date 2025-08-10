@@ -5,6 +5,8 @@ import io.github.bradpatras.justworkout.database.exercise.ExerciseTagCrossRef
 import io.github.bradpatras.justworkout.database.exercise.ExerciseTagCrossRefDao
 import io.github.bradpatras.justworkout.database.exercise.asExercise
 import io.github.bradpatras.justworkout.database.exercise.asExerciseWithTags
+import io.github.bradpatras.justworkout.database.workout.WorkoutExerciseCrossRef
+import io.github.bradpatras.justworkout.database.workout.WorkoutExerciseCrossRefDao
 import io.github.bradpatras.justworkout.di.IoDispatcher
 import io.github.bradpatras.justworkout.models.Exercise
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,6 +18,7 @@ import javax.inject.Inject
 class ExerciseRepositoryImpl @Inject constructor(
     private val exerciseDao: ExerciseDao,
     private val exerciseTagCrossRefDao: ExerciseTagCrossRefDao,
+    private val workoutExerciseCrossRefDao: WorkoutExerciseCrossRefDao,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): ExerciseRepository {
     override fun fetchExercise(id: UUID) = exerciseDao
@@ -55,6 +58,9 @@ class ExerciseRepositoryImpl @Inject constructor(
             .deleteByIds(exerciseIds)
 
         exerciseTagCrossRefDao
+            .deleteByExerciseIds(exerciseIds)
+
+        workoutExerciseCrossRefDao
             .deleteByExerciseIds(exerciseIds)
     }
 }
