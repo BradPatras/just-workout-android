@@ -1,7 +1,11 @@
 package io.github.bradpatras.justworkout.ui
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.DateRange
@@ -48,6 +52,8 @@ fun MainScreen() {
         ?: NavGraphs.root.startDestination
 
     Scaffold(
+        modifier = Modifier
+            .windowInsetsPadding(WindowInsets.statusBars),
         bottomBar = {
             BottomBar(currentDestination, destinationsNavigator)
         }
