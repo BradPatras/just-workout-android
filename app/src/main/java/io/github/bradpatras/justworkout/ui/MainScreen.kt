@@ -1,6 +1,7 @@
 package io.github.bradpatras.justworkout.ui
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -54,8 +55,7 @@ fun MainScreen() {
         ?: NavGraphs.root.startDestination
 
     Scaffold(
-        modifier = Modifier
-            .statusBarsPadding(),
+        contentWindowInsets = WindowInsets.statusBars,
         bottomBar = {
             BottomBar(currentDestination, destinationsNavigator)
         }
@@ -65,6 +65,7 @@ fun MainScreen() {
             navController = navController,
             modifier = Modifier
                 .padding(it)
+                .consumeWindowInsets(it)
                 .fillMaxSize()
         )
     }
