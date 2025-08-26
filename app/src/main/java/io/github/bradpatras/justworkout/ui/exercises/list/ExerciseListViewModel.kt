@@ -31,7 +31,7 @@ class ExerciseListViewModel @Inject constructor(
     val exerciseRepository: ExerciseRepository,
     tagRepository: TagRepository,
     val uuidProvider: UuidProvider,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private val tagFilter = MutableStateFlow<List<Tag>>(emptyList())
     private val selectedExerciseIds = MutableStateFlow<Set<UUID>>(emptySet())

@@ -27,7 +27,7 @@ class WorkoutListViewModel @Inject constructor(
     val workoutRepository: WorkoutRepository,
     tagRepository: TagRepository,
     val uuidProvider: UuidProvider,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): ViewModel() {
     private val tagFilter = MutableStateFlow<List<Tag>>(emptyList())
     private val isSelectModeEnabled = MutableStateFlow(false)

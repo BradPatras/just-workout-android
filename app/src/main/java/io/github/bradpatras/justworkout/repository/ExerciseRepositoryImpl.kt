@@ -19,7 +19,7 @@ class ExerciseRepositoryImpl @Inject constructor(
     private val exerciseDao: ExerciseDao,
     private val exerciseTagCrossRefDao: ExerciseTagCrossRefDao,
     private val workoutExerciseCrossRefDao: WorkoutExerciseCrossRefDao,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): ExerciseRepository {
     override fun fetchExercise(id: UUID) = exerciseDao
         .get(id)
