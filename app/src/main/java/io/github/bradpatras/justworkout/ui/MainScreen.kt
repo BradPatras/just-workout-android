@@ -3,8 +3,10 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
@@ -38,7 +40,7 @@ import io.github.bradpatras.justworkout.R
 enum class BottomBarDestination(
     val direction: DirectionDestinationSpec,
     val icon: ImageVector,
-    @StringRes val label: Int
+    @param:StringRes val label: Int
 ) {
     Exercises(ExerciseListScreenDestination, Icons.AutoMirrored.Filled.List, R.string.exercises),
     Workouts(WorkoutListScreenDestination, Icons.Default.DateRange, R.string.workouts),
@@ -53,7 +55,7 @@ fun MainScreen() {
 
     Scaffold(
         modifier = Modifier
-            .windowInsetsPadding(WindowInsets.statusBars),
+            .statusBarsPadding(),
         bottomBar = {
             BottomBar(currentDestination, destinationsNavigator)
         }
