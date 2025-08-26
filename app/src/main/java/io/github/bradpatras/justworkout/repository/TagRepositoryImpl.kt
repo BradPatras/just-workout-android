@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class TagRepositoryImpl @Inject constructor(
     private val tagDao: TagDao,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): TagRepository {
     override fun fetchTags() = flow<List<Tag>> {
         tagDao
